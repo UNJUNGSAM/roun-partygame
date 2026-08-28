@@ -524,8 +524,8 @@
    ================================================================= */
 const DB = window.GAME_DB || {}; // 문제 데이터는 questions.js에서 로드
 
-// 문제 식별 키 — 카테고리|제시어|정답 (정답 글자가 같은 다른 문제와 출제기록 충돌 방지)
-const keyOf = item => `${item._cat}|${item.q}|${item.a}`;
+// 문제 식별 키 — 제시어|정답 (카테고리 변경/랜덤 모드에서도 같은 문제 중복 출제 완전 방지)
+const keyOf = item => `${item.q}|${item.a !== undefined ? item.a : item.q}`;
 
 // 시간제 게임 라운드당 출제 수 상한 — 주제와 관계없이 만점(상한×배점) 동일
 const ROUND_CAP = { speed: 30, body: 25, chosung: 12 };
@@ -1453,6 +1453,7 @@ function renderQuiz() {
     const historyKey = keyOf(item);
     if (!App.history[App.game.type].includes(historyKey)) {
         App.history[App.game.type].push(historyKey);
+        persist();
     }
 
     const qContent = document.getElementById('quiz-content');
