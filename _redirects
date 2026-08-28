@@ -1,0 +1,5 @@
+# 백업 폴더 공개 접근 차단 (순서 중요 — 아래 SPA 규칙보다 먼저)
+/_backup/*  /index.html  404!
+
+# SPA 리다이렉트
+/*    /index.html    200

@@ -1,0 +1,2010 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#2D4036">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="description" content="로운네 파티게임 - 가족과 친구가 함께하는 프리미엄 파티 게임">
+    <link rel="manifest" href="manifest.webmanifest">
+
+    <title>로운네 파티게임</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="questions.js"></script>
+    <script src="characters.js"></script>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-mode="party">
+
+<!-- =========================================================
+     SVG ICON DEFINITIONS — 통일된 라인 아이콘
+     ========================================================= -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+        <!-- 로고 마크 (텐트/산) -->
+        <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 20 L12 4 L21 20 Z" fill="rgba(255,255,255,0.15)"/>
+            <path d="M12 4 L12 20" />
+            <path d="M3 20 L21 20" />
+        </symbol>
+        <!-- 톱니바퀴 (설정) -->
+        <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </symbol>
+        <!-- 왼쪽 화살표 -->
+        <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 18 L9 12 L15 6"/>
+        </symbol>
+        <!-- 트로피 -->
+        <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 21 L16 21" />
+            <path d="M12 17 L12 21" />
+            <path d="M7 4 L17 4 L17 9 a5 5 0 0 1 -10 0 Z"/>
+            <path d="M17 5 H20 V8 a3 3 0 0 1 -3 3"/>
+            <path d="M7 5 H4 V8 a3 3 0 0 0 3 3"/>
+        </symbol>
+        <!-- 사용자 그룹 -->
+        <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </symbol>
+        <!-- 홈 -->
+        <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12 L12 3 L21 12"/>
+            <path d="M5 10 L5 21 L19 21 L19 10"/>
+            <path d="M10 21 L10 14 L14 14 L14 21"/>
+        </symbol>
+        <!-- 타겟/배점 -->
+        <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/>
+            <circle cx="12" cy="12" r="5"/>
+            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+        </symbol>
+        <!-- 전구 (힌트) -->
+        <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18 L15 18"/>
+            <path d="M10 21 L14 21"/>
+            <path d="M12 3 a6 6 0 0 1 6 6 c0 2.5 -1.5 4 -2.5 5 L8.5 14 c-1 -1 -2.5 -2.5 -2.5 -5 a6 6 0 0 1 6 -6 z"/>
+        </symbol>
+        <!-- 주사위 -->
+        <symbol id="i-dice" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="3"/>
+            <circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="16" cy="8" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="8" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+            <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+        </symbol>
+
+        <!-- =========== 모드/게임 아이콘 (대형, 컬러풀) =========== -->
+        <!-- 파티 모드: 풍선 -->
+        <symbol id="i-mode-party" viewBox="0 0 64 64" fill="none">
+            <path d="M22 6 c-7 0 -12 5 -12 13 c0 9 9 17 12 19 c3 -2 12 -10 12 -19 c0 -8 -5 -13 -12 -13 z" fill="#E27D60" stroke="#C25A4A" stroke-width="2"/>
+            <path d="M22 38 L22 46" stroke="#3D5547" stroke-width="2" stroke-linecap="round"/>
+            <path d="M42 12 c-6 0 -10 5 -10 11 c0 7 7 14 10 16 c3 -2 10 -9 10 -16 c0 -6 -4 -11 -10 -11 z" fill="#E89F4E" stroke="#D17E2A" stroke-width="2"/>
+            <path d="M42 39 L42 50" stroke="#3D5547" stroke-width="2" stroke-linecap="round"/>
+            <path d="M14 50 L52 56" stroke="#3D5547" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+
+        <!-- 워크샵 모드: 사람들 회의 -->
+        <symbol id="i-mode-workshop" viewBox="0 0 64 64" fill="none">
+            <rect x="10" y="36" width="44" height="16" rx="4" fill="#A8C0A0" stroke="#5C7A65" stroke-width="2"/>
+            <circle cx="20" cy="26" r="7" fill="#E89F4E" stroke="#D17E2A" stroke-width="2"/>
+            <circle cx="44" cy="26" r="7" fill="#7CA7B6" stroke="#5C8898" stroke-width="2"/>
+            <circle cx="32" cy="22" r="8" fill="#E27D60" stroke="#C25A4A" stroke-width="2"/>
+            <path d="M10 36 L10 44 M54 36 L54 44" stroke="#3D5547" stroke-width="2" stroke-linecap="round"/>
+        </symbol>
+
+        <!-- 스피드 게임: 번개 -->
+        <symbol id="i-game-speed" viewBox="0 0 64 64" fill="none">
+            <path d="M36 4 L14 36 L28 36 L24 60 L50 26 L34 26 L40 4 Z" fill="#E89F4E" stroke="#D17E2A" stroke-width="2.5" stroke-linejoin="round"/>
+        </symbol>
+
+        <!-- 몸으로 말해요: 사람 점프 -->
+        <symbol id="i-game-body" viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="14" r="7" fill="#E27D60" stroke="#C25A4A" stroke-width="2"/>
+            <path d="M32 22 L32 38" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+            <path d="M32 28 L16 22" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+            <path d="M32 28 L48 18" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+            <path d="M32 38 L22 56" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+            <path d="M32 38 L46 54" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+        </symbol>
+
+        <!-- 초성 퀴즈: 한글 자음 블록 -->
+        <symbol id="i-game-chosung" viewBox="0 0 64 64" fill="none">
+            <rect x="6" y="14" width="22" height="36" rx="6" fill="#A8C0A0" stroke="#5C7A65" stroke-width="2"/>
+            <rect x="36" y="14" width="22" height="36" rx="6" fill="#E89F4E" stroke="#D17E2A" stroke-width="2"/>
+            <path d="M12 26 L22 26 L22 38 L12 38 Z M22 26 L22 30 L16 30 L16 34 L22 34" stroke="#FFFBF2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <path d="M42 24 L52 24 M47 24 L47 40 M42 40 L52 40" stroke="#FFFBF2" stroke-width="2.5" stroke-linecap="round"/>
+        </symbol>
+
+        <!-- 이어서 말해요: 말풍선 체인 -->
+        <symbol id="i-game-relay" viewBox="0 0 64 64" fill="none">
+            <path d="M6 14 a4 4 0 0 1 4 -4 h22 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 H18 L10 40 V32 a4 4 0 0 1 -4 -4 Z" fill="#7CA7B6" stroke="#5C8898" stroke-width="2"/>
+            <path d="M28 30 a4 4 0 0 1 4 -4 h22 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 H40 L48 56 V48 a4 4 0 0 1 -4 -4 Z" fill="#E89F4E" stroke="#D17E2A" stroke-width="2"/>
+        </symbol>
+
+        <!-- 네 글자 퀴즈: 퍼즐 -->
+        <symbol id="i-game-fourletter" viewBox="0 0 64 64" fill="none">
+            <path d="M8 8 H28 V18 a4 4 0 0 0 8 0 V8 H56 V28 a4 4 0 0 1 -8 0 a4 4 0 0 0 -8 0 V36 H56 V56 H36 V46 a4 4 0 0 0 -8 0 V56 H8 V36 H18 a4 4 0 0 0 0 -8 H8 Z"
+                  fill="#A8C0A0" stroke="#5C7A65" stroke-width="2" stroke-linejoin="round"/>
+        </symbol>
+
+        <!-- 결과 트로피 (큰 사이즈) -->
+        <symbol id="i-result-win" viewBox="0 0 64 64" fill="none">
+            <path d="M22 50 L42 50 M32 42 L32 50" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+            <path d="M16 10 L48 10 L48 22 a16 16 0 0 1 -32 0 Z" fill="#E89F4E" stroke="#D17E2A" stroke-width="2.5"/>
+            <path d="M48 12 H56 V20 a6 6 0 0 1 -6 6" stroke="#D17E2A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M16 12 H8 V20 a6 6 0 0 0 6 6" stroke="#D17E2A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+            <path d="M32 26 L34 32 L40 32 L35 36 L37 42 L32 38 L27 42 L29 36 L24 32 L30 32 Z" fill="#FFFBF2"/>
+        </symbol>
+
+        <!-- 결과 시간초과 -->
+        <symbol id="i-result-time" viewBox="0 0 64 64" fill="none">
+            <circle cx="32" cy="36" r="22" fill="#F8DCB6" stroke="#D17E2A" stroke-width="2.5"/>
+            <path d="M32 22 L32 36 L42 42" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+            <path d="M22 6 L42 6" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+            <path d="M32 6 L32 12" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+        </symbol>
+
+        <!-- 추첨 주사위 (큰) -->
+        <symbol id="i-pick-big" viewBox="0 0 64 64" fill="none">
+            <rect x="8" y="8" width="48" height="48" rx="8" fill="#E89F4E" stroke="#D17E2A" stroke-width="2.5"/>
+            <circle cx="20" cy="20" r="3" fill="#FFFBF2"/>
+            <circle cx="44" cy="20" r="3" fill="#FFFBF2"/>
+            <circle cx="32" cy="32" r="3" fill="#FFFBF2"/>
+            <circle cx="20" cy="44" r="3" fill="#FFFBF2"/>
+            <circle cx="44" cy="44" r="3" fill="#FFFBF2"/>
+        </symbol>
+    </defs>
+</svg>
+
+<!-- =========================================================
+     APP ROOT
+     ========================================================= -->
+<div class="app-root">
+
+    <!-- HEADER -->
+    <header class="header">
+        <div class="brand" onclick="goHome()">
+            <div class="brand-mark"><svg><use href="#i-logo"/></svg></div>
+            <div class="brand-text">PARTY<span>GAME</span></div>
+        </div>
+
+        <div id="header-scoreboard" class="scoreboard"></div>
+
+        <button class="icon-btn" id="settings-trigger" onclick="toggleMenu(event)" aria-label="설정">
+            <svg><use href="#i-cog"/></svg>
+        </button>
+        <div class="menu-pop" id="settings-menu">
+            <div class="menu-item" onclick="openScoreBoard()"><svg><use href="#i-trophy"/></svg>점수 관리</div>
+            <div class="menu-item" onclick="openGameScoreSettings()"><svg><use href="#i-target"/></svg>배점 설정</div>
+            <div class="menu-item" onclick="openTeamSettings()"><svg><use href="#i-users"/></svg>팀 설정</div>
+            <div class="menu-divider"></div>
+            <div class="menu-item danger" onclick="openResetModal()"><svg><use href="#i-home"/></svg>처음으로</div>
+        </div>
+    </header>
+
+    <!-- ==================== SCREEN: MODE ==================== -->
+    <section id="screen-mode" class="screen active">
+        <div class="mode-wrap">
+            <p class="overline">Let's Play</p>
+            <h1 class="display-1">오늘은 누구와<br>함께 노실 건가요?</h1>
+            <p class="display-sub">모임에 맞는 모드를 골라주세요 · 테마 색도 함께 바뀌어요</p>
+
+            <div class="mode-cards">
+                <button class="mode-card mode-card--party" onclick="setMode('party')">
+                    <div class="mode-card-art"><svg><use href="#i-mode-party"/></svg></div>
+                    <div class="mode-card-body">
+                        <span class="mode-card-tag">MODE 01</span>
+                        <span class="mode-card-title">파티 모드</span>
+                        <span class="mode-card-sub">가족 · 친구 · 2~4팀</span>
+                    </div>
+                </button>
+                <button class="mode-card mode-card--workshop" onclick="setMode('workshop')">
+                    <div class="mode-card-art"><svg><use href="#i-mode-workshop"/></svg></div>
+                    <div class="mode-card-body">
+                        <span class="mode-card-tag">MODE 02</span>
+                        <span class="mode-card-title">워크샵 모드</span>
+                        <span class="mode-card-sub">단체 행사 · 4~10팀</span>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SCREEN: SETUP ==================== -->
+    <section id="screen-setup" class="screen">
+        <div class="screen-pad" style="max-width: 720px;">
+            <button class="btn-ghost" onclick="showScreen('screen-mode')" style="margin-bottom:20px"><svg width="16" height="16" style="margin-right:4px"><use href="#i-back"/></svg>모드 선택</button>
+
+            <div class="panel">
+                <div class="section-title" style="margin-bottom: 24px;">
+                    <p class="overline">Team Setup</p>
+                    <h2>팀을 만들어 주세요</h2>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">참가 팀 수</label>
+                    <select id="team-count-select" class="form-select" onchange="renderTeamInputs()"></select>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-label">
+                        <span>팀 캐릭터 &amp; 이름 — 자유롭게 고쳐도 좋아요</span>
+                        <button class="label-action" onclick="rerollAllTeams()"><svg><use href="#i-dice"/></svg>전체 다시 뽑기</button>
+                    </div>
+                    <div id="team-inputs-container" class="team-rows"></div>
+                </div>
+
+                <button class="btn btn-3d btn-primary btn-big w-full" onclick="completeSetup()" style="margin-top:6px">설정 완료</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SCREEN: GAME MENU ==================== -->
+    <section id="screen-menu" class="screen">
+        <div class="screen-pad">
+            <button class="btn-ghost" onclick="showScreen('screen-setup')" style="margin-bottom:20px"><svg width="16" height="16" style="margin-right:4px"><use href="#i-back"/></svg>팀 설정</button>
+
+            <div class="section-title">
+                <p class="overline">Pick a Game</p>
+                <h2>어떤 게임으로 시작할까요?</h2>
+            </div>
+
+            <div class="games-grid">
+                <button class="game-card game-card--speed" onclick="prepareGame('speed')">
+                    <div class="game-card-info">
+                        <span class="game-card-tag">GAME 01</span>
+                        <span class="game-card-title">스피드 게임</span>
+                        <span class="game-card-sub">설명 없이 단어 맞추기</span>
+                    </div>
+                    <div class="game-card-art"><svg><use href="#i-game-speed"/></svg></div>
+                </button>
+                <button class="game-card game-card--body" onclick="prepareGame('body')">
+                    <div class="game-card-info">
+                        <span class="game-card-tag">GAME 02</span>
+                        <span class="game-card-title">몸으로 말해요</span>
+                        <span class="game-card-sub">말하지 않고 액션으로!</span>
+                    </div>
+                    <div class="game-card-art"><svg><use href="#i-game-body"/></svg></div>
+                </button>
+                <button class="game-card game-card--chosung" onclick="prepareGame('chosung')">
+                    <div class="game-card-info">
+                        <span class="game-card-tag">GAME 03</span>
+                        <span class="game-card-title">초성 퀴즈</span>
+                        <span class="game-card-sub">어려운 주제는 자동 힌트</span>
+                    </div>
+                    <div class="game-card-art"><svg><use href="#i-game-chosung"/></svg></div>
+                </button>
+                <button class="game-card game-card--relay" onclick="prepareGame('relay')">
+                    <div class="game-card-info">
+                        <span class="game-card-tag">GAME 04</span>
+                        <span class="game-card-title">이어서 말해요</span>
+                        <span class="game-card-sub">주제 추첨 릴레이</span>
+                    </div>
+                    <div class="game-card-art"><svg><use href="#i-game-relay"/></svg></div>
+                </button>
+                <button class="game-card game-card--fourletter" onclick="prepareGame('fourLetter')">
+                    <div class="game-card-info">
+                        <span class="game-card-tag">GAME 05</span>
+                        <span class="game-card-title">네 글자 퀴즈</span>
+                        <span class="game-card-sub">목표 개수 연속 성공하기</span>
+                    </div>
+                    <div class="game-card-art"><svg><use href="#i-game-fourletter"/></svg></div>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SCREEN: PREGAME ==================== -->
+    <section id="screen-pregame" class="screen">
+        <div class="screen-pad pregame-wrap">
+            <button class="btn-ghost" onclick="showScreen('screen-menu')" style="margin-bottom:20px"><svg width="16" height="16" style="margin-right:4px"><use href="#i-back"/></svg>게임 목록</button>
+
+            <div class="panel">
+                <div class="section-title">
+                    <p class="overline">Round Setup</p>
+                    <h2 id="pregame-title">게임 설정</h2>
+                </div>
+
+                <div class="form-row">
+                    <label class="form-label">1. 도전 팀 선택</label>
+                    <div id="team-selector-container" class="selector-row"></div>
+                </div>
+
+                <div class="form-row" id="category-section">
+                    <label class="form-label">2. 주제 선택</label>
+                    <div id="category-selector-container" class="selector-row"></div>
+                </div>
+
+                <div class="form-row hidden" id="difficulty-section">
+                    <label class="form-label">3. 주제 난이도</label>
+                    <div class="selector-row" id="difficulty-selector" style="grid-template-columns:repeat(3,1fr);">
+                        <button class="chip" data-d="1" onclick="setDifficulty(1)">순한맛 · 쉬운 주제만</button>
+                        <button class="chip" data-d="2" onclick="setDifficulty(2)">보통 · 추천</button>
+                        <button class="chip" data-d="3" onclick="setDifficulty(3)">매운맛 · 전부</button>
+                    </div>
+                </div>
+
+                <div class="form-row" id="timer-section">
+                    <label class="form-label">3. 제한 시간</label>
+                    <select id="timer-select" class="form-select">
+                        <option value="60">60초</option>
+                        <option value="90" selected>90초</option>
+                        <option value="120">120초</option>
+                    </select>
+                </div>
+
+                <div class="form-row hidden" id="fourletter-count-section">
+                    <label class="form-label">3. 목표 문제 수 (연속 성공)</label>
+                    <select id="fourletter-count-select" class="form-select">
+                        <option value="4">4문제</option>
+                        <option value="5">5문제</option>
+                        <option value="6">6문제</option>
+                        <option value="8" selected>8문제</option>
+                        <option value="10">10문제</option>
+                        <option value="12">12문제</option>
+                        <option value="16">16문제</option>
+                        <option value="20">20문제</option>
+                    </select>
+                </div>
+
+                <div class="start-block">
+                    <div class="start-label">Now Playing</div>
+                    <div id="ready-team-name" class="start-team">팀 이름</div>
+                    <button class="btn btn-3d btn-primary btn-xl w-full" onclick="startGame()" style="max-width:480px;margin:0 auto;display:flex">START</button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== SCREEN: GAME ==================== -->
+    <section id="screen-game" class="screen">
+
+        <div class="game-topbar">
+            <div class="game-meta">
+                <span class="badge badge-game" id="ingame-game-name"><svg id="ingame-game-icon"><use href="#i-game-speed"/></svg><span id="ingame-game-text">게임</span></span>
+                <span class="badge badge-team" id="ingame-team-badge">A팀</span>
+                <span class="badge badge-cat" id="ingame-category">주제</span>
+                <span class="badge badge-progress hidden" id="ingame-progress">1 / 4</span>
+            </div>
+            <div class="timer-zone">
+                <div class="timer" id="timer-display">60</div>
+                <button class="btn btn-3d btn-coral" onclick="stopGame(false)">정지</button>
+            </div>
+        </div>
+        <div class="timer-progress" id="timer-progress-wrap">
+            <div class="timer-progress-fill" id="timer-progress-fill"></div>
+        </div>
+
+        <div class="game-stage">
+            <div class="quiz-card" id="quiz-card">
+                <div id="quiz-content" class="quiz-text">제시어</div>
+                <div id="quiz-sub" class="quiz-answer hidden">정답</div>
+
+                <div id="placeholder-stage" class="placeholder-stage hidden">
+                    <div class="relay-wheel" id="relay-wheel" onclick="pickRelayTopic()">
+                        <svg><use href="#i-pick-big"/></svg>
+                    </div>
+                    <div>
+                        <div class="placeholder-title">어떤 주제일까요?</div>
+                        <div class="placeholder-hint">아래 버튼 또는 휠을 눌러 주제를 추첨하세요</div>
+                    </div>
+                </div>
+
+                <div id="slot-stage" class="slot-display hidden">
+                    <div class="slot-label">SPINNING…</div>
+                    <div class="slot-text" id="slot-text">&nbsp;</div>
+                </div>
+
+                <div id="hint-area" class="hint-zone hidden">
+                    <div class="hint-meta">
+                        <span class="hint-cat-badge" id="current-quiz-category">주제</span>
+                        <button id="btn-hint" class="hint-btn" onclick="showHint()">
+                            <svg width="16" height="16"><use href="#i-bulb"/></svg>
+                            <span>힌트 (3/3)</span>
+                        </button>
+                    </div>
+                    <div id="hint-text" class="hint-text hidden"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="game-controls">
+            <div id="controls-basic" class="control-row hidden">
+                <button class="btn btn-3d btn-stone btn-big" onclick="passQuiz()">PASS</button>
+                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="correctQuiz()">성공</button>
+            </div>
+            <div id="controls-chosung" class="control-row hidden">
+                <button class="btn btn-3d btn-stone btn-big" onclick="handleChosungPass()">PASS</button>
+                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleChosungCorrect()">정답</button>
+            </div>
+            <div id="controls-relay" class="control-row hidden">
+                <button id="btn-relay-pick" class="btn btn-3d btn-orange btn-big w-full" onclick="pickRelayTopic()">주제 추첨하기</button>
+                <div id="relay-actions" class="control-row hidden" style="padding:0;width:100%">
+                    <button id="btn-relay-redraw" class="btn btn-3d btn-stone btn-big" onclick="redrawRelayTopic()">다시 추첨</button>
+                    <button class="btn btn-3d btn-coral btn-big" onclick="handleRelayResult(false)">실패</button>
+                    <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleRelayResult(true)">성공</button>
+                </div>
+            </div>
+            <div id="controls-fourletter" class="control-row hidden">
+                <button class="btn btn-3d btn-coral btn-big" onclick="handleFourLetterFail()">실패</button>
+                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleFourLetterCorrect()">정답</button>
+            </div>
+            <div class="shortcut-guide" id="shortcut-guide">
+                <span><kbd>←</kbd>Pass / 실패</span>
+                <span><kbd>→</kbd>성공 / 정답</span>
+                <span><kbd>Esc</kbd>정지</span>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<!-- =========================================================
+     MODALS
+     ========================================================= -->
+<dialog id="modal-result">
+    <div class="modal">
+        <div class="result-avatar" id="result-avatar"></div>
+        <h3 id="result-title" class="modal-title">GAME OVER</h3>
+        <p class="modal-sub" id="result-team-line">결과 발표</p>
+
+        <div class="result-team-name" id="result-team">A팀</div>
+
+        <div class="result-score-row">
+            <div class="result-score-block">
+                <div class="result-score-label">획득 점수</div>
+                <div class="result-score-val earned" id="result-score-display">+0</div>
+            </div>
+            <div class="result-divider"></div>
+            <div class="result-score-block">
+                <div class="result-score-label">총 점수</div>
+                <div class="result-score-val total" id="result-total-score">0</div>
+            </div>
+        </div>
+
+        <button class="btn btn-3d btn-primary btn-big w-full mb-4" onclick="prepareNextTeam()">다음 팀 도전</button>
+        <button class="btn-ghost w-full" onclick="closeAndShow('screen-menu')">게임 목록으로</button>
+    </div>
+</dialog>
+
+<dialog id="modal-reset-confirm">
+    <div class="modal" style="max-width:380px">
+        <h3 class="modal-title" style="color:#E0524E">초기화 경고</h3>
+        <p class="modal-sub">모든 팀의 점수와 출제 기록이 삭제됩니다.<br>정말 처음으로 돌아가시겠습니까?</p>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-ghost w-full" onclick="closeDialog('modal-reset-confirm')">취소</button>
+            <button class="btn btn-3d btn-coral w-full" onclick="resetGame()">네, 초기화</button>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="modal-team-settings">
+    <div class="modal">
+        <h3 class="modal-title">팀 이름 편집</h3>
+        <p class="modal-sub">참가 팀의 이름을 자유롭게 설정해 보세요</p>
+        <div id="team-settings-list" style="max-height:50vh; overflow-y:auto;" class="no-scrollbar"></div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button class="btn-ghost w-full" onclick="closeDialog('modal-team-settings')">취소</button>
+            <button class="btn btn-3d btn-forest w-full" onclick="saveTeamSettings()">저장</button>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="modal-scoreboard">
+    <div class="modal">
+        <h3 class="modal-title">점수 관리</h3>
+        <p class="modal-sub">각 팀의 점수를 직접 조정할 수 있어요</p>
+        <div id="scoreboard-list"></div>
+        <button class="btn-ghost w-full mt-4" onclick="closeDialog('modal-scoreboard')">닫기</button>
+    </div>
+</dialog>
+
+<dialog id="modal-game-scores">
+    <div class="modal">
+        <h3 class="modal-title">배점 설정</h3>
+        <p class="modal-sub">문제 1개(네 글자/이어서 말해요는 1라운드)<br>성공 시 획득 점수입니다</p>
+        <div>
+            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-speed)"><svg><use href="#i-game-speed"/></svg></div><span class="score-edit-name">스피드 게임</span></div><input type="number" id="score-input-speed" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-body)"><svg><use href="#i-game-body"/></svg></div><span class="score-edit-name">몸으로 말해요</span></div><input type="number" id="score-input-body" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-chosung)"><svg><use href="#i-game-chosung"/></svg></div><span class="score-edit-name">초성 퀴즈</span></div><input type="number" id="score-input-chosung" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-relay)"><svg><use href="#i-game-relay"/></svg></div><span class="score-edit-name">이어서 말해요</span></div><input type="number" id="score-input-relay" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-fourletter)"><svg><use href="#i-game-fourletter"/></svg></div><span class="score-edit-name">네 글자 퀴즈</span></div><input type="number" id="score-input-fourLetter" class="game-score-input"></div>
+        </div>
+        <div style="display:flex; gap:10px; margin-top:20px;">
+            <button class="btn-ghost w-full" onclick="closeDialog('modal-game-scores')">취소</button>
+            <button class="btn btn-3d btn-forest w-full" onclick="saveGameScoreSettings()">저장</button>
+        </div>
+    </div>
+</dialog>
+
+<script>
+/* =================================================================
+   DATABASE
+   ================================================================= */
+const DB = window.GAME_DB || {}; // 문제 데이터는 questions.js에서 로드
+
+// 문제 식별 키 — 카테고리|제시어|정답 (정답 글자가 같은 다른 문제와 출제기록 충돌 방지)
+const keyOf = item => `${item._cat}|${item.q}|${item.a}`;
+
+// 시간제 게임 라운드당 출제 수 상한 — 주제와 관계없이 만점(상한×배점) 동일
+const ROUND_CAP = { speed: 30, body: 25, chosung: 12 };
+
+// Fisher-Yates 셔플 (sort+random 방식은 편향 발생)
+function shuffle(arr) {
+    const a = arr.slice();
+    for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+}
+
+// confetti CDN 로드 실패 시에도 게임이 멈추지 않게 하는 안전 래퍼
+const fx = opts => { try { window.confetti && confetti(opts); } catch (e) {} };
+
+// 폭죽 팔레트 (캔디 팝 테마)
+const FX_COLORS = ['#FF5D73', '#FFC94D', '#4ECDC4', '#7C5CFF', '#FFFFFF'];
+
+// 가벼운 햅틱 (지원 기기에서만 — iOS Safari는 무시됨)
+const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} };
+
+/* =================================================================
+   팀 캐릭터 — characters.js의 오리지널 아바타 10종
+   ================================================================= */
+const CHARS = window.TEAM_CHARS || [];
+
+// 아바타 심볼을 문서에 주입 (스크립트가 body 끝이라 DOM 준비 완료 상태)
+(function injectCharSymbols() {
+    if (!CHARS.length) return;
+    const holder = document.createElement('div');
+    holder.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+    holder.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg"><defs>'
+        + CHARS.map(c => '<symbol id="char-' + c.id + '" viewBox="0 0 96 96">' + c.svg + '</symbol>').join('')
+        + '</defs></svg>';
+    document.body.prepend(holder);
+})();
+
+function charById(id) {
+    return CHARS.find(c => c.id === id) || CHARS[0] || { id: 'none', color: '#CCC', label: '팀', names: ['팀'], svg: '' };
+}
+function avatarHtml(charId, cls) {
+    const c = charById(charId);
+    return '<span class="avatar ' + (cls || '') + '"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="#char-' + c.id + '"/></svg></span>';
+}
+function pickName(c) { return c.names[Math.floor(Math.random() * c.names.length)]; }
+function pickTeamIdentities(count) {
+    return shuffle(CHARS).slice(0, count).map(c => ({ char: c.id, name: pickName(c) }));
+}
+
+// 모드별 컬러 테마 — 파티(코랄) / 워크샵(블루)
+function applyMode(mode) {
+    const m = (mode === 'workshop') ? 'workshop' : 'party';
+    document.body.dataset.mode = m;
+    // 브라우저 상단바(status bar) 색도 테마에 맞춤
+    const meta = document.querySelector('meta[name="theme-color"]');
+    if (meta) meta.setAttribute('content', m === 'workshop' ? '#4285FF' : '#FFF6EA');
+}
+
+/* =================================================================
+   SOUND ENGINE — 음악적 풍부함을 더한 고품질 사운드
+   ================================================================= */
+const Sound = {
+    isInit: false,
+    muted: false,
+    userGestureDone: false,   // 브라우저 자동재생 정책: 첫 터치 전 오디오 시작 불가
+    bgmWanted: false,         // 터치 전 BGM 요청을 예약해 두는 플래그
+    _bgmDisposeTimer: null,
+    nodes: {},
+    bgmActive: false,
+    successCount: 0,
+
+    async init() {
+        if (this.isInit || typeof Tone === 'undefined') return;
+        try { await Tone.start(); } catch(e) {}
+
+        // ----- 마스터 체인: EQ → 컴프레서 → 리미터 (폰 스피커에서도 안 깨지게) -----
+        const limiter = new Tone.Limiter(-1.5).toDestination();
+        const masterComp = new Tone.Compressor({ threshold: -16, ratio: 2.5, attack: 0.004, release: 0.18 }).connect(limiter);
+        const masterEQ = new Tone.EQ3({ low: 0.5, mid: 0, high: 1.5 }).connect(masterComp);
+
+        // 공간 센드 — 짧고 밝은 룸 리버브 + 가벼운 8분 딜레이
+        const reverbSend = new Tone.Gain(0.16).connect(masterEQ);
+        const reverb = new Tone.Reverb({ decay: 1.7, wet: 1, preDelay: 0.015 }).connect(reverbSend);
+        const delaySend = new Tone.Gain(0.1).connect(masterEQ);
+        const delay = new Tone.FeedbackDelay({ delayTime: '8n', feedback: 0.22, wet: 1 }).connect(delaySend);
+
+        // 노드를 드라이 + 센드에 동시에 연결
+        const route = (node, rev = 0.3, del = 0) => {
+            node.connect(masterEQ);
+            if (rev > 0) { const s = new Tone.Gain(rev); node.connect(s); s.connect(reverb); }
+            if (del > 0) { const s = new Tone.Gain(del); node.connect(s); s.connect(delay); }
+        };
+
+        // ===== PLUCK — 마림바 톤. UI 멜로디의 기본 목소리 =====
+        const pluck = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'sine' },
+            envelope: { attack: 0.002, decay: 0.28, sustain: 0, release: 0.4 }
+        });
+        pluck.volume.value = -10;
+        const pluckLp = new Tone.Filter(3400, 'lowpass');
+        pluck.connect(pluckLp);
+        route(pluckLp, 0.35, 0.08);
+        this.nodes.pluck = pluck;
+
+        // ===== GLASS — 부드러운 유리 벨 (성공의 반짝임) =====
+        const glass = new Tone.PolySynth(Tone.FMSynth, {
+            harmonicity: 3.01,
+            modulationIndex: 8,
+            envelope: { attack: 0.001, decay: 0.6, sustain: 0, release: 1.1 },
+            modulationEnvelope: { attack: 0.001, decay: 0.4, sustain: 0, release: 0.4 }
+        });
+        glass.volume.value = -14;
+        route(glass, 0.5, 0.18);
+        this.nodes.glass = glass;
+
+        // ===== KEYS — 팡파레/BGM용 일렉피아노 =====
+        const keys = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'sine' },
+            envelope: { attack: 0.004, decay: 0.5, sustain: 0.12, release: 0.8 }
+        });
+        keys.volume.value = -12;
+        route(keys, 0.4, 0.08);
+        this.nodes.keys = keys;
+
+        // ===== PAD — 배경 스트링 =====
+        const pad = new Tone.PolySynth(Tone.Synth, {
+            oscillator: { type: 'fatsawtooth', count: 3, spread: 16 },
+            envelope: { attack: 0.7, decay: 0.4, sustain: 0.7, release: 1.8 }
+        });
+        pad.volume.value = -26;
+        const padLp = new Tone.Filter(1400, 'lowpass');
+        pad.connect(padLp);
+        route(padLp, 0.55);
+        this.nodes.pad = pad;
+
+        // ===== BASS =====
+        const bass = new Tone.MonoSynth({
+            oscillator: { type: 'triangle' },
+            envelope: { attack: 0.01, decay: 0.35, sustain: 0.35, release: 0.35 },
+            filterEnvelope: { attack: 0.01, decay: 0.25, sustain: 0.4, baseFrequency: 90, octaves: 2 }
+        });
+        bass.volume.value = -12;
+        route(bass, 0.1);
+        this.nodes.bass = bass;
+
+        // ===== 드럼: KICK / SNARE / WOOD / SHAKER =====
+        const kick = new Tone.MembraneSynth({
+            pitchDecay: 0.04, octaves: 4,
+            envelope: { attack: 0.001, decay: 0.32, sustain: 0.01, release: 0.3 }
+        });
+        kick.volume.value = -10;
+        route(kick, 0.08);
+        this.nodes.kick = kick;
+
+        const snare = new Tone.NoiseSynth({
+            noise: { type: 'white' },
+            envelope: { attack: 0.001, decay: 0.09, sustain: 0 }
+        });
+        snare.volume.value = -22;
+        const snareHp = new Tone.Filter(1800, 'highpass');
+        snare.connect(snareHp);
+        route(snareHp, 0.3);
+        this.nodes.snare = snare;
+
+        // 우드블록 — 틱/탭의 기본 (짧고 둥근 '똑')
+        const wood = new Tone.MembraneSynth({
+            pitchDecay: 0.006, octaves: 1.1,
+            envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.04 }
+        });
+        wood.volume.value = -12;
+        route(wood, 0.12);
+        this.nodes.wood = wood;
+
+        const shaker = new Tone.NoiseSynth({
+            noise: { type: 'white' },
+            envelope: { attack: 0.001, decay: 0.04, sustain: 0 }
+        });
+        shaker.volume.value = -30;
+        const shakerHp = new Tone.Filter(6000, 'highpass');
+        shaker.connect(shakerHp);
+        route(shakerHp, 0.15);
+        this.nodes.shaker = shaker;
+
+        // ===== SWOOSH — PASS/스핀용 바람 소리 =====
+        const swoosh = new Tone.NoiseSynth({
+            noise: { type: 'pink' },
+            envelope: { attack: 0.015, decay: 0.22, sustain: 0 }
+        });
+        swoosh.volume.value = -22;
+        const swooshBp = new Tone.Filter(900, 'bandpass');
+        swoosh.connect(swooshBp);
+        route(swooshBp, 0.2);
+        this.nodes.swoosh = swoosh;
+
+        // ===== GONG — 시간 종료 =====
+        const gong = new Tone.MetalSynth({
+            frequency: 70,
+            envelope: { attack: 0.001, decay: 1.6, release: 1.6 },
+            harmonicity: 3.1, modulationIndex: 36,
+            resonance: 1800, octaves: 1.8
+        });
+        gong.volume.value = -18;
+        route(gong, 0.6, 0.15);
+        this.nodes.gong = gong;
+
+        this.isInit = true;
+    },
+
+    async ensure() {
+        if (typeof Tone === 'undefined') return;
+        if (!this.isInit) await this.init();
+        if (Tone.context.state !== 'running') { try { await Tone.context.resume(); } catch(e){} }
+    },
+
+    setMuted(v) {
+        this.muted = !!v;
+        if (this.muted) this.stopBgm();
+    },
+
+    // ---------------------------------------------------------------
+    //  BGM — 8마디 lo-fi 진행 (스윙 + 휴머나이즈로 기계적인 느낌 제거)
+    // ---------------------------------------------------------------
+    async startBgm() {
+        if (this.muted) return;
+        // 첫 사용자 터치 전에는 예약만 — 터치 시 pointerdown 핸들러가 시작
+        if (!this.userGestureDone || typeof Tone === 'undefined') { this.bgmWanted = true; return; }
+        await this.ensure();
+        if (!this.isInit || this.bgmActive) return;
+        // 직전 stopBgm의 지연 dispose 타이머와 경합하면 새 루프가 삭제되어 영구 침묵 → 먼저 정리
+        if (this._bgmDisposeTimer) { clearTimeout(this._bgmDisposeTimer); this._bgmDisposeTimer = null; }
+        this._disposeBgmLoops();
+        this.bgmActive = true;
+
+        Tone.Transport.bpm.value = 76;
+        Tone.Transport.swing = 0.12;           // 살짝 스윙 — lo-fi 그루브
+        Tone.Transport.swingSubdivision = '8n';
+        try { Tone.Transport.start(); } catch(e) {}
+
+        // 8마디 화성 — CMaj7 · Em7 · Am7 · C7 · FMaj7 · Dm7 · G7sus · CMaj7
+        const chords = [
+            ['C3','E3','G3','B3'], ['E3','G3','B3','D4'], ['A2','C3','E3','G3'], ['C3','E3','G3','Bb3'],
+            ['F2','A2','C3','E3'], ['D3','F3','A3','C4'], ['G2','C3','D3','F3'], ['C3','E3','G3','B3']
+        ];
+        const bassNotes = ['C2','E2','A1','C2','F1','D2','G1','C2'];
+        const melody = [
+            'E5', null, 'G5', null, 'C6', null, 'B5', null,
+            'D5', null, 'B5', null, 'G5', null, null, null,
+            'C5', null, 'E5', null, 'A5', null, 'E5', null,
+            'G5', null, 'Bb5', null, 'C6', null, null, null,
+            'A5', null, 'C6', null, 'F5', null, 'E5', null,
+            'F5', null, 'A5', null, 'D6', null, null, null,
+            'D5', null, 'F5', null, 'G5', null, 'C6', null,
+            'E5', null, 'G5', null, 'C6', null, null, null
+        ];
+
+        let chordIdx = 0;
+        this._bgmPad = new Tone.Loop((time) => {
+            this.nodes.pad.triggerAttackRelease(chords[chordIdx % 8], '1n', time, 0.45);
+            chordIdx++;
+        }, '1n').start(0);
+
+        let bassIdx = 0;
+        this._bgmBass = new Tone.Loop((time) => {
+            this.nodes.bass.triggerAttackRelease(bassNotes[bassIdx % 8], '2n', time, 0.4);
+            bassIdx++;
+        }, '1n').start(0);
+
+        this._bgmMelody = new Tone.Sequence((time, note) => {
+            // 휴머나이즈: 벨로시티에 미세한 랜덤 — 기계적인 반복감 제거
+            if (note) this.nodes.keys.triggerAttackRelease(note, '8n', time, 0.2 + Math.random() * 0.07);
+        }, melody, '8n').start(0);
+
+        // 셰이커 백비트 (2·4박)
+        let hatStep = 0;
+        this._bgmHat = new Tone.Loop((time) => {
+            if (hatStep % 2 === 1) this.nodes.shaker.triggerAttackRelease('32n', time, 0.5);
+            hatStep++;
+        }, '4n').start('0:0');
+
+        // 페이드인
+        const t = Tone.now();
+        this.nodes.pad.volume.cancelScheduledValues(t);
+        this.nodes.pad.volume.setValueAtTime(-60, t);
+        this.nodes.pad.volume.linearRampToValueAtTime(-26, t + 2);
+
+        this.nodes.keys.volume.cancelScheduledValues(t);
+        this.nodes.keys.volume.setValueAtTime(-60, t);
+        this.nodes.keys.volume.linearRampToValueAtTime(-18, t + 2);
+
+        this.nodes.bass.volume.cancelScheduledValues(t);
+        this.nodes.bass.volume.setValueAtTime(-60, t);
+        this.nodes.bass.volume.linearRampToValueAtTime(-16, t + 2);
+    },
+
+    stopBgm() {
+        this.bgmWanted = false;
+        if (!this.bgmActive) return;
+        this.bgmActive = false;
+        if (typeof Tone === 'undefined') return;
+        const t = Tone.now();
+
+        // 1. 즉시 시퀀스 정지 — 새 노트가 더 이상 schedule 되지 않도록
+        try { this._bgmPad && this._bgmPad.stop(); } catch(e){}
+        try { this._bgmBass && this._bgmBass.stop(); } catch(e){}
+        try { this._bgmMelody && this._bgmMelody.stop(); } catch(e){}
+        try { this._bgmHat && this._bgmHat.stop(); } catch(e){}
+
+        // 2. 재생 중인 사운드 페이드아웃 (0.25s)
+        try {
+            this.nodes.pad.volume.cancelScheduledValues(t);
+            this.nodes.pad.volume.linearRampToValueAtTime(-60, t + 0.25);
+            this.nodes.keys.volume.cancelScheduledValues(t);
+            this.nodes.keys.volume.linearRampToValueAtTime(-60, t + 0.25);
+            this.nodes.bass.volume.cancelScheduledValues(t);
+            this.nodes.bass.volume.linearRampToValueAtTime(-60, t + 0.25);
+        } catch (e) {}
+
+        // 3. 페이드 끝나면 dispose + SFX용 볼륨 복원 (핸들 보관 — startBgm과의 경합 방지)
+        this._bgmDisposeTimer = setTimeout(() => {
+            this._bgmDisposeTimer = null;
+            this._disposeBgmLoops();
+
+            try {
+                this.nodes.pad.volume.setValueAtTime(-26, Tone.now());
+                this.nodes.keys.volume.setValueAtTime(-12, Tone.now());
+                this.nodes.bass.volume.setValueAtTime(-12, Tone.now());
+            } catch(e){}
+        }, 280);
+    },
+
+    _disposeBgmLoops() {
+        try { this._bgmPad && this._bgmPad.dispose(); } catch(e){}
+        try { this._bgmBass && this._bgmBass.dispose(); } catch(e){}
+        try { this._bgmMelody && this._bgmMelody.dispose(); } catch(e){}
+        try { this._bgmHat && this._bgmHat.dispose(); } catch(e){}
+        this._bgmPad = this._bgmBass = this._bgmMelody = this._bgmHat = null;
+    },
+
+    // ---------------------------------------------------------------
+    //  SFX — 모든 소리는 C장조 펜타토닉 계열로 통일 (게임 전체가 한 곡처럼)
+    // ---------------------------------------------------------------
+    async play(kind, arg) {
+        if (this.muted) return;
+        try {
+            await this.ensure();
+            if (!this.isInit) return;
+            const now = Tone.now();
+            const n = this.nodes;
+
+            switch (kind) {
+                case 'tap': // 짧은 '똑' — 어느 화면에서도 튀지 않는 낮은 톤
+                    n.wood.triggerAttackRelease('G4', '32n', now, 0.4);
+                    break;
+
+                case 'modal': // 두 음 '또롱' (4도 상행)
+                    n.pluck.triggerAttackRelease('E5', '16n', now, 0.35);
+                    n.pluck.triggerAttackRelease('A5', '16n', now + 0.07, 0.3);
+                    break;
+
+                case 'hint': // 반짝이는 3음 글리산도
+                    n.glass.triggerAttackRelease('C6', '32n', now, 0.22);
+                    n.glass.triggerAttackRelease('E6', '32n', now + 0.055, 0.2);
+                    n.glass.triggerAttackRelease('G6', '16n', now + 0.11, 0.22);
+                    break;
+
+                case 'pass': // 스윽 + 가벼운 하강 — 아쉬움 없이 산뜻하게 넘김
+                    n.swoosh.triggerAttackRelease('8n', now);
+                    n.pluck.triggerAttackRelease('B4', '32n', now + 0.02, 0.28);
+                    n.pluck.triggerAttackRelease('F#4', '16n', now + 0.09, 0.24);
+                    break;
+
+                case 'success': { // 시그니처 3음 아르페지오 — 연속 성공마다 온음씩 상승
+                    this.successCount = Math.min((this.successCount || 0) + 1, 5);
+                    const tr = (this.successCount - 1) * 2;
+                    const tt = (note) => Tone.Frequency(note).transpose(tr);
+                    n.pluck.triggerAttackRelease(tt('C5'), '16n', now, 0.55);
+                    n.pluck.triggerAttackRelease(tt('E5'), '16n', now + 0.055, 0.55);
+                    n.pluck.triggerAttackRelease(tt('G5'), '16n', now + 0.11, 0.6);
+                    n.glass.triggerAttackRelease(tt('C6'), '8n', now + 0.165, 0.5);
+                    n.kick.triggerAttackRelease('C2', '16n', now + 0.165, 0.35);
+                    // 4연속 이상: 보너스 반짝임 한 겹
+                    if (this.successCount >= 4) n.glass.triggerAttackRelease(tt('E6'), '8n', now + 0.23, 0.35);
+                    break;
+                }
+
+                case 'big-success': { // 팡파레 — I·IV·V·I 케이던스 + 스네어 롤 크레셴도
+                    this.successCount = 0;
+                    n.keys.triggerAttackRelease(['C4','E4','G4'], '8n', now, 0.5);
+                    n.keys.triggerAttackRelease(['F4','A4','C5'], '8n', now + 0.22, 0.55);
+                    n.keys.triggerAttackRelease(['G4','B4','D5'], '8n', now + 0.44, 0.6);
+                    n.keys.triggerAttackRelease(['C4','E4','G4','C5'], '2n', now + 0.68, 0.8);
+
+                    n.bass.triggerAttackRelease('C2', '8n', now, 0.6);
+                    n.bass.triggerAttackRelease('F2', '8n', now + 0.22, 0.6);
+                    n.bass.triggerAttackRelease('G2', '8n', now + 0.44, 0.65);
+                    n.bass.triggerAttackRelease('C2', '2n', now + 0.68, 0.75);
+
+                    for (let i = 0; i < 6; i++) n.snare.triggerAttackRelease('16n', now + 0.44 + i * 0.04, 0.12 + i * 0.06);
+                    n.kick.triggerAttackRelease('C2', '8n', now, 0.7);
+                    n.kick.triggerAttackRelease('C2', '8n', now + 0.68, 0.9);
+
+                    n.glass.triggerAttackRelease('C6', '8n', now + 0.68, 0.4);
+                    n.glass.triggerAttackRelease('E6', '8n', now + 0.75, 0.35);
+                    n.glass.triggerAttackRelease('G6', '8n', now + 0.82, 0.3);
+                    n.glass.triggerAttackRelease('C7', '4n', now + 0.89, 0.25);
+                    break;
+                }
+
+                case 'fail': // 짧고 다정한 두 음 — 창피 주지 않는 '아쉽다'
+                    this.successCount = 0;
+                    n.pluck.triggerAttackRelease('Eb4', '8n', now, 0.4);
+                    n.pluck.triggerAttackRelease('C4', '4n', now + 0.16, 0.38);
+                    n.bass.triggerAttackRelease('C2', '4n', now + 0.16, 0.3);
+                    break;
+
+                case 'tick': { // 카운트다운 — 마지막 5초는 톤·세기 상승
+                    const remaining = typeof arg === 'number' ? arg : 10;
+                    const urgent = remaining <= 5;
+                    n.wood.triggerAttackRelease(urgent ? 'C5' : 'A4', '32n', now, urgent ? 0.5 : 0.3);
+                    break;
+                }
+
+                case 'timesup': // 공 + 부드러운 단조 하강
+                    this.successCount = 0;
+                    n.gong.triggerAttackRelease(0.7, now, 0.8);
+                    n.keys.triggerAttackRelease(['A3','C4','E4'], '2n', now + 0.05, 0.5);
+                    n.pluck.triggerAttackRelease('A4', '8n', now + 0.3, 0.35);
+                    n.pluck.triggerAttackRelease('G4', '8n', now + 0.48, 0.32);
+                    n.pluck.triggerAttackRelease('E4', '4n', now + 0.66, 0.3);
+                    break;
+
+                case 'start': // "레디— 고!" 상승 픽업
+                    n.wood.triggerAttackRelease('G4', '32n', now, 0.4);
+                    n.pluck.triggerAttackRelease('C5', '16n', now + 0.11, 0.5);
+                    n.pluck.triggerAttackRelease('E5', '16n', now + 0.22, 0.55);
+                    n.glass.triggerAttackRelease(['G5','C6'], '4n', now + 0.33, 0.55);
+                    n.kick.triggerAttackRelease('C2', '8n', now + 0.33, 0.6);
+                    break;
+
+                case 'spinTick': { // 슬롯 회전 째깍 — 회전할 때마다 다른 펜타토닉 음
+                    const notes = ['C5','D5','E5','G5','A5'];
+                    n.wood.triggerAttackRelease(notes[Math.floor(Math.random() * notes.length)], '32n', now, 0.22);
+                    n.shaker.triggerAttackRelease('32n', now, 0.3);
+                    break;
+                }
+
+                case 'roll': // 스핀 시작 스윽
+                    n.swoosh.triggerAttackRelease('4n', now);
+                    break;
+            }
+        } catch (e) { /* silent */ }
+    }
+};
+
+
+/* =================================================================
+   APP STATE
+   ================================================================= */
+const App = {
+    mode: null,
+    teams: [],
+    currentTeamIndex: 0,
+    round: 1,
+    history: { speed: [], body: [], chosung: [], relay: [], fourLetter: [] },
+    scoreSettings: { speed: 10, body: 10, chosung: 10, relay: 100, fourLetter: 100 },
+    game: {
+        type: null, category: 'random', targetCount: 8,
+        timer: 90, words: [], currentIndex: 0, score: 0,
+        timerInterval: null, pendingTimeout: null, hintsLeft: 3,
+        isTransitioning: false, ended: false,
+        difficulty: 2,      // 이어말하기 주제 난이도: 1 순한맛 / 2 보통 / 3 매운맛
+        redrawUsed: false   // 이어말하기 재추첨(라운드당 1회) 사용 여부
+    }
+};
+
+const STORAGE_KEY = 'partygame_v27'; // v27: 팀 데이터에 캐릭터(char) 추가
+
+function persist() {
+    try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            mode: App.mode,
+            teams: App.teams,
+            currentTeamIndex: App.currentTeamIndex,
+            round: App.round,
+            history: App.history,
+            scoreSettings: App.scoreSettings
+        }));
+    } catch (e) {}
+}
+
+function restore() {
+    try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) return false;
+        const s = JSON.parse(raw);
+        if (!s.teams || !s.teams.length) return false;
+        App.mode = s.mode;
+        App.teams = s.teams;
+        // 구버전 데이터: 캐릭터가 없으면 자동 배정
+        if (App.teams.some(t => !t.char)) {
+            const ids = pickTeamIdentities(App.teams.length);
+            App.teams.forEach((t, i) => { if (!t.char) t.char = ids[i % ids.length].char; });
+        }
+        App.currentTeamIndex = s.currentTeamIndex || 0;
+        App.round = s.round || 1;
+        App.history = Object.assign({ speed:[], body:[], chosung:[], relay:[], fourLetter:[] }, s.history || {});
+        App.scoreSettings = Object.assign({ speed:10, body:10, chosung:10, relay:100, fourLetter:100 }, s.scoreSettings || {});
+        return true;
+    } catch (e) { return false; }
+}
+
+/* =================================================================
+   FLOW: MODE → SETUP → MENU → PREGAME → GAME
+   ================================================================= */
+function setMode(mode) {
+    App.mode = mode;
+    applyMode(mode);
+    Sound.play('tap');
+    const sel = document.getElementById('team-count-select');
+    sel.innerHTML = '';
+    const min = mode === 'party' ? 2 : 4;
+    const max = mode === 'party' ? 4 : 10;
+    for (let i = min; i <= max; i++) {
+        const opt = document.createElement('option');
+        opt.value = i;
+        opt.textContent = `${i}팀`;
+        sel.appendChild(opt);
+    }
+    setupDraft = []; // 모드가 바뀌면 캐릭터·이름 새로 추천
+    renderTeamInputs();
+    showScreen('screen-setup');
+}
+
+/* ---------- 팀 만들기: 캐릭터 랜덤 배정 + 이름 자동 추천 ---------- */
+let setupDraft = []; // [{char, name}] — 설정 화면의 임시 팀 구성
+
+function syncDraftFromInputs() {
+    document.querySelectorAll('#team-inputs-container .team-row').forEach((row, i) => {
+        if (setupDraft[i]) {
+            const v = row.querySelector('input').value.trim();
+            if (v) setupDraft[i].name = v;
+        }
+    });
+}
+
+function ensureDraft(count) {
+    if (setupDraft.length > count) { setupDraft = setupDraft.slice(0, count); return; }
+    const usedIds = setupDraft.map(d => d.char);
+    const fresh = shuffle(CHARS.filter(c => !usedIds.includes(c.id)));
+    while (setupDraft.length < count) {
+        const c = fresh.pop() || CHARS[Math.floor(Math.random() * CHARS.length)];
+        setupDraft.push({ char: c.id, name: pickName(c) });
+    }
+}
+
+function paintTeamRows() {
+    const div = document.getElementById('team-inputs-container');
+    div.innerHTML = setupDraft.map((d, i) =>
+        '<div class="team-row" data-index="' + i + '">'
+        + avatarHtml(d.char, 'avatar-md')
+        + '<input type="text" class="form-input team-name-input" maxlength="10" value="' + escapeHtml(d.name) + '">'
+        + '<button class="reroll-btn" onclick="rerollTeamRow(' + i + ')" aria-label="캐릭터와 이름 다시 뽑기"><svg><use href="#i-dice"/></svg></button>'
+        + '</div>'
+    ).join('');
+}
+
+function renderTeamInputs() {
+    syncDraftFromInputs();
+    ensureDraft(parseInt(document.getElementById('team-count-select').value) || 2);
+    paintTeamRows();
+}
+
+function rerollTeamRow(i) {
+    Sound.play('spinTick');
+    syncDraftFromInputs();
+    const usedIds = setupDraft.filter((_, j) => j !== i).map(d => d.char);
+    const candidates = CHARS.filter(c => !usedIds.includes(c.id) && c.id !== setupDraft[i].char);
+    const c = candidates.length ? candidates[Math.floor(Math.random() * candidates.length)] : charById(setupDraft[i].char);
+    setupDraft[i] = { char: c.id, name: pickName(c) };
+    paintTeamRows();
+}
+
+function rerollAllTeams() {
+    Sound.play('roll');
+    const cnt = setupDraft.length || parseInt(document.getElementById('team-count-select').value) || 2;
+    setupDraft = [];
+    ensureDraft(cnt);
+    paintTeamRows();
+}
+
+function completeSetup() {
+    Sound.play('tap');
+    syncDraftFromInputs();
+    App.teams = setupDraft.map(d => ({
+        name: (d.name || '').trim() || charById(d.char).label + '팀',
+        score: 0,
+        char: d.char
+    }));
+    App.currentTeamIndex = 0;
+    updateScoreboard();
+    persist();
+    showScreen('screen-menu');
+}
+
+function updateScoreboard() {
+    const board = document.getElementById('header-scoreboard');
+    if (!board) return;
+    if (!App.teams.length) {
+        board.style.display = 'none';
+        return;
+    }
+    board.style.display = '';
+    board.innerHTML = App.teams.map((t, i) => {
+        const cls = i === App.currentTeamIndex ? 'score-chip active' : 'score-chip';
+        return `<div class="${cls}" style="--char:${charById(t.char).color}">
+            ${avatarHtml(t.char, 'avatar-xs')}
+            <div class="score-chip-info">
+                <div class="score-chip-num">${t.score}</div>
+                <div class="score-chip-name">${escapeHtml(t.name)}</div>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({
+        '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'
+    }[c]));
+}
+
+function prepareGame(type, keepSettings = false) {
+    Sound.play('tap');
+    App.game.type = type;
+    if (!keepSettings) {
+        App.game.category = 'random';
+    }
+
+    const titles = {
+        speed: '스피드 게임', body: '몸으로 말해요', chosung: '초성 퀴즈',
+        relay: '이어서 말해요', fourLetter: '네 글자 퀴즈'
+    };
+    document.getElementById('pregame-title').textContent = titles[type];
+
+    // 팀 선택자
+    const tCon = document.getElementById('team-selector-container');
+    tCon.innerHTML = '';
+    App.teams.forEach((t, i) => {
+        const btn = document.createElement('button');
+        btn.className = i === App.currentTeamIndex ? 'chip active-orange' : 'chip';
+        btn.innerHTML = avatarHtml(t.char, 'avatar-sm') + '<span>' + escapeHtml(t.name) + '</span>';
+        btn.onclick = () => {
+            App.currentTeamIndex = i;
+            updateScoreboard();
+            prepareGame(type, true);
+        };
+        tCon.appendChild(btn);
+    });
+    const readyTeam = App.teams[App.currentTeamIndex];
+    document.getElementById('ready-team-name').innerHTML =
+        avatarHtml(readyTeam.char, 'avatar-md') + '<span>' + escapeHtml(readyTeam.name) + '</span>';
+
+    // 카테고리 선택자
+    const catSection = document.getElementById('category-section');
+    const cCon = document.getElementById('category-selector-container');
+    cCon.innerHTML = '';
+
+    catSection.classList.remove('hidden');
+    const rnd = document.createElement('button');
+    rnd.className = App.game.category === 'random' ? 'chip active-orange' : 'chip';
+    rnd.innerHTML = '<svg width="14" height="14" style="vertical-align:-2px;margin-right:4px"><use href="#i-dice"/></svg>전체 랜덤';
+    rnd.onclick = () => { App.game.category = 'random'; prepareGame(type, true); };
+    cCon.appendChild(rnd);
+
+    if (DB[type]) {
+        Object.keys(DB[type]).forEach(k => {
+            const btn = document.createElement('button');
+            btn.className = App.game.category === k ? 'chip active' : 'chip';
+            btn.textContent = k;
+            btn.onclick = () => { App.game.category = k; prepareGame(type, true); };
+            cCon.appendChild(btn);
+        });
+    }
+
+    // 시간/문제수/난이도 설정 토글
+    document.getElementById('difficulty-section').classList.add('hidden');
+    if (type === 'fourLetter') {
+        document.getElementById('timer-section').classList.add('hidden');
+        document.getElementById('fourletter-count-section').classList.remove('hidden');
+    } else if (type === 'relay') {
+        document.getElementById('timer-section').classList.add('hidden');
+        document.getElementById('fourletter-count-section').classList.add('hidden');
+        document.getElementById('difficulty-section').classList.remove('hidden');
+        paintDifficultyChips();
+    } else {
+        document.getElementById('timer-section').classList.remove('hidden');
+        document.getElementById('fourletter-count-section').classList.add('hidden');
+    }
+
+    showScreen('screen-pregame');
+}
+
+/* ---------- 이어말하기 난이도 선택 ---------- */
+function setDifficulty(d) {
+    App.game.difficulty = d;
+    Sound.play('tap');
+    paintDifficultyChips();
+}
+function paintDifficultyChips() {
+    document.querySelectorAll('#difficulty-selector .chip').forEach(btn => {
+        btn.classList.toggle('active-orange', parseInt(btn.dataset.d) === (App.game.difficulty || 2));
+    });
+}
+
+function startGame() {
+    // BGM을 먼저 정지하여 게임 시작 사운드와 겹치지 않도록
+    Sound.stopBgm();
+    Sound.play('start');
+    const timerSel = document.getElementById('timer-select');
+    App.game.timer = parseInt(timerSel.value);
+    App.game.score = 0;
+    App.game.currentIndex = 0;
+    App.game.hintsLeft = 3;
+    App.game.isTransitioning = false;
+    App.game.ended = false;
+    clearTimeout(App.game.pendingTimeout);
+    App.game.pendingTimeout = null;
+
+    // fourLetter는 목표 문제 수가 loadGameData에서 필요하므로 먼저 설정
+    if (App.game.type === 'fourLetter') {
+        App.game.targetCount = parseInt(document.getElementById('fourletter-count-select').value);
+    }
+
+    if (!loadGameData()) return;
+
+    const playTeam = App.teams[App.currentTeamIndex];
+    document.getElementById('ingame-team-badge').innerHTML =
+        avatarHtml(playTeam.char, '') + '<span>' + escapeHtml(playTeam.name) + '</span>';
+
+    // 현재 진행 중인 게임 이름·아이콘
+    const gameLabels = {
+        speed:'스피드 게임', body:'몸으로 말해요', chosung:'초성 퀴즈',
+        relay:'이어서 말해요', fourLetter:'네 글자 퀴즈'
+    };
+    const gameIcons = {
+        speed:'#i-game-speed', body:'#i-game-body', chosung:'#i-game-chosung',
+        relay:'#i-game-relay', fourLetter:'#i-game-fourletter'
+    };
+    document.getElementById('ingame-game-text').textContent = gameLabels[App.game.type] || '';
+    document.getElementById('ingame-game-icon').innerHTML = `<use href="${gameIcons[App.game.type] || '#i-game-speed'}"/>`;
+
+    const catDisplay = (!App.game.category || App.game.category === 'random') ? '전체 랜덤' : App.game.category;
+    document.getElementById('ingame-category').textContent = catDisplay;
+
+    document.getElementById('timer-display').textContent = App.game.timer;
+    document.getElementById('timer-display').classList.remove('danger');
+    resetTimerProgress();
+
+    // Hide all controls
+    ['controls-basic','controls-chosung','controls-relay','controls-fourletter'].forEach(id => {
+        document.getElementById(id).classList.add('hidden');
+    });
+    document.getElementById('placeholder-stage').classList.add('hidden');
+    document.getElementById('quiz-content').classList.remove('hidden');
+    document.getElementById('quiz-sub').classList.add('hidden');
+    document.getElementById('hint-area').classList.add('hidden');
+
+    updateHintButtonState();
+
+    if (App.game.type === 'fourLetter') {
+        document.getElementById('ingame-progress').classList.remove('hidden');
+    } else {
+        document.getElementById('ingame-progress').classList.add('hidden');
+    }
+
+    const progressWrap = document.getElementById('timer-progress-wrap');
+    // slot-stage는 relay 진입 시마다 초기화
+    const slotStage = document.getElementById('slot-stage');
+    if (slotStage) slotStage.classList.add('hidden');
+
+    if (App.game.type === 'relay') {
+        document.getElementById('controls-relay').classList.remove('hidden');
+        document.getElementById('timer-display').textContent = '∞';
+        progressWrap.style.visibility = 'hidden';
+        document.getElementById('quiz-content').classList.add('hidden');
+        document.getElementById('placeholder-stage').classList.remove('hidden');
+        document.getElementById('btn-relay-pick').classList.remove('hidden');
+        document.getElementById('relay-actions').classList.add('hidden');
+        App.game.redrawUsed = false; // 재추첨 기회 리셋 (라운드당 1회)
+        document.getElementById('btn-relay-redraw').classList.remove('hidden');
+    } else if (App.game.type === 'fourLetter') {
+        document.getElementById('controls-fourletter').classList.remove('hidden');
+        document.getElementById('timer-display').textContent = '∞';
+        progressWrap.style.visibility = 'hidden';
+        renderQuiz();
+    } else if (App.game.type === 'chosung') {
+        progressWrap.style.visibility = 'visible';
+        document.getElementById('controls-chosung').classList.remove('hidden');
+        renderQuiz();
+        startTimer();
+    } else {
+        progressWrap.style.visibility = 'visible';
+        document.getElementById('controls-basic').classList.remove('hidden');
+        renderQuiz();
+        startTimer();
+    }
+
+    showScreen('screen-game');
+}
+
+function loadGameData() {
+    const { type, category } = App.game;
+    let raw = [];
+
+    try {
+        // relay/이어서 말해요 — 카테고리 선택 가능하도록 통합 처리
+        if (category === 'random' || (type === 'relay' && (!category || category === 'random'))) {
+            Object.keys(DB[type] || {}).forEach(catKey => {
+                const catItems = DB[type][catKey];
+                const withCat = catItems.map(item =>
+                    typeof item === 'string'
+                        ? { q: item, a: item, _cat: catKey }
+                        : { ...item, _cat: catKey }
+                );
+                raw = raw.concat(withCat);
+            });
+        } else {
+            const source = DB[type][category] || [];
+            raw = source.map(item =>
+                typeof item === 'string'
+                    ? { q: item, a: item, _cat: category }
+                    : { ...item, _cat: category }
+            );
+        }
+
+        // 값 정규화: 정답(a)이 없는 항목(relay 주제 등)은 제시어와 동일하게
+        raw = raw.map(it => it.a === undefined ? { ...it, a: it.q } : it);
+
+        // 이어말하기: 선택한 난이도 이하의 주제만 사용 (기본 '보통' = 어려운 주제 제외)
+        if (type === 'relay') {
+            const maxD = App.game.difficulty || 2;
+            raw = raw.filter(it => (it.d || 2) <= maxD);
+        }
+
+        // 랜덤 모드에서 카테고리 간 중복 단어 제거 — 같은 판에 같은 문제 2회 방지
+        const seen = new Set();
+        raw = raw.filter(item => {
+            const k = `${item.q}|${item.a}`;
+            if (seen.has(k)) return false;
+            seen.add(k);
+            return true;
+        });
+
+        const used = App.history[type];
+        let avail = raw.filter(item => !used.includes(keyOf(item)));
+
+        if (type === 'fourLetter') {
+            if (avail.length < App.game.targetCount) {
+                // 문제 소진 → 기록 초기화 후 전체 재사용
+                App.history[type] = [];
+                avail = raw;
+            }
+            if (avail.length < App.game.targetCount) {
+                alert(`이 주제에는 문제가 충분하지 않습니다. (필요: ${App.game.targetCount}개)`);
+                return false;
+            }
+            App.game.words = shuffle(avail);
+        } else {
+            const cap = ROUND_CAP[type];
+            let words = shuffle(avail);
+            if (cap && words.length < cap) {
+                // 새 문제가 부족하면 출제됐던 문제로 보충 — 라운드 출제 수(만점 기회)를 항상 동일하게
+                words = words.concat(shuffle(raw.filter(item => used.includes(keyOf(item)))));
+                App.history[type] = [];
+            } else if (!cap && !words.length) {
+                // relay 등 상한 없는 게임: 소진 시 기록 초기화
+                App.history[type] = [];
+                words = shuffle(raw);
+            }
+            if (!words.length) {
+                alert('이 주제에는 문제가 없습니다.');
+                return false;
+            }
+            App.game.words = cap ? words.slice(0, cap) : words;
+        }
+        return true;
+    } catch (e) {
+        console.error(e);
+        alert('데이터를 불러올 수 없습니다.');
+        return false;
+    }
+}
+
+function renderQuiz() {
+    App.game.isTransitioning = false;
+
+    const item = App.game.words[App.game.currentIndex];
+    if (!item) { stopGame(false); return; } // 준비된 문제 모두 소진 = 클리어 (TIME UP 아님)
+
+    const historyKey = keyOf(item);
+    if (!App.history[App.game.type].includes(historyKey)) {
+        App.history[App.game.type].push(historyKey);
+    }
+
+    const qContent = document.getElementById('quiz-content');
+    const qSub = document.getElementById('quiz-sub');
+    const hintArea = document.getElementById('hint-area');
+    const hintText = document.getElementById('hint-text');
+    const catBadge = document.getElementById('current-quiz-category');
+
+    qSub.classList.add('hidden');
+    hintText.classList.add('hidden');
+    qContent.classList.remove('hidden');
+    document.getElementById('placeholder-stage').classList.add('hidden');
+
+    // Reset chosung / 긴 텍스트 클래스
+    qContent.classList.remove('chosung-text', 'long-text', 'very-long-text');
+
+    if (item._cat) {
+        catBadge.textContent = item._cat;
+        catBadge.classList.remove('hidden');
+    } else {
+        catBadge.classList.add('hidden');
+    }
+
+    if (App.game.type === 'chosung') {
+        qContent.classList.add('chosung-text');
+        qContent.innerHTML = escapeHtml(item.q).replace(/\n/g, '<br>');
+        qSub.innerHTML = escapeHtml(item.a).replace(/\n/g, '<br>');
+
+        const hardCats = ['속담','사자성어','영화/드라마','아이돌/가수','스포츠']; // 생활용품은 쉬운 편이라 자동 힌트 제외
+        hintArea.classList.remove('hidden');
+        if (hardCats.includes(item._cat)) {
+            // 어려운 카테고리: 힌트 자동 노출
+            hintText.classList.remove('hidden');
+            hintText.textContent = item.h || '힌트 없음';
+            document.getElementById('btn-hint').classList.add('hidden');
+        } else {
+            hintText.classList.add('hidden');
+            hintText.textContent = item.h || '힌트 없음';
+            document.getElementById('btn-hint').classList.remove('hidden');
+        }
+    } else if (App.game.type === 'fourLetter') {
+        document.getElementById('ingame-progress').textContent =
+            `${App.game.currentIndex + 1} / ${App.game.targetCount}`;
+        qContent.textContent = item.q;
+        qSub.textContent = item.a;
+        hintArea.classList.add('hidden');
+    } else {
+        qContent.textContent = item.q;
+        // 긴 제시어 자동 축소 (Speed/Body/Relay)
+        const len = String(item.q).length;
+        if (len > 12) qContent.classList.add('very-long-text');
+        else if (len > 6) qContent.classList.add('long-text');
+
+        if (item.h) {
+            hintArea.classList.remove('hidden');
+            hintText.classList.add('hidden');
+            hintText.textContent = item.h;
+            document.getElementById('btn-hint').classList.remove('hidden');
+        } else {
+            hintArea.classList.add('hidden');
+        }
+    }
+
+    const card = document.getElementById('quiz-card');
+    card.classList.remove('burst');
+    void card.offsetWidth;
+    card.classList.add('burst');
+}
+
+function showHint() {
+    if (App.game.hintsLeft > 0) {
+        App.game.hintsLeft--;
+        updateHintButtonState();
+        document.getElementById('hint-text').classList.remove('hidden');
+        Sound.play('hint');
+    }
+}
+
+function updateHintButtonState() {
+    const btn = document.getElementById('btn-hint');
+    const span = btn.querySelector('span');
+    if (span) span.textContent = `힌트 (${App.game.hintsLeft}/3)`;
+    if (App.game.hintsLeft === 0) {
+        btn.setAttribute('disabled', 'true');
+    } else {
+        btn.removeAttribute('disabled');
+    }
+}
+
+function startTimer() {
+    clearInterval(App.game.timerInterval);
+    const total = App.game.timer;
+    App.game.timerTotal = total;
+    const startedAt = Date.now(); // 시작 시각 기준 계산 — 탭 전환/랙에도 드리프트 없음
+    let lastShown = total;
+    updateTimerProgress(total, total);
+
+    App.game.timerInterval = setInterval(() => {
+        const remaining = Math.max(0, total - Math.floor((Date.now() - startedAt) / 1000));
+        if (remaining === lastShown) return; // 초 단위가 바뀔 때만 갱신
+        lastShown = remaining;
+        App.game.timer = remaining;
+        const d = document.getElementById('timer-display');
+        d.textContent = remaining;
+        updateTimerProgress(remaining, total);
+
+        if (remaining <= 10 && remaining > 0) {
+            d.classList.add('danger');
+            Sound.play('tick', remaining); // 남은 초에 따라 톤 상승
+        }
+        if (remaining <= 0) {
+            clearInterval(App.game.timerInterval);
+            stopGame(true);
+        }
+    }, 200);
+}
+
+function updateTimerProgress(remaining, total) {
+    const fill = document.getElementById('timer-progress-fill');
+    if (!fill) return;
+    const pct = Math.max(0, (remaining / total) * 100);
+    fill.style.width = pct + '%';
+    if (remaining <= 10) fill.classList.add('danger');
+    else fill.classList.remove('danger');
+}
+
+function resetTimerProgress() {
+    const fill = document.getElementById('timer-progress-fill');
+    if (fill) {
+        fill.style.width = '100%';
+        fill.classList.remove('danger');
+    }
+}
+
+function stopGame(isTimeOver = false) {
+    if (App.game.ended) return; // 중복 정산 방지 — Esc·예약 타이머·이중 클릭 경합 모두 차단
+    App.game.ended = true;
+    clearInterval(App.game.timerInterval);
+    clearTimeout(App.game.pendingTimeout);
+    App.game.pendingTimeout = null;
+
+    const pts = App.scoreSettings[App.game.type] || 10;
+    const earned = App.game.score * pts;
+    App.teams[App.currentTeamIndex].score += earned;
+
+    const titleEl = document.getElementById('result-title');
+    const avatarEl = document.getElementById('result-avatar');
+    if (avatarEl) avatarEl.innerHTML = avatarHtml(App.teams[App.currentTeamIndex].char, 'avatar-lg');
+    if (isTimeOver) {
+        titleEl.textContent = "TIME UP!";
+        Sound.play('timesup');
+    } else {
+        titleEl.textContent = "STAGE CLEAR!";
+        if (earned > 0) Sound.play('big-success');
+        else Sound.play('fail');
+    }
+    if (earned > 0) buzz(30);
+
+    // 라운드/팀 정보 부제
+    const subEl = document.getElementById('result-team-line');
+    if (subEl) {
+        const titles = { speed:'스피드 게임', body:'몸으로 말해요', chosung:'초성 퀴즈', relay:'이어서 말해요', fourLetter:'네 글자 퀴즈' };
+        subEl.textContent = `라운드 ${App.round} · ${titles[App.game.type] || ''}`;
+    }
+
+    document.getElementById('result-team').textContent = App.teams[App.currentTeamIndex].name;
+    document.getElementById('result-score-display').textContent = `+${earned}`;
+    document.getElementById('result-total-score').textContent = App.teams[App.currentTeamIndex].score;
+
+    updateScoreboard();
+    persist();
+    document.getElementById('modal-result').showModal();
+    if (earned > 0) {
+        fx({ particleCount: 90, spread: 90, origin: { y: 0.6 }, colors: FX_COLORS });
+    }
+}
+
+/* =============== Game Action Handlers =============== */
+function correctQuiz() {
+    if (App.game.isTransitioning) return;
+    App.game.isTransitioning = true;
+    Sound.play('success');
+    buzz(12);
+    App.game.score++;
+    App.game.currentIndex++;
+    renderQuiz();
+}
+
+function passQuiz() {
+    if (App.game.isTransitioning) return;
+    App.game.isTransitioning = true;
+    Sound.play('pass');
+    App.game.currentIndex++;
+    renderQuiz();
+}
+
+function handleChosungPass() {
+    if (App.game.isTransitioning) return;
+    App.game.isTransitioning = true;
+    document.getElementById('quiz-sub').classList.remove('hidden');
+    Sound.play('pass');
+    App.game.pendingTimeout = setTimeout(() => {
+        App.game.currentIndex++;
+        renderQuiz();
+    }, 1400);
+}
+
+function handleChosungCorrect() {
+    if (App.game.isTransitioning) return;
+    App.game.isTransitioning = true;
+    document.getElementById('quiz-sub').classList.remove('hidden');
+    Sound.play('success');
+    buzz(12);
+    fx({ particleCount: 40, spread: 60, origin: { y: 0.7 }, colors: FX_COLORS });
+    App.game.score++;
+    App.game.pendingTimeout = setTimeout(() => {
+        App.game.currentIndex++;
+        renderQuiz();
+    }, 1400);
+}
+
+function pickRelayTopic() {
+    if (App.game.isTransitioning) return;
+    App.game.isTransitioning = true;
+
+    // 미리 결정된 최종 주제
+    const item = App.game.words[App.game.currentIndex];
+    if (!item) { App.game.isTransitioning = false; return; }
+    const finalTopic = item.q;
+
+    // UI 전환: placeholder/button 숨김, 슬롯 디스플레이 등장
+    document.getElementById('btn-relay-pick').classList.add('hidden');
+    document.getElementById('placeholder-stage').classList.add('hidden');
+    document.getElementById('quiz-content').classList.add('hidden');
+
+    const slotStage = document.getElementById('slot-stage');
+    const slotText = document.getElementById('slot-text');
+    slotStage.classList.remove('hidden');
+    slotStage.classList.add('spinning');
+    slotText.classList.remove('pop');
+    slotText.classList.add('spinning');
+
+    // 스핀 표시용 풀 — 실제 추첨 대상(선택한 난이도·주제)과 동일하게
+    const pool = App.game.words.map(w => w.q);
+
+    // 스핀 사이클: 가속 → 일정 → 감속 → 결과
+    let iter = 0;
+    const totalIter = 22;          // 총 회전 횟수
+    let delay = 55;                // 시작 속도
+
+    Sound.play('roll');
+
+    const spin = () => {
+        if (App.game.ended) return; // 정지로 라운드가 끝났으면 스핀 즉시 중단
+        // 결과 단계
+        if (iter >= totalIter) {
+            slotStage.classList.remove('spinning');
+            slotText.classList.remove('spinning');
+            slotText.textContent = finalTopic;
+            slotText.classList.add('pop');
+            Sound.play('big-success');
+            fx({ particleCount: 100, spread: 100, origin: { y: 0.6 }, colors: FX_COLORS });
+
+            // 잠시 슬롯 결과를 보여준 뒤 실제 quiz UI로 전환
+            App.game.pendingTimeout = setTimeout(() => {
+                slotStage.classList.add('hidden');
+                document.getElementById('quiz-content').classList.remove('hidden');
+                renderQuiz();
+                document.getElementById('relay-actions').classList.remove('hidden');
+            }, 1500);
+            return;
+        }
+
+        // 랜덤 주제 표시 + 기계식 째깍음
+        slotText.textContent = pool[Math.floor(Math.random() * pool.length)];
+        Sound.play('spinTick');
+
+        // 가속/감속 곡선
+        if (iter < 6) {
+            delay = Math.max(35, delay - 4);            // 초반 가속
+        } else if (iter > totalIter - 6) {
+            delay += 60;                                  // 후반 감속
+        }
+
+        // 종료 직전 마지막 tick
+        if (iter === totalIter - 1) Sound.play('tap');
+
+        iter++;
+        App.game.pendingTimeout = setTimeout(spin, delay);
+    };
+
+    spin();
+}
+
+function redrawRelayTopic() {
+    // 뽑힌 주제가 어려우면 라운드당 1회 다른 주제로 재추첨
+    if (App.game.redrawUsed || App.game.ended || App.game.isTransitioning) return;
+    if (App.game.currentIndex + 1 >= App.game.words.length) return; // 남은 후보 없음
+    App.game.redrawUsed = true;
+    document.getElementById('btn-relay-redraw').classList.add('hidden');
+    document.getElementById('relay-actions').classList.add('hidden');
+    App.game.currentIndex++;
+    Sound.play('pass');
+    pickRelayTopic();
+}
+
+function handleRelayResult(success) {
+    if (App.game.isTransitioning) return;
+    App.game.isTransitioning = true;
+    App.game.score = success ? 1 : 0;
+    stopGame(false);
+}
+
+function handleFourLetterFail() {
+    if (App.game.isTransitioning) return;
+    App.game.isTransitioning = true;
+    App.game.score = 0;
+    Sound.play('fail');
+    document.getElementById('quiz-sub').classList.remove('hidden');
+    App.game.pendingTimeout = setTimeout(() => stopGame(false), 1800);
+}
+
+function handleFourLetterCorrect() {
+    if (App.game.isTransitioning) return;
+    App.game.isTransitioning = true;
+    document.getElementById('quiz-sub').classList.remove('hidden');
+    Sound.play('success');
+
+    if (App.game.currentIndex + 1 >= App.game.targetCount) {
+        App.game.score = 1;
+        fx({ particleCount: 80, spread: 90, origin: { y: 0.6 }, colors: FX_COLORS });
+        App.game.pendingTimeout = setTimeout(() => stopGame(false), 1500);
+    } else {
+        App.game.pendingTimeout = setTimeout(() => {
+            App.game.currentIndex++;
+            renderQuiz();
+        }, 700);
+    }
+}
+
+/* =============== Screen Helpers =============== */
+function showScreen(id) {
+    closeAllDialogs();
+    closeMenu();
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    window.scrollTo(0, 0);
+
+    // BGM: 메뉴/설정 화면에서 잔잔한 음악, 게임 진행 화면에서는 SFX만
+    if (id === 'screen-menu' || id === 'screen-mode' || id === 'screen-setup' || id === 'screen-pregame') {
+        Sound.startBgm();
+    } else if (id === 'screen-game') {
+        Sound.stopBgm();
+    }
+}
+
+function closeAndShow(id) {
+    closeAllDialogs();
+    showScreen(id);
+}
+
+function closeAllDialogs() {
+    document.querySelectorAll('dialog').forEach(d => { try { d.close(); } catch(e){} });
+}
+
+function closeDialog(id) {
+    const d = document.getElementById(id);
+    if (d) d.close();
+    Sound.play('tap');
+}
+
+function prepareNextTeam() {
+    App.currentTeamIndex = (App.currentTeamIndex + 1) % App.teams.length;
+    if (App.currentTeamIndex === 0) App.round++;
+    updateScoreboard();
+    document.getElementById('modal-result').close();
+    prepareGame(App.game.type, true);
+}
+
+/* =============== Settings Menu =============== */
+function toggleMenu(e) {
+    e.stopPropagation();
+    const m = document.getElementById('settings-menu');
+    m.classList.toggle('open');
+    Sound.play('tap');
+}
+function closeMenu() {
+    const m = document.getElementById('settings-menu');
+    if (m) m.classList.remove('open');
+}
+document.addEventListener('click', (e) => {
+    const m = document.getElementById('settings-menu');
+    const trigger = document.getElementById('settings-trigger');
+    if (m && m.classList.contains('open') &&
+        !m.contains(e.target) && !trigger.contains(e.target)) {
+        closeMenu();
+    }
+});
+
+function openResetModal() {
+    closeMenu();
+    document.getElementById('modal-reset-confirm').showModal();
+    Sound.play('modal');
+}
+function resetGame() {
+    try { localStorage.removeItem(STORAGE_KEY); } catch(e){}
+    location.reload();
+}
+function goHome() {
+    Sound.play('tap');
+    // 팀이 설정되어 있으면 초기화 확인, 아니면 첫 화면
+    if (App.teams.length) {
+        openResetModal();
+    } else {
+        showScreen('screen-mode');
+    }
+}
+
+function renderScoreboardList() {
+    document.getElementById('scoreboard-list').innerHTML = App.teams.map((t, i) => `
+        <div class="score-edit-row">
+            <div class="score-edit-who">
+                ${avatarHtml(t.char, 'avatar-sm')}
+                <span class="score-edit-name">${escapeHtml(t.name)}</span>
+            </div>
+            <div class="score-edit-ctl">
+                <button class="score-pm" onclick="adjScore(${i}, -10)">−</button>
+                <span class="score-edit-val">${t.score}</span>
+                <button class="score-pm" onclick="adjScore(${i}, 10)">+</button>
+            </div>
+        </div>
+    `).join('');
+}
+function openScoreBoard() {
+    closeMenu();
+    renderScoreboardList();
+    document.getElementById('modal-scoreboard').showModal();
+    Sound.play('modal');
+}
+function adjScore(i, v) {
+    App.teams[i].score += v;
+    persist();
+    renderScoreboardList(); // 열린 모달에 showModal 재호출 금지 (InvalidStateError) — 목록만 갱신
+    updateScoreboard();
+}
+
+function renderTeamSettingsList() {
+    document.getElementById('team-settings-list').innerHTML = App.teams.map((t, i) => `
+        <div class="team-edit-row">
+            ${avatarHtml(t.char, 'avatar-md')}
+            <input type="text" id="edit-team-${i}" class="form-input" maxlength="10" value="${escapeHtml(t.name)}">
+            <button class="reroll-btn" onclick="rerollTeamChar(${i})" aria-label="캐릭터 바꾸기"><svg><use href="#i-dice"/></svg></button>
+        </div>
+    `).join('');
+}
+function openTeamSettings() {
+    closeMenu();
+    renderTeamSettingsList();
+    document.getElementById('modal-team-settings').showModal();
+    Sound.play('modal');
+}
+function rerollTeamChar(i) {
+    // 진행 중 팀의 캐릭터 교체 (입력 중인 이름은 유지)
+    Sound.play('spinTick');
+    const typed = App.teams.map((_, j) => {
+        const el = document.getElementById(`edit-team-${j}`);
+        return el ? el.value : null;
+    });
+    const used = App.teams.filter((_, j) => j !== i).map(t => t.char);
+    const candidates = CHARS.filter(c => !used.includes(c.id) && c.id !== App.teams[i].char);
+    if (candidates.length) App.teams[i].char = candidates[Math.floor(Math.random() * candidates.length)].id;
+    renderTeamSettingsList();
+    typed.forEach((v, j) => {
+        const el = document.getElementById(`edit-team-${j}`);
+        if (el && v !== null) el.value = v;
+    });
+    updateScoreboard();
+    persist();
+}
+function saveTeamSettings() {
+    App.teams.forEach((t, i) => {
+        const v = document.getElementById(`edit-team-${i}`).value.trim();
+        if (v) t.name = v;
+    });
+    updateScoreboard();
+    persist();
+    document.getElementById('modal-team-settings').close();
+    Sound.play('success');
+}
+
+function openGameScoreSettings() {
+    closeMenu();
+    document.getElementById('score-input-speed').value = App.scoreSettings.speed;
+    document.getElementById('score-input-body').value = App.scoreSettings.body;
+    document.getElementById('score-input-chosung').value = App.scoreSettings.chosung;
+    document.getElementById('score-input-relay').value = App.scoreSettings.relay;
+    document.getElementById('score-input-fourLetter').value = App.scoreSettings.fourLetter;
+    document.getElementById('modal-game-scores').showModal();
+    Sound.play('modal');
+}
+function saveGameScoreSettings() {
+    const parseScore = (id, def) => {
+        const val = parseInt(document.getElementById(id).value, 10);
+        return isNaN(val) ? def : val;
+    };
+    App.scoreSettings.speed = parseScore('score-input-speed', 10);
+    App.scoreSettings.body = parseScore('score-input-body', 10);
+    App.scoreSettings.chosung = parseScore('score-input-chosung', 10);
+    App.scoreSettings.relay = parseScore('score-input-relay', 100);
+    App.scoreSettings.fourLetter = parseScore('score-input-fourLetter', 100);
+    persist();
+    document.getElementById('modal-game-scores').close();
+    Sound.play('success');
+}
+
+/* =============== Init =============== */
+// 첫 사용자 터치: 오디오 컨텍스트 초기화 + 예약된 BGM 시작
+document.body.addEventListener('pointerdown', async () => {
+    Sound.userGestureDone = true;
+    await Sound.init();
+    if (Sound.bgmWanted && !Sound.bgmActive) Sound.startBgm();
+}, { once: true });
+
+// Restore from storage if available
+window.addEventListener('DOMContentLoaded', () => {
+    // 결과 모달은 Esc로 닫히지 않도록 — 버튼 선택을 강제해 어중간한 상태 방지
+    document.getElementById('modal-result').addEventListener('cancel', e => e.preventDefault());
+    if (restore()) {
+        applyMode(App.mode); // 저장된 모드의 컬러 테마 복원
+        updateScoreboard();
+        showScreen('screen-menu');
+    }
+});
+
+// Prevent pinch zoom on iOS
+document.addEventListener('gesturestart', e => e.preventDefault());
+document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
+
+// Keyboard shortcuts (desktop)
+document.addEventListener('keydown', (e) => {
+    // 모달이 열려 있으면 게임 단축키 전면 차단 (Esc 이중 점수·모달 뒤 조작 방지)
+    if (document.querySelector('dialog[open]')) return;
+    const activeScreen = document.querySelector('.screen.active');
+    if (!activeScreen || activeScreen.id !== 'screen-game') return;
+    const visible = id => !document.getElementById(id).classList.contains('hidden');
+    if (e.key === 'ArrowRight' || e.key === 'Enter') {
+        e.preventDefault();
+        if (visible('controls-basic')) correctQuiz();
+        else if (visible('controls-chosung')) handleChosungCorrect();
+        else if (visible('controls-fourletter')) handleFourLetterCorrect();
+        else if (visible('controls-relay') && visible('relay-actions')) handleRelayResult(true);
+    } else if (e.key === 'ArrowLeft' || e.key === ' ') {
+        e.preventDefault();
+        if (visible('controls-basic')) passQuiz();
+        else if (visible('controls-chosung')) handleChosungPass();
+        else if (visible('controls-fourletter')) handleFourLetterFail();
+        else if (visible('controls-relay') && visible('relay-actions')) handleRelayResult(false);
+    } else if (e.key === 'Escape') {
+        stopGame(false);
+    }
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+[build]
+  publish = "."
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "SAMEORIGIN"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"
+
+[[headers]]
+  for = "/index.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# 문제 데이터도 항상 최신으로 (수정 후 재배포 시 캐시 문제 방지)
+[[headers]]
+  for = "/questions.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
+# 백업 폴더는 공개 접근 차단 (순서 중요 — SPA 규칙보다 먼저)
+[[redirects]]
+  from = "/_backup/*"
+  to = "/index.html"
+  status = 404
+  force = true
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200

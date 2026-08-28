@@ -1,0 +1,12 @@
+# Netlify Drop 배포용 헤더 (netlify.toml은 CLI/Git 배포에서만 적용됨)
+/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/questions.js
+  Cache-Control: public, max-age=0, must-revalidate

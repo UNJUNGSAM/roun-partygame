@@ -1,0 +1,15 @@
+﻿# Executables & Installers
+Inst_MaWebDRM.exe
+*.exe
+
+# Backup directories
+_backup/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs & temp
+*.log
+.gemini/
