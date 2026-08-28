@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#2D4036">
+    <meta name="theme-color" content="#f5ead8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
@@ -31,143 +31,120 @@
      ========================================================= -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
     <defs>
-        <!-- 로고 마크 (텐트/산) -->
-        <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 20 L12 4 L21 20 Z" fill="rgba(255,255,255,0.15)"/>
-            <path d="M12 4 L12 20" />
-            <path d="M3 20 L21 20" />
+        <!-- Lucide (ISC) 단색 라인 아이콘 — stroke-width 2.75 / round / fill none -->
+        <!-- tent — 로고 -->
+        <symbol id="i-logo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.5 21 14 3"/><path d="M20.5 21 10 3"/><path d="M15.5 21 12 15l-3.5 6"/><path d="M2 21h20"/>
         </symbol>
-        <!-- 톱니바퀴 (설정) -->
-        <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        <!-- settings-2 — 설정 -->
+        <symbol id="i-cog" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 7h-9"/><path d="M14 17H5"/><circle cx="17" cy="17" r="3"/><circle cx="7" cy="7" r="3"/>
         </symbol>
-        <!-- 왼쪽 화살표 -->
-        <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M15 18 L9 12 L15 6"/>
+        <!-- arrow-left — 뒤로 -->
+        <symbol id="i-back" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m12 19-7-7 7-7"/><path d="M19 12H5"/>
         </symbol>
-        <!-- 트로피 -->
-        <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M8 21 L16 21" />
-            <path d="M12 17 L12 21" />
-            <path d="M7 4 L17 4 L17 9 a5 5 0 0 1 -10 0 Z"/>
-            <path d="M17 5 H20 V8 a3 3 0 0 1 -3 3"/>
-            <path d="M7 5 H4 V8 a3 3 0 0 0 3 3"/>
+        <!-- trophy — 점수 관리 -->
+        <symbol id="i-trophy" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/>
+            <path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/>
+            <path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/>
         </symbol>
-        <!-- 사용자 그룹 -->
-        <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        <!-- users — 팀 설정 / 워크샵 모드 -->
+        <symbol id="i-users" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/>
         </symbol>
-        <!-- 홈 -->
-        <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M3 12 L12 3 L21 12"/>
-            <path d="M5 10 L5 21 L19 21 L19 10"/>
-            <path d="M10 21 L10 14 L14 14 L14 21"/>
+        <!-- house — 처음으로 -->
+        <symbol id="i-home" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8"/>
+            <path d="M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
         </symbol>
-        <!-- 타겟/배점 -->
-        <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="9"/>
-            <circle cx="12" cy="12" r="5"/>
-            <circle cx="12" cy="12" r="1.5" fill="currentColor"/>
+        <!-- target — 배점 -->
+        <symbol id="i-target" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>
         </symbol>
-        <!-- 전구 (힌트) -->
-        <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M9 18 L15 18"/>
-            <path d="M10 21 L14 21"/>
-            <path d="M12 3 a6 6 0 0 1 6 6 c0 2.5 -1.5 4 -2.5 5 L8.5 14 c-1 -1 -2.5 -2.5 -2.5 -5 a6 6 0 0 1 6 -6 z"/>
+        <!-- lightbulb — 힌트 -->
+        <symbol id="i-bulb" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/>
+            <path d="M9 18h6"/><path d="M10 22h4"/>
         </symbol>
-        <!-- 주사위 -->
-        <symbol id="i-dice" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="3" width="18" height="18" rx="3"/>
-            <circle cx="8" cy="8" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="16" cy="8" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="12" cy="12" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="8" cy="16" r="1.2" fill="currentColor" stroke="none"/>
-            <circle cx="16" cy="16" r="1.2" fill="currentColor" stroke="none"/>
+        <!-- dices — 개별 다시 뽑기 -->
+        <symbol id="i-dice" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="4"/>
+            <circle cx="8" cy="8" r="1"/><circle cx="16" cy="8" r="1"/><circle cx="12" cy="12" r="1"/>
+            <circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/>
         </symbol>
-
-        <!-- =========== 모드/게임 아이콘 (대형, 컬러풀) =========== -->
-        <!-- 파티 모드: 풍선 -->
-        <symbol id="i-mode-party" viewBox="0 0 64 64" fill="none">
-            <path d="M22 6 c-7 0 -12 5 -12 13 c0 9 9 17 12 19 c3 -2 12 -10 12 -19 c0 -8 -5 -13 -12 -13 z" fill="#E27D60" stroke="#C25A4A" stroke-width="2"/>
-            <path d="M22 38 L22 46" stroke="#3D5547" stroke-width="2" stroke-linecap="round"/>
-            <path d="M42 12 c-6 0 -10 5 -10 11 c0 7 7 14 10 16 c3 -2 10 -9 10 -16 c0 -6 -4 -11 -10 -11 z" fill="#E89F4E" stroke="#D17E2A" stroke-width="2"/>
-            <path d="M42 39 L42 50" stroke="#3D5547" stroke-width="2" stroke-linecap="round"/>
-            <path d="M14 50 L52 56" stroke="#3D5547" stroke-width="2" stroke-linecap="round"/>
+        <!-- refresh-cw — 전체 다시 뽑기 -->
+        <symbol id="i-refresh" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 2v6h-6"/><path d="M3 12a9 9 0 0 1 15-6.7L21 8"/><path d="M3 22v-6h6"/><path d="M21 12a9 9 0 0 1-15 6.7L3 16"/>
         </symbol>
-
-        <!-- 워크샵 모드: 사람들 회의 -->
-        <symbol id="i-mode-workshop" viewBox="0 0 64 64" fill="none">
-            <rect x="10" y="36" width="44" height="16" rx="4" fill="#A8C0A0" stroke="#5C7A65" stroke-width="2"/>
-            <circle cx="20" cy="26" r="7" fill="#E89F4E" stroke="#D17E2A" stroke-width="2"/>
-            <circle cx="44" cy="26" r="7" fill="#7CA7B6" stroke="#5C8898" stroke-width="2"/>
-            <circle cx="32" cy="22" r="8" fill="#E27D60" stroke="#C25A4A" stroke-width="2"/>
-            <path d="M10 36 L10 44 M54 36 L54 44" stroke="#3D5547" stroke-width="2" stroke-linecap="round"/>
+        <!-- chevron 세트 -->
+        <symbol id="i-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6"/>
+        </symbol>
+        <symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m6 9 6 6 6-6"/>
+        </symbol>
+        <symbol id="i-chevron-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m18 15-6-6-6 6"/>
+        </symbol>
+        <!-- check — 성공 -->
+        <symbol id="i-check" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M20 6 9 17l-5-5"/>
+        </symbol>
+        <!-- chevrons-right — 패스 -->
+        <symbol id="i-pass" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m9 18 6-6-6-6"/><path d="m15 18 6-6-6-6"/>
+        </symbol>
+        <!-- pause — 정지 -->
+        <symbol id="i-pause" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="4" height="16" x="6" y="4" rx="1"/><rect width="4" height="16" x="14" y="4" rx="1"/>
+        </symbol>
+        <!-- clock — 시간 초과 -->
+        <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
         </symbol>
 
-        <!-- 스피드 게임: 번개 -->
-        <symbol id="i-game-speed" viewBox="0 0 64 64" fill="none">
-            <path d="M36 4 L14 36 L28 36 L24 60 L50 26 L34 26 L40 4 Z" fill="#E89F4E" stroke="#D17E2A" stroke-width="2.5" stroke-linejoin="round"/>
+        <!-- =========== 모드 / 게임 아이콘 =========== -->
+        <!-- party-popper — 파티 모드 -->
+        <symbol id="i-mode-party" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5.8 11.3 2 22l10.7-3.79"/><path d="M4 3h.01"/><path d="M22 8h.01"/><path d="M15 2h.01"/><path d="M22 20h.01"/>
+            <path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"/>
+            <path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"/>
+            <path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"/>
+            <path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"/>
         </symbol>
-
-        <!-- 몸으로 말해요: 사람 점프 -->
-        <symbol id="i-game-body" viewBox="0 0 64 64" fill="none">
-            <circle cx="32" cy="14" r="7" fill="#E27D60" stroke="#C25A4A" stroke-width="2"/>
-            <path d="M32 22 L32 38" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
-            <path d="M32 28 L16 22" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
-            <path d="M32 28 L48 18" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
-            <path d="M32 38 L22 56" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
-            <path d="M32 38 L46 54" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+        <!-- users — 워크샵 모드 -->
+        <symbol id="i-mode-workshop" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/>
         </symbol>
-
-        <!-- 초성 퀴즈: 한글 자음 블록 -->
-        <symbol id="i-game-chosung" viewBox="0 0 64 64" fill="none">
-            <rect x="6" y="14" width="22" height="36" rx="6" fill="#A8C0A0" stroke="#5C7A65" stroke-width="2"/>
-            <rect x="36" y="14" width="22" height="36" rx="6" fill="#E89F4E" stroke="#D17E2A" stroke-width="2"/>
-            <path d="M12 26 L22 26 L22 38 L12 38 Z M22 26 L22 30 L16 30 L16 34 L22 34" stroke="#FFFBF2" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-            <path d="M42 24 L52 24 M47 24 L47 40 M42 40 L52 40" stroke="#FFFBF2" stroke-width="2.5" stroke-linecap="round"/>
+        <!-- zap — 스피드 게임 -->
+        <symbol id="i-game-speed" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/>
         </symbol>
-
-        <!-- 이어서 말해요: 말풍선 체인 -->
-        <symbol id="i-game-relay" viewBox="0 0 64 64" fill="none">
-            <path d="M6 14 a4 4 0 0 1 4 -4 h22 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 H18 L10 40 V32 a4 4 0 0 1 -4 -4 Z" fill="#7CA7B6" stroke="#5C8898" stroke-width="2"/>
-            <path d="M28 30 a4 4 0 0 1 4 -4 h22 a4 4 0 0 1 4 4 v14 a4 4 0 0 1 -4 4 H40 L48 56 V48 a4 4 0 0 1 -4 -4 Z" fill="#E89F4E" stroke="#D17E2A" stroke-width="2"/>
+        <!-- person-standing — 몸으로 말해요 -->
+        <symbol id="i-game-body" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="5" r="1"/><path d="m9 20 3-6 3 6"/><path d="m6 8 6 2 6-2"/><path d="M12 10v4"/>
         </symbol>
-
-        <!-- 네 글자 퀴즈: 퍼즐 -->
-        <symbol id="i-game-fourletter" viewBox="0 0 64 64" fill="none">
-            <path d="M8 8 H28 V18 a4 4 0 0 0 8 0 V8 H56 V28 a4 4 0 0 1 -8 0 a4 4 0 0 0 -8 0 V36 H56 V56 H36 V46 a4 4 0 0 0 -8 0 V56 H8 V36 H18 a4 4 0 0 0 0 -8 H8 Z"
-                  fill="#A8C0A0" stroke="#5C7A65" stroke-width="2" stroke-linejoin="round"/>
+        <!-- languages — 초성 퀴즈 -->
+        <symbol id="i-game-chosung" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="m5 8 6 6"/><path d="m4 14 6-6 2-3"/><path d="M2 5h12"/><path d="M7 2h1"/><path d="m22 22-5-10-5 10"/><path d="M14 18h6"/>
         </symbol>
-
-        <!-- 결과 트로피 (큰 사이즈) -->
-        <symbol id="i-result-win" viewBox="0 0 64 64" fill="none">
-            <path d="M22 50 L42 50 M32 42 L32 50" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
-            <path d="M16 10 L48 10 L48 22 a16 16 0 0 1 -32 0 Z" fill="#E89F4E" stroke="#D17E2A" stroke-width="2.5"/>
-            <path d="M48 12 H56 V20 a6 6 0 0 1 -6 6" stroke="#D17E2A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <path d="M16 12 H8 V20 a6 6 0 0 0 6 6" stroke="#D17E2A" stroke-width="2.5" stroke-linecap="round" fill="none"/>
-            <path d="M32 26 L34 32 L40 32 L35 36 L37 42 L32 38 L27 42 L29 36 L24 32 L30 32 Z" fill="#FFFBF2"/>
+        <!-- messages-square — 이어서 말해요 -->
+        <symbol id="i-game-relay" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"/>
+            <path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"/>
         </symbol>
-
-        <!-- 결과 시간초과 -->
-        <symbol id="i-result-time" viewBox="0 0 64 64" fill="none">
-            <circle cx="32" cy="36" r="22" fill="#F8DCB6" stroke="#D17E2A" stroke-width="2.5"/>
-            <path d="M32 22 L32 36 L42 42" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
-            <path d="M22 6 L42 6" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
-            <path d="M32 6 L32 12" stroke="#3D5547" stroke-width="3" stroke-linecap="round"/>
+        <!-- layout-grid — 네 글자 퀴즈 -->
+        <symbol id="i-game-fourletter" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="7" height="7" x="3" y="3" rx="2"/><rect width="7" height="7" x="14" y="3" rx="2"/>
+            <rect width="7" height="7" x="14" y="14" rx="2"/><rect width="7" height="7" x="3" y="14" rx="2"/>
         </symbol>
-
-        <!-- 추첨 주사위 (큰) -->
-        <symbol id="i-pick-big" viewBox="0 0 64 64" fill="none">
-            <rect x="8" y="8" width="48" height="48" rx="8" fill="#E89F4E" stroke="#D17E2A" stroke-width="2.5"/>
-            <circle cx="20" cy="20" r="3" fill="#FFFBF2"/>
-            <circle cx="44" cy="20" r="3" fill="#FFFBF2"/>
-            <circle cx="32" cy="32" r="3" fill="#FFFBF2"/>
-            <circle cx="20" cy="44" r="3" fill="#FFFBF2"/>
-            <circle cx="44" cy="44" r="3" fill="#FFFBF2"/>
+        <!-- dices — 이어서 말해요 추첨 휠 -->
+        <symbol id="i-pick-big" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="4"/>
+            <circle cx="8" cy="8" r="1"/><circle cx="16" cy="8" r="1"/><circle cx="12" cy="12" r="1"/>
+            <circle cx="8" cy="16" r="1"/><circle cx="16" cy="16" r="1"/>
         </symbol>
     </defs>
 </svg>
@@ -244,8 +221,8 @@
 
                 <div class="form-row">
                     <div class="form-label">
-                        <span>팀 캐릭터 &amp; 이름 — 자유롭게 고쳐도 좋아요</span>
-                        <button class="label-action" onclick="rerollAllTeams()"><svg><use href="#i-dice"/></svg>전체 다시 뽑기</button>
+                        <span>팀 이름 — 자유롭게 수정</span>
+                        <button class="label-action" onclick="rerollAllTeams()"><svg><use href="#i-refresh"/></svg>전체 다시 뽑기</button>
                     </div>
                     <div id="team-inputs-container" class="team-rows"></div>
                 </div>
@@ -273,6 +250,7 @@
                         <span class="game-card-sub">설명 없이 단어 맞추기</span>
                     </div>
                     <div class="game-card-art"><svg><use href="#i-game-speed"/></svg></div>
+                    <svg class="game-card-chev"><use href="#i-chevron-right"/></svg>
                 </button>
                 <button class="game-card game-card--body" onclick="prepareGame('body')">
                     <div class="game-card-info">
@@ -281,6 +259,7 @@
                         <span class="game-card-sub">말하지 않고 액션으로!</span>
                     </div>
                     <div class="game-card-art"><svg><use href="#i-game-body"/></svg></div>
+                    <svg class="game-card-chev"><use href="#i-chevron-right"/></svg>
                 </button>
                 <button class="game-card game-card--chosung" onclick="prepareGame('chosung')">
                     <div class="game-card-info">
@@ -289,6 +268,7 @@
                         <span class="game-card-sub">어려운 주제는 자동 힌트</span>
                     </div>
                     <div class="game-card-art"><svg><use href="#i-game-chosung"/></svg></div>
+                    <svg class="game-card-chev"><use href="#i-chevron-right"/></svg>
                 </button>
                 <button class="game-card game-card--relay" onclick="prepareGame('relay')">
                     <div class="game-card-info">
@@ -297,6 +277,7 @@
                         <span class="game-card-sub">주제 추첨 릴레이</span>
                     </div>
                     <div class="game-card-art"><svg><use href="#i-game-relay"/></svg></div>
+                    <svg class="game-card-chev"><use href="#i-chevron-right"/></svg>
                 </button>
                 <button class="game-card game-card--fourletter" onclick="prepareGame('fourLetter')">
                     <div class="game-card-info">
@@ -305,6 +286,7 @@
                         <span class="game-card-sub">목표 개수 연속 성공하기</span>
                     </div>
                     <div class="game-card-art"><svg><use href="#i-game-fourletter"/></svg></div>
+                    <svg class="game-card-chev"><use href="#i-chevron-right"/></svg>
                 </button>
             </div>
         </div>
@@ -322,17 +304,17 @@
                 </div>
 
                 <div class="form-row">
-                    <label class="form-label">1. 도전 팀 선택</label>
+                    <label class="form-label">1 · 도전 팀</label>
                     <div id="team-selector-container" class="selector-row"></div>
                 </div>
 
                 <div class="form-row" id="category-section">
-                    <label class="form-label">2. 주제 선택</label>
+                    <label class="form-label">2 · 주제</label>
                     <div id="category-selector-container" class="selector-row"></div>
                 </div>
 
                 <div class="form-row hidden" id="difficulty-section">
-                    <label class="form-label">3. 주제 난이도</label>
+                    <label class="form-label">3 · 주제 난이도</label>
                     <div class="selector-row" id="difficulty-selector" style="grid-template-columns:repeat(3,1fr);">
                         <button class="chip" data-d="1" onclick="setDifficulty(1)">순한맛 · 쉬운 주제만</button>
                         <button class="chip" data-d="2" onclick="setDifficulty(2)">보통 · 추천</button>
@@ -341,16 +323,16 @@
                 </div>
 
                 <div class="form-row" id="timer-section">
-                    <label class="form-label">3. 제한 시간</label>
-                    <select id="timer-select" class="form-select">
-                        <option value="60">60초</option>
-                        <option value="90" selected>90초</option>
-                        <option value="120">120초</option>
-                    </select>
+                    <label class="form-label">3 · 제한 시간</label>
+                    <div class="segmented" id="timer-segment" role="group" aria-label="제한 시간">
+                        <button type="button" data-timer="60" aria-pressed="false" onclick="setTimerChoice(60)">60초</button>
+                        <button type="button" data-timer="90" aria-pressed="true" onclick="setTimerChoice(90)">90초</button>
+                        <button type="button" data-timer="120" aria-pressed="false" onclick="setTimerChoice(120)">120초</button>
+                    </div>
                 </div>
 
                 <div class="form-row hidden" id="fourletter-count-section">
-                    <label class="form-label">3. 목표 문제 수 (연속 성공)</label>
+                    <label class="form-label">3 · 목표 문제 수 (연속 성공)</label>
                     <select id="fourletter-count-select" class="form-select">
                         <option value="4">4문제</option>
                         <option value="5">5문제</option>
@@ -383,8 +365,11 @@
                 <span class="badge badge-progress hidden" id="ingame-progress">1 / 4</span>
             </div>
             <div class="timer-zone">
-                <div class="timer" id="timer-display">60</div>
-                <button class="btn btn-3d btn-coral" onclick="stopGame(false)">정지</button>
+                <div class="timer-count">
+                    <div class="timer" id="timer-display">60</div>
+                    <span class="timer-unit">초</span>
+                </div>
+                <button class="btn-ghost" onclick="stopGame(false)"><svg width="16" height="16"><use href="#i-pause"/></svg>정지</button>
             </div>
         </div>
         <div class="timer-progress" id="timer-progress-wrap">
@@ -426,27 +411,27 @@
 
         <div class="game-controls">
             <div id="controls-basic" class="control-row hidden">
-                <button class="btn btn-3d btn-stone btn-big" onclick="passQuiz()">PASS</button>
-                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="correctQuiz()">성공</button>
+                <button class="btn btn-3d btn-stone btn-big" onclick="passQuiz()"><svg><use href="#i-pass"/></svg>패스</button>
+                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="correctQuiz()"><svg><use href="#i-check"/></svg>성공</button>
             </div>
             <div id="controls-chosung" class="control-row hidden">
-                <button class="btn btn-3d btn-stone btn-big" onclick="handleChosungPass()">PASS</button>
-                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleChosungCorrect()">정답</button>
+                <button class="btn btn-3d btn-stone btn-big" onclick="handleChosungPass()"><svg><use href="#i-pass"/></svg>패스</button>
+                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleChosungCorrect()"><svg><use href="#i-check"/></svg>정답</button>
             </div>
             <div id="controls-relay" class="control-row hidden">
                 <button id="btn-relay-pick" class="btn btn-3d btn-orange btn-big w-full" onclick="pickRelayTopic()">주제 추첨하기</button>
                 <div id="relay-actions" class="control-row hidden" style="padding:0;width:100%">
                     <button id="btn-relay-redraw" class="btn btn-3d btn-stone btn-big" onclick="redrawRelayTopic()">다시 추첨</button>
                     <button class="btn btn-3d btn-coral btn-big" onclick="handleRelayResult(false)">실패</button>
-                    <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleRelayResult(true)">성공</button>
+                    <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleRelayResult(true)"><svg><use href="#i-check"/></svg>성공</button>
                 </div>
             </div>
             <div id="controls-fourletter" class="control-row hidden">
                 <button class="btn btn-3d btn-coral btn-big" onclick="handleFourLetterFail()">실패</button>
-                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleFourLetterCorrect()">정답</button>
+                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleFourLetterCorrect()"><svg><use href="#i-check"/></svg>정답</button>
             </div>
             <div class="shortcut-guide" id="shortcut-guide">
-                <span><kbd>←</kbd>Pass / 실패</span>
+                <span><kbd>←</kbd>패스 / 실패</span>
                 <span><kbd>→</kbd>성공 / 정답</span>
                 <span><kbd>Esc</kbd>정지</span>
             </div>
@@ -461,10 +446,10 @@
 <dialog id="modal-result">
     <div class="modal">
         <div class="result-avatar" id="result-avatar"></div>
-        <h3 id="result-title" class="modal-title">GAME OVER</h3>
-        <p class="modal-sub" id="result-team-line">결과 발표</p>
+        <div class="result-status" id="result-title">ROUND CLEAR</div>
 
         <div class="result-team-name" id="result-team">A팀</div>
+        <p class="result-round-line" id="result-team-line">결과 발표</p>
 
         <div class="result-score-row">
             <div class="result-score-block">
@@ -485,7 +470,7 @@
 
 <dialog id="modal-reset-confirm">
     <div class="modal" style="max-width:380px">
-        <h3 class="modal-title" style="color:#E0524E">초기화 경고</h3>
+        <h3 class="modal-title">초기화 경고</h3>
         <p class="modal-sub">모든 팀의 점수와 출제 기록이 삭제됩니다.<br>정말 처음으로 돌아가시겠습니까?</p>
         <div style="display:flex; gap:10px;">
             <button class="btn-ghost w-full" onclick="closeDialog('modal-reset-confirm')">취소</button>
@@ -501,7 +486,7 @@
         <div id="team-settings-list" style="max-height:50vh; overflow-y:auto;" class="no-scrollbar"></div>
         <div style="display:flex; gap:10px; margin-top:20px;">
             <button class="btn-ghost w-full" onclick="closeDialog('modal-team-settings')">취소</button>
-            <button class="btn btn-3d btn-forest w-full" onclick="saveTeamSettings()">저장</button>
+            <button class="btn btn-3d btn-primary w-full" onclick="saveTeamSettings()">저장</button>
         </div>
     </div>
 </dialog>
@@ -520,15 +505,15 @@
         <h3 class="modal-title">배점 설정</h3>
         <p class="modal-sub">문제 1개(네 글자/이어서 말해요는 1라운드)<br>성공 시 획득 점수입니다</p>
         <div>
-            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-speed)"><svg><use href="#i-game-speed"/></svg></div><span class="score-edit-name">스피드 게임</span></div><input type="number" id="score-input-speed" class="game-score-input"></div>
-            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-body)"><svg><use href="#i-game-body"/></svg></div><span class="score-edit-name">몸으로 말해요</span></div><input type="number" id="score-input-body" class="game-score-input"></div>
-            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-chosung)"><svg><use href="#i-game-chosung"/></svg></div><span class="score-edit-name">초성 퀴즈</span></div><input type="number" id="score-input-chosung" class="game-score-input"></div>
-            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-relay)"><svg><use href="#i-game-relay"/></svg></div><span class="score-edit-name">이어서 말해요</span></div><input type="number" id="score-input-relay" class="game-score-input"></div>
-            <div class="game-score-row"><div><div class="game-score-tile" style="background:var(--grad-fourletter)"><svg><use href="#i-game-fourletter"/></svg></div><span class="score-edit-name">네 글자 퀴즈</span></div><input type="number" id="score-input-fourLetter" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--speed"><svg><use href="#i-game-speed"/></svg></div><span class="score-edit-name">스피드 게임</span></div><input type="number" id="score-input-speed" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--body"><svg><use href="#i-game-body"/></svg></div><span class="score-edit-name">몸으로 말해요</span></div><input type="number" id="score-input-body" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--chosung"><svg><use href="#i-game-chosung"/></svg></div><span class="score-edit-name">초성 퀴즈</span></div><input type="number" id="score-input-chosung" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--relay"><svg><use href="#i-game-relay"/></svg></div><span class="score-edit-name">이어서 말해요</span></div><input type="number" id="score-input-relay" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--fourletter"><svg><use href="#i-game-fourletter"/></svg></div><span class="score-edit-name">네 글자 퀴즈</span></div><input type="number" id="score-input-fourLetter" class="game-score-input"></div>
         </div>
         <div style="display:flex; gap:10px; margin-top:20px;">
             <button class="btn-ghost w-full" onclick="closeDialog('modal-game-scores')">취소</button>
-            <button class="btn btn-3d btn-forest w-full" onclick="saveGameScoreSettings()">저장</button>
+            <button class="btn btn-3d btn-primary w-full" onclick="saveGameScoreSettings()">저장</button>
         </div>
     </div>
 </dialog>
@@ -559,7 +544,7 @@ function shuffle(arr) {
 const fx = opts => { try { window.confetti && confetti(opts); } catch (e) {} };
 
 // 폭죽 팔레트 (캔디 팝 테마)
-const FX_COLORS = ['#FF5D73', '#FFC94D', '#4ECDC4', '#7C5CFF', '#FFFFFF'];
+const FX_COLORS = ['#c67139', '#728157', '#b8952f', '#5b7d8c', '#fffdf6'];
 
 // 가벼운 햅틱 (지원 기기에서만 — iOS Safari는 무시됨)
 const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch (e) {} };
@@ -569,23 +554,19 @@ const buzz = ms => { try { navigator.vibrate && navigator.vibrate(ms); } catch (
    ================================================================= */
 const CHARS = window.TEAM_CHARS || [];
 
-// 아바타 심볼을 문서에 주입 (스크립트가 body 끝이라 DOM 준비 완료 상태)
-(function injectCharSymbols() {
-    if (!CHARS.length) return;
-    const holder = document.createElement('div');
-    holder.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
-    holder.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg"><defs>'
-        + CHARS.map(c => '<symbol id="char-' + c.id + '" viewBox="0 0 96 96">' + c.svg + '</symbol>').join('')
-        + '</defs></svg>';
-    document.body.prepend(holder);
-})();
+// 팀 색 — 팀 인덱스 순서로 배정 (동물 아바타 대체). characters.js의 이름 풀은 계속 사용.
+const TEAM_COLORS = ['#c67139','#728157','#5b7d8c','#8a6a86','#b8952f','#645c50','#8c491a','#56633f','#3f5b67','#6b4f67'];
+const teamColor = i => TEAM_COLORS[((i % TEAM_COLORS.length) + TEAM_COLORS.length) % TEAM_COLORS.length];
+const teamInitial = i => String.fromCharCode(65 + (((i % 26) + 26) % 26));
 
 function charById(id) {
     return CHARS.find(c => c.id === id) || CHARS[0] || { id: 'none', color: '#CCC', label: '팀', names: ['팀'], svg: '' };
 }
-function avatarHtml(charId, cls) {
-    const c = charById(charId);
-    return '<span class="avatar ' + (cls || '') + '"><svg viewBox="0 0 96 96" aria-hidden="true"><use href="#char-' + c.id + '"/></svg></span>';
+// 팀 인덱스 → 팀 색 원 + 이니셜 모노그램 (A~J)
+function avatarHtml(teamIndex, cls) {
+    const i = Number(teamIndex) || 0;
+    return '<span class="avatar ' + (cls || '') + '" style="--team-color:' + teamColor(i) + '" aria-hidden="true">'
+        + teamInitial(i) + '</span>';
 }
 function pickName(c) { return c.names[Math.floor(Math.random() * c.names.length)]; }
 function pickTeamIdentities(count) {
@@ -598,7 +579,7 @@ function applyMode(mode) {
     document.body.dataset.mode = m;
     // 브라우저 상단바(status bar) 색도 테마에 맞춤
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', m === 'workshop' ? '#4285FF' : '#FFF6EA');
+    if (meta) meta.setAttribute('content', m === 'workshop' ? '#f9f4ed' : '#f5ead8');
 }
 
 /* =================================================================
@@ -1010,7 +991,7 @@ const App = {
     scoreSettings: { speed: 10, body: 10, chosung: 10, relay: 100, fourLetter: 100 },
     game: {
         type: null, category: 'random', targetCount: 8,
-        timer: 90, words: [], currentIndex: 0, score: 0,
+        timer: 90, timerChoice: 90, words: [], currentIndex: 0, score: 0,
         timerInterval: null, pendingTimeout: null, hintsLeft: 3,
         isTransitioning: false, ended: false,
         difficulty: 2,      // 이어말하기 주제 난이도: 1 순한맛 / 2 보통 / 3 매운맛
@@ -1102,9 +1083,9 @@ function paintTeamRows() {
     const div = document.getElementById('team-inputs-container');
     div.innerHTML = setupDraft.map((d, i) =>
         '<div class="team-row" data-index="' + i + '">'
-        + avatarHtml(d.char, 'avatar-md')
+        + avatarHtml(i, 'avatar-md')
         + '<input type="text" class="form-input team-name-input" maxlength="10" value="' + escapeHtml(d.name) + '">'
-        + '<button class="reroll-btn" onclick="rerollTeamRow(' + i + ')" aria-label="캐릭터와 이름 다시 뽑기"><svg><use href="#i-dice"/></svg></button>'
+        + '<button class="reroll-btn" onclick="rerollTeamRow(' + i + ')" aria-label="팀 이름 다시 뽑기"><svg><use href="#i-dice"/></svg></button>'
         + '</div>'
     ).join('');
 }
@@ -1157,8 +1138,8 @@ function updateScoreboard() {
     board.style.display = '';
     board.innerHTML = App.teams.map((t, i) => {
         const cls = i === App.currentTeamIndex ? 'score-chip active' : 'score-chip';
-        return `<div class="${cls}" style="--char:${charById(t.char).color}">
-            ${avatarHtml(t.char, 'avatar-xs')}
+        return `<div class="${cls}">
+            ${avatarHtml(i, 'avatar-xs')}
             <div class="score-chip-info">
                 <div class="score-chip-num">${t.score}</div>
                 <div class="score-chip-name">${escapeHtml(t.name)}</div>
@@ -1192,7 +1173,7 @@ function prepareGame(type, keepSettings = false) {
     App.teams.forEach((t, i) => {
         const btn = document.createElement('button');
         btn.className = i === App.currentTeamIndex ? 'chip active-orange' : 'chip';
-        btn.innerHTML = avatarHtml(t.char, 'avatar-sm') + '<span>' + escapeHtml(t.name) + '</span>';
+        btn.innerHTML = avatarHtml(i, 'avatar-sm') + '<span>' + escapeHtml(t.name) + '</span>';
         btn.onclick = () => {
             App.currentTeamIndex = i;
             updateScoreboard();
@@ -1202,7 +1183,7 @@ function prepareGame(type, keepSettings = false) {
     });
     const readyTeam = App.teams[App.currentTeamIndex];
     document.getElementById('ready-team-name').innerHTML =
-        avatarHtml(readyTeam.char, 'avatar-md') + '<span>' + escapeHtml(readyTeam.name) + '</span>';
+        avatarHtml(App.currentTeamIndex, 'avatar-md') + '<span>' + escapeHtml(readyTeam.name) + '</span>';
 
     // 카테고리 선택자
     const catSection = document.getElementById('category-section');
@@ -1211,7 +1192,7 @@ function prepareGame(type, keepSettings = false) {
 
     catSection.classList.remove('hidden');
     const rnd = document.createElement('button');
-    rnd.className = App.game.category === 'random' ? 'chip active-orange' : 'chip';
+    rnd.className = App.game.category === 'random' ? 'chip active' : 'chip';
     rnd.innerHTML = '<svg width="14" height="14" style="vertical-align:-2px;margin-right:4px"><use href="#i-dice"/></svg>전체 랜덤';
     rnd.onclick = () => { App.game.category = 'random'; prepareGame(type, true); };
     cCon.appendChild(rnd);
@@ -1239,9 +1220,28 @@ function prepareGame(type, keepSettings = false) {
     } else {
         document.getElementById('timer-section').classList.remove('hidden');
         document.getElementById('fourletter-count-section').classList.add('hidden');
+        paintTimerSegment();
     }
 
     showScreen('screen-pregame');
+}
+
+/* ---------- 제한 시간 세그먼트 ---------- */
+// 시간제한 없는 게임(이어서/네 글자)은 '초' 단위 라벨을 감춥니다
+function showTimerUnit(show) {
+    const el = document.querySelector('.timer-unit');
+    if (el) el.style.display = show ? '' : 'none';
+}
+
+function setTimerChoice(sec) {
+    App.game.timerChoice = sec;
+    Sound.play('tap');
+    paintTimerSegment();
+}
+function paintTimerSegment() {
+    document.querySelectorAll('#timer-segment button').forEach(btn => {
+        btn.setAttribute('aria-pressed', parseInt(btn.dataset.timer) === App.game.timerChoice ? 'true' : 'false');
+    });
 }
 
 /* ---------- 이어말하기 난이도 선택 ---------- */
@@ -1252,7 +1252,7 @@ function setDifficulty(d) {
 }
 function paintDifficultyChips() {
     document.querySelectorAll('#difficulty-selector .chip').forEach(btn => {
-        btn.classList.toggle('active-orange', parseInt(btn.dataset.d) === (App.game.difficulty || 2));
+        btn.classList.toggle('active', parseInt(btn.dataset.d) === (App.game.difficulty || 2));
     });
 }
 
@@ -1260,8 +1260,7 @@ function startGame() {
     // BGM을 먼저 정지하여 게임 시작 사운드와 겹치지 않도록
     Sound.stopBgm();
     Sound.play('start');
-    const timerSel = document.getElementById('timer-select');
-    App.game.timer = parseInt(timerSel.value);
+    App.game.timer = App.game.timerChoice;
     App.game.score = 0;
     App.game.currentIndex = 0;
     App.game.hintsLeft = 3;
@@ -1279,7 +1278,7 @@ function startGame() {
 
     const playTeam = App.teams[App.currentTeamIndex];
     document.getElementById('ingame-team-badge').innerHTML =
-        avatarHtml(playTeam.char, '') + '<span>' + escapeHtml(playTeam.name) + '</span>';
+        avatarHtml(App.currentTeamIndex, '') + '<span>' + escapeHtml(playTeam.name) + '</span>';
 
     // 현재 진행 중인 게임 이름·아이콘
     const gameLabels = {
@@ -1290,14 +1289,22 @@ function startGame() {
         speed:'#i-game-speed', body:'#i-game-body', chosung:'#i-game-chosung',
         relay:'#i-game-relay', fourLetter:'#i-game-fourletter'
     };
+    const gameColors = {
+        speed:'#c67139', body:'#728157', chosung:'#5b7d8c',
+        relay:'#8a6a86', fourLetter:'#b8952f'
+    };
     document.getElementById('ingame-game-text').textContent = gameLabels[App.game.type] || '';
     document.getElementById('ingame-game-icon').innerHTML = `<use href="${gameIcons[App.game.type] || '#i-game-speed'}"/>`;
+    const gameBadge = document.getElementById('ingame-game-name');
+    if (gameColors[App.game.type]) gameBadge.style.setProperty('--game-color', gameColors[App.game.type]);
+    else gameBadge.style.removeProperty('--game-color');
 
     const catDisplay = (!App.game.category || App.game.category === 'random') ? '전체 랜덤' : App.game.category;
     document.getElementById('ingame-category').textContent = catDisplay;
 
     document.getElementById('timer-display').textContent = App.game.timer;
     document.getElementById('timer-display').classList.remove('danger');
+    showTimerUnit(true);
     resetTimerProgress();
 
     // Hide all controls
@@ -1325,6 +1332,7 @@ function startGame() {
     if (App.game.type === 'relay') {
         document.getElementById('controls-relay').classList.remove('hidden');
         document.getElementById('timer-display').textContent = '∞';
+        showTimerUnit(false);
         progressWrap.style.visibility = 'hidden';
         document.getElementById('quiz-content').classList.add('hidden');
         document.getElementById('placeholder-stage').classList.remove('hidden');
@@ -1335,6 +1343,7 @@ function startGame() {
     } else if (App.game.type === 'fourLetter') {
         document.getElementById('controls-fourletter').classList.remove('hidden');
         document.getElementById('timer-display').textContent = '∞';
+        showTimerUnit(false);
         progressWrap.style.visibility = 'hidden';
         renderQuiz();
     } else if (App.game.type === 'chosung') {
@@ -1591,12 +1600,14 @@ function stopGame(isTimeOver = false) {
 
     const titleEl = document.getElementById('result-title');
     const avatarEl = document.getElementById('result-avatar');
-    if (avatarEl) avatarEl.innerHTML = avatarHtml(App.teams[App.currentTeamIndex].char, 'avatar-lg');
+    if (avatarEl) avatarEl.innerHTML = avatarHtml(App.currentTeamIndex, 'avatar-lg');
     if (isTimeOver) {
-        titleEl.textContent = "TIME UP!";
+        titleEl.className = 'result-status timeup';
+        titleEl.innerHTML = '<svg><use href="#i-clock"/></svg>TIME UP';
         Sound.play('timesup');
     } else {
-        titleEl.textContent = "STAGE CLEAR!";
+        titleEl.className = 'result-status';
+        titleEl.innerHTML = '<svg><use href="#i-trophy"/></svg>ROUND CLEAR';
         if (earned > 0) Sound.play('big-success');
         else Sound.play('fail');
     }
@@ -1866,7 +1877,7 @@ function renderScoreboardList() {
     document.getElementById('scoreboard-list').innerHTML = App.teams.map((t, i) => `
         <div class="score-edit-row">
             <div class="score-edit-who">
-                ${avatarHtml(t.char, 'avatar-sm')}
+                ${avatarHtml(i, 'avatar-sm')}
                 <span class="score-edit-name">${escapeHtml(t.name)}</span>
             </div>
             <div class="score-edit-ctl">
@@ -1893,9 +1904,9 @@ function adjScore(i, v) {
 function renderTeamSettingsList() {
     document.getElementById('team-settings-list').innerHTML = App.teams.map((t, i) => `
         <div class="team-edit-row">
-            ${avatarHtml(t.char, 'avatar-md')}
+            ${avatarHtml(i, 'avatar-md')}
             <input type="text" id="edit-team-${i}" class="form-input" maxlength="10" value="${escapeHtml(t.name)}">
-            <button class="reroll-btn" onclick="rerollTeamChar(${i})" aria-label="캐릭터 바꾸기"><svg><use href="#i-dice"/></svg></button>
+            <button class="reroll-btn" onclick="rerollTeamChar(${i})" aria-label="팀 이름 다시 뽑기"><svg><use href="#i-dice"/></svg></button>
         </div>
     `).join('');
 }
@@ -1906,7 +1917,7 @@ function openTeamSettings() {
     Sound.play('modal');
 }
 function rerollTeamChar(i) {
-    // 진행 중 팀의 캐릭터 교체 (입력 중인 이름은 유지)
+    // 팀 이름 다시 뽑기 — 팀 색은 인덱스 고정이므로 이름 풀만 새로 뽑습니다
     Sound.play('spinTick');
     const typed = App.teams.map((_, j) => {
         const el = document.getElementById(`edit-team-${j}`);
@@ -1914,7 +1925,10 @@ function rerollTeamChar(i) {
     });
     const used = App.teams.filter((_, j) => j !== i).map(t => t.char);
     const candidates = CHARS.filter(c => !used.includes(c.id) && c.id !== App.teams[i].char);
-    if (candidates.length) App.teams[i].char = candidates[Math.floor(Math.random() * candidates.length)].id;
+    const picked = candidates.length ? candidates[Math.floor(Math.random() * candidates.length)] : charById(App.teams[i].char);
+    App.teams[i].char = picked.id;
+    App.teams[i].name = pickName(picked);
+    typed[i] = App.teams[i].name;
     renderTeamSettingsList();
     typed.forEach((v, j) => {
         const el = document.getElementById(`edit-team-${j}`);

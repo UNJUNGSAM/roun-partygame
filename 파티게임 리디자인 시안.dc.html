@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/organic-17f67a22-da84-4ac8-8eda-49f70d3d04a0/styles.css">
+<script src="_ds/organic-17f67a22-da84-4ac8-8eda-49f70d3d04a0/_ds_bundle.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:'GmarketSans';font-weight:500;font-display:swap;src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');}
+@font-face{font-family:'GmarketSans';font-weight:700;font-display:swap;src:url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansBold.woff') format('woff');}
+body{margin:0;background:#efe3ce;font-family:'Pretendard',system-ui,sans-serif;color:#201e1d;}
+a{color:#8c491a;text-decoration:none;}a:hover{color:#c67139;}
+</style>
+</helmet>
+
+<section style="padding:72px 72px 100px;display:flex;flex-direction:column;gap:56px;background:#f5ead8">
+
+  <div style="display:flex;flex-direction:column;gap:20px;max-width:1080px">
+    <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.24em;text-transform:uppercase;color:#b2622d">Turn 2 · Game design pass</div>
+    <h1 style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:52px;line-height:1.14;margin:0;letter-spacing:-0.02em">화면을 다시 짰습니다<br>— 게임처럼</h1>
+    <p style="margin:0;font-size:18px;line-height:1.6;color:#645c50;max-width:820px;text-wrap:pretty">1차 시안은 기존 구성을 그대로 두고 스타일만 정리한 안이었습니다. 이번엔 <strong>파티게임의 진행 방식</strong>을 기준으로 구조를 바꿨습니다. 핵심 전제: <strong>손에 든 화면은 사회자의 조작기</strong>이고, <strong>큰 화면은 방 전체가 보는 무대</strong>입니다. 이 둘은 정보량이 달라야 합니다.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px">
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:20px;padding:18px 22px;width:250px">
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.14em;color:#b2622d;margin-bottom:8px">준비 시간 단축</div>
+        <div style="font-size:15px;line-height:1.5;color:#474238">모드 → 팀 → 게임 → 라운드, 4화면을 <strong>로비 1화면</strong>으로. 시작까지 탭 2번.</div>
+      </div>
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:20px;padding:18px 22px;width:250px">
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.14em;color:#b2622d;margin-bottom:8px">읽지 않는 타이머</div>
+        <div style="font-size:15px;line-height:1.5;color:#474238">숫자를 읽는 대신 <strong>줄어드는 기둥</strong>으로. 방 뒤에서도 남은 시간이 보입니다.</div>
+      </div>
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:20px;padding:18px 22px;width:250px">
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.14em;color:#b2622d;margin-bottom:8px">진행이 보이는 눈금</div>
+        <div style="font-size:15px;line-height:1.5;color:#474238">&lsquo;12 / 30&rsquo; 텍스트 대신 <strong>성공·패스 눈금</strong>. 성적표가 실시간으로 쌓입니다.</div>
+      </div>
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:20px;padding:18px 22px;width:250px">
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.14em;color:#b2622d;margin-bottom:8px">차례 넘김 = 이벤트</div>
+        <div style="font-size:15px;line-height:1.5;color:#474238">결과 모달 대신 <strong>순위 변동</strong> → <strong>다음 팀 전면 카드</strong>. 흐름이 끊기지 않습니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="2a" style="display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.1em;background:#201e1d;color:#f5ead8;padding:6px 14px;border-radius:999px">2a</span>
+      <h2 style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:30px;margin:0">로비 — 4화면을 1화면으로</h2>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:44px;align-items:flex-start">
+      <div style="display:flex;flex-direction:column;gap:14px;width:390px">
+        <div data-screen-label="로비" style="width:390px;height:800px;border-radius:40px;background:#f5ead8;overflow:hidden;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;border:1px solid #dcd3c4">
+          <div style="display:flex;align-items:center;gap:10px;padding:18px 20px 10px">
+            <div style="width:34px;height:34px;border-radius:12px;background:#c67139;display:grid;place-items:center;color:#fff">
+              <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 21 14 3"></path><path d="M20.5 21 10 3"></path><path d="M15.5 21 12 15l-3.5 6"></path><path d="M2 21h20"></path></svg>
+            </div>
+            <div style="display:flex;border:1px solid #dcd3c4;border-radius:999px;overflow:hidden;background:#fffdf6;flex:1">
+              <span style="flex:1;text-align:center;padding:9px 0;font-size:14px;font-weight:800;background:#201e1d;color:#f5ead8">파티</span>
+              <span style="flex:1;text-align:center;padding:9px 0;font-size:14px;font-weight:700;color:#645c50">워크샵</span>
+            </div>
+            <div style="width:34px;height:34px;border-radius:999px;border:1px solid #dcd3c4;background:#fffdf6;display:grid;place-items:center;color:#645c50">
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
+            </div>
+          </div>
+
+          <div style="flex:1;min-height:0;padding:14px 20px 0;display:flex;flex-direction:column;gap:20px">
+            <div style="display:flex;flex-direction:column;gap:11px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:19px">참가 팀</span>
+                <span style="font-size:13px;font-weight:700;color:#8c491a">이름 탭하면 수정 · 4팀</span>
+              </div>
+              <div style="display:flex;gap:10px">
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+                  <span style="width:54px;height:54px;border-radius:999px;background:#c67139;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:22px">A</span>
+                  <span style="font-size:12.5px;font-weight:700;text-align:center;line-height:1.3">불꽃<br>여우팀</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+                  <span style="width:54px;height:54px;border-radius:999px;background:#728157;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:22px">B</span>
+                  <span style="font-size:12.5px;font-weight:700;text-align:center;line-height:1.3">느긋한<br>판다팀</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+                  <span style="width:54px;height:54px;border-radius:999px;background:#5b7d8c;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:22px">C</span>
+                  <span style="font-size:12.5px;font-weight:700;text-align:center;line-height:1.3">뜀박질<br>토끼팀</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+                  <span style="width:54px;height:54px;border-radius:999px;background:#b8952f;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:22px">D</span>
+                  <span style="font-size:12.5px;font-weight:700;text-align:center;line-height:1.3">까만<br>고양이팀</span>
+                </div>
+                <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:7px">
+                  <span style="width:54px;height:54px;border-radius:999px;border:2px dashed #c0b6a5;color:#a19786;display:grid;place-items:center">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14"></path><path d="M5 12h14"></path></svg>
+                  </span>
+                  <span style="font-size:12.5px;font-weight:700;text-align:center;color:#a19786">추가</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:1px;background:#e1d6c0"></div>
+
+            <div style="display:flex;flex-direction:column;gap:11px">
+              <div style="display:flex;align-items:baseline;justify-content:space-between">
+                <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:19px">게임</span>
+                <span style="font-size:13px;font-weight:700;color:#a19786">좌우로 넘기기</span>
+              </div>
+              <div style="display:flex;gap:10px;align-items:stretch">
+                <div style="width:150px;flex-shrink:0;background:#c67139;border-radius:24px;padding:16px;display:flex;flex-direction:column;gap:10px;color:#fffdf6">
+                  <span style="width:42px;height:42px;border-radius:14px;background:rgba(255,255,255,0.22);display:grid;place-items:center">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                  </span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:19px;line-height:1.2">스피드<br>게임</span>
+                  <span style="font-size:12.5px;opacity:0.9;line-height:1.4">설명 없이<br>단어 맞추기</span>
+                </div>
+                <div style="width:104px;flex-shrink:0;background:#fffdf6;border:1px solid #dcd3c4;border-radius:24px;padding:14px;display:flex;flex-direction:column;gap:9px">
+                  <span style="width:38px;height:38px;border-radius:13px;background:#f0fae1;color:#56633f;display:grid;place-items:center">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"></circle><path d="m9 20 3-6 3 6"></path><path d="m6 8 6 2 6-2"></path><path d="M12 10v4"></path></svg>
+                  </span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:15px;line-height:1.25">몸으로<br>말해요</span>
+                </div>
+                <div style="width:104px;flex-shrink:0;background:#fffdf6;border:1px solid #dcd3c4;border-radius:24px;padding:14px;display:flex;flex-direction:column;gap:9px">
+                  <span style="width:38px;height:38px;border-radius:13px;background:#e9f1f3;color:#3f5b67;display:grid;place-items:center">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>
+                  </span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:15px;line-height:1.25">초성<br>퀴즈</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:11px">
+              <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+                <span style="font-size:13px;font-weight:700;color:#82796a;width:46px">주제</span>
+                <span style="padding:8px 14px;border-radius:999px;background:#201e1d;color:#f5ead8;font-size:13.5px;font-weight:700">동물</span>
+                <span style="padding:8px 14px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;font-size:13.5px;font-weight:700;color:#474238">음식</span>
+                <span style="padding:8px 14px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;font-size:13.5px;font-weight:700;color:#474238">직업</span>
+                <span style="padding:8px 14px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;font-size:13.5px;font-weight:700;color:#474238">전체</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <span style="font-size:13px;font-weight:700;color:#82796a;width:46px">시간</span>
+                <div style="display:flex;border:1px solid #dcd3c4;border-radius:999px;overflow:hidden;background:#fffdf6;flex:1">
+                  <span style="flex:1;text-align:center;padding:9px 0;font-family:'Outfit',sans-serif;font-weight:700;font-size:14.5px;color:#645c50">60</span>
+                  <span style="flex:1;text-align:center;padding:9px 0;font-family:'Outfit',sans-serif;font-weight:800;font-size:14.5px;background:#201e1d;color:#f5ead8">90</span>
+                  <span style="flex:1;text-align:center;padding:9px 0;font-family:'Outfit',sans-serif;font-weight:700;font-size:14.5px;color:#645c50">120</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div style="padding:16px 20px 22px;display:flex;flex-direction:column;gap:9px;background:#f5ead8">
+            <div style="height:64px;border-radius:999px;background:#c67139;color:#fffdf6;display:flex;align-items:center;justify-content:center;gap:12px;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:21px">
+              <span style="width:34px;height:34px;border-radius:999px;background:rgba(255,255,255,0.24);display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:15px">A</span>불꽃 여우팀 시작
+            </div>
+            <div style="text-align:center;font-size:13px;font-weight:600;color:#82796a">순서 A → B → C → D · 한 바퀴 4라운드</div>
+          </div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50"><strong style="color:#201e1d">로비</strong> — 모드는 상단 토글, 팀은 한 줄, 게임은 가로 카루셀, 주제·시간은 한 줄씩. 스크롤 없이 전체 상태가 보이고, 다음 라운드에 돌아와도 <strong>바꿀 것만 한 번 누르고 시작</strong>합니다. 시작 버튼이 다음 차례 팀을 직접 말해줍니다.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;width:620px">
+        <div data-screen-label="차례 넘김 카드" style="width:620px;height:800px;border-radius:40px;overflow:hidden;background:#728157;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;box-shadow:0 16px 40px rgba(46,43,37,0.20);padding:40px;text-align:center">
+          <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:14px;letter-spacing:0.28em;color:rgba(255,253,246,0.75)">ROUND 6 · NEXT UP</div>
+          <div style="width:150px;height:150px;border-radius:999px;background:#fffdf6;color:#56633f;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:64px">B</div>
+          <div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:56px;line-height:1.15;color:#fffdf6">느긋한 판다팀</div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="padding:11px 20px;border-radius:999px;background:rgba(255,253,246,0.18);color:#fffdf6;font-size:17px;font-weight:700">초성 퀴즈 · 사자성어</span>
+            <span style="padding:11px 20px;border-radius:999px;background:rgba(255,253,246,0.18);color:#fffdf6;font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">현재 2위 · 95점</span>
+          </div>
+          <div style="margin-top:20px;width:118px;height:118px;border-radius:999px;border:6px solid rgba(255,253,246,0.35);display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:58px;color:#fffdf6">3</div>
+          <div style="font-size:18px;font-weight:600;color:rgba(255,253,246,0.9)">준비되면 화면을 눌러 시작</div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50"><strong style="color:#201e1d">차례 넘김</strong> — &lsquo;다음 팀 도전&rsquo; 버튼 하나로 조용히 넘기던 순간을 <strong>팀 색이 화면을 덮는 전면 카드</strong>로 만들었습니다. 폰을 넘겨받는 시간을 3-2-1 카운트가 채워주고, 지금 몇 위인지도 여기서 알려줍니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="2b" style="display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.1em;background:#201e1d;color:#f5ead8;padding:6px 14px;border-radius:999px">2b</span>
+      <h2 style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:30px;margin:0">무대 화면 — 제시어 하나만 남기고</h2>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;width:1120px;max-width:100%">
+      <div data-screen-label="무대 플레이" style="width:1120px;height:630px;border-radius:28px;overflow:hidden;background:#f5ead8;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;border:1px solid #dcd3c4">
+        <div style="flex:1;min-width:0;display:flex;flex-direction:column;padding:26px 0 26px 32px">
+          <div style="display:flex;align-items:center;gap:12px">
+            <span style="display:inline-flex;align-items:center;gap:9px;padding:6px 18px 6px 6px;border-radius:999px;background:#c67139;color:#fffdf6;font-size:16px;font-weight:800">
+              <span style="width:30px;height:30px;border-radius:999px;background:rgba(255,255,255,0.26);display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:14px">A</span>불꽃 여우팀
+            </span>
+            <span style="font-size:15px;font-weight:700;color:#82796a">스피드 게임 · 동물</span>
+            <span style="margin-left:auto;margin-right:26px;display:inline-flex;align-items:baseline;gap:6px">
+              <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:26px;color:#201e1d">138</span>
+              <span style="font-size:14px;font-weight:700;color:#a19786">점 · 2위</span>
+            </span>
+          </div>
+
+          <div style="flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:20px">
+            <div style="display:inline-flex;align-items:center;gap:9px;padding:8px 18px;border-radius:999px;background:#f0fae1;color:#56633f;font-size:17px;font-weight:800">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>3연속 성공
+            </div>
+            <div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:184px;line-height:1;letter-spacing:-0.04em;color:#201e1d;text-align:center;word-break:keep-all">{{ sampleWord }}</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:5px;padding-right:32px;margin-bottom:20px">
+            <sc-for list="{{ ticksDone }}" as="t" hint-placeholder-count="8">
+              <span style="flex:1;height:12px;border-radius:999px;background:#728157"></span>
+            </sc-for>
+            <sc-for list="{{ ticksPass }}" as="t" hint-placeholder-count="3">
+              <span style="flex:1;height:12px;border-radius:999px;background:#c0b6a5"></span>
+            </sc-for>
+            <span style="flex:1;height:12px;border-radius:999px;background:#c67139"></span>
+            <sc-for list="{{ ticksLeft }}" as="t" hint-placeholder-count="18">
+              <span style="flex:1;height:12px;border-radius:999px;background:#e1d6c0"></span>
+            </sc-for>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:14px;padding-right:32px">
+            <div style="width:230px;height:92px;border-radius:999px;background:#ebddc5;border:1px solid #dcd3c4;color:#645c50;display:flex;align-items:center;justify-content:center;gap:12px;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:28px">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path><path d="m15 18 6-6-6-6"></path></svg>패스
+            </div>
+            <div style="flex:1;height:92px;border-radius:999px;background:#728157;color:#fffdf6;display:flex;align-items:center;justify-content:center;gap:16px;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:34px">
+              <svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>성공
+            </div>
+            <div style="width:92px;height:92px;border-radius:999px;border:1px solid #c0b6a5;color:#8c491a;display:grid;place-items:center;flex-shrink:0">
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="4" height="16" x="6" y="4" rx="1"></rect><rect width="4" height="16" x="14" y="4" rx="1"></rect></svg>
+            </div>
+          </div>
+        </div>
+
+        <div style="width:132px;flex-shrink:0;display:flex;flex-direction:column;align-items:center;gap:16px;padding:26px 26px 26px 0">
+          <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:52px;line-height:1;color:#201e1d;font-variant-numeric:tabular-nums">{{ timerValue }}</div>
+          <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.2em;color:#a19786">SEC</div>
+          <div style="flex:1;width:36px;border-radius:999px;background:#e1d6c0;display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden">
+            <div style="width:36px;border-radius:999px;background:#c67139;height: {{ progressPercent }}%"></div>
+          </div>
+        </div>
+      </div>
+      <div style="font-size:14px;line-height:1.55;color:#645c50;max-width:900px"><strong style="color:#201e1d">무대 플레이</strong> — 제시어를 184px까지 키우고 나머지는 모두 주변으로 밀었습니다. 오른쪽 <strong>시간 기둥</strong>은 숫자를 못 읽는 거리에서도 남은 시간이 보이고(마지막 10초에 테라코타 → 진한 색으로), 아래 <strong>눈금</strong>은 성공(세이지)·패스(회색)·현재 문제(테라코타)를 한 줄로 보여줍니다. 정지는 아이콘 하나로 줄여 오답 탭을 막았습니다.</div>
+    </div>
+  </div>
+
+  <div id="2c" style="display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.1em;background:#201e1d;color:#f5ead8;padding:6px 14px;border-radius:999px">2c</span>
+      <h2 style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:30px;margin:0">결과 — 점수가 아니라 순위</h2>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px;width:1120px;max-width:100%">
+      <div data-screen-label="라운드 결과 · 순위" style="width:1120px;height:630px;border-radius:28px;overflow:hidden;background:#f5ead8;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;padding:34px 40px;border:1px solid #dcd3c4">
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:20px">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.24em;color:#b2622d">ROUND 5 결과</span>
+            <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:38px;line-height:1.15">불꽃 여우팀, 1위로 올라섰습니다</span>
+          </div>
+          <div style="display:flex;align-items:baseline;gap:10px">
+            <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:64px;line-height:1;color:#728157">+42</span>
+            <span style="font-size:17px;font-weight:700;color:#82796a">21문제 성공 · 콤보 3</span>
+          </div>
+        </div>
+
+        <div style="flex:1;min-height:0;display:flex;flex-direction:column;justify-content:center;gap:14px;margin:26px 0">
+          <div style="display:flex;align-items:center;gap:16px;background:#fffdf6;border:2px solid #c67139;border-radius:26px;padding:14px 20px;box-shadow:0 3px 10px rgba(46,43,37,0.08)">
+            <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:26px;color:#201e1d;width:34px">1</span>
+            <span style="width:46px;height:46px;border-radius:999px;background:#c67139;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;flex-shrink:0">A</span>
+            <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:22px;width:190px">불꽃 여우팀</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:999px;background:#f0fae1;color:#56633f;font-size:13.5px;font-weight:800">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m18 15-6-6-6 6"></path></svg>2위 → 1위
+            </span>
+            <span style="flex:1;height:20px;border-radius:999px;background:#e1d6c0;overflow:hidden"><span style="display:block;height:20px;width:100%;border-radius:999px;background:#c67139"></span></span>
+            <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:30px;width:90px;text-align:right">162</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;background:#fffdf6;border:1px solid #dcd3c4;border-radius:26px;padding:14px 20px">
+            <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:26px;color:#201e1d;width:34px">2</span>
+            <span style="width:46px;height:46px;border-radius:999px;background:#728157;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;flex-shrink:0">B</span>
+            <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:22px;width:190px">느긋한 판다팀</span>
+            <span style="display:inline-flex;align-items:center;gap:5px;padding:6px 13px;border-radius:999px;background:#fff2eb;color:#8c491a;font-size:13.5px;font-weight:800">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>1위 → 2위
+            </span>
+            <span style="flex:1;height:20px;border-radius:999px;background:#e1d6c0;overflow:hidden"><span style="display:block;height:20px;width:96%;border-radius:999px;background:#728157"></span></span>
+            <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:30px;width:90px;text-align:right">155</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;background:#fffdf6;border:1px solid #dcd3c4;border-radius:26px;padding:14px 20px">
+            <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:26px;color:#201e1d;width:34px">3</span>
+            <span style="width:46px;height:46px;border-radius:999px;background:#5b7d8c;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;flex-shrink:0">C</span>
+            <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:22px;width:190px">뜀박질 토끼팀</span>
+            <span style="width:96px"></span>
+            <span style="flex:1;height:20px;border-radius:999px;background:#e1d6c0;overflow:hidden"><span style="display:block;height:20px;width:74%;border-radius:999px;background:#5b7d8c"></span></span>
+            <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:30px;width:90px;text-align:right">120</span>
+          </div>
+          <div style="display:flex;align-items:center;gap:16px;background:#fffdf6;border:1px solid #dcd3c4;border-radius:26px;padding:14px 20px">
+            <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:26px;color:#201e1d;width:34px">4</span>
+            <span style="width:46px;height:46px;border-radius:999px;background:#b8952f;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;flex-shrink:0">D</span>
+            <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:22px;width:190px">까만 고양이팀</span>
+            <span style="width:96px"></span>
+            <span style="flex:1;height:20px;border-radius:999px;background:#e1d6c0;overflow:hidden"><span style="display:block;height:20px;width:52%;border-radius:999px;background:#b8952f"></span></span>
+            <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:30px;width:90px;text-align:right">84</span>
+          </div>
+        </div>
+
+        <div style="display:flex;align-items:center;gap:14px">
+          <div style="flex:1;height:74px;border-radius:999px;background:#c67139;color:#fffdf6;display:flex;align-items:center;justify-content:center;gap:12px;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:24px">
+            <span style="width:36px;height:36px;border-radius:999px;background:rgba(255,255,255,0.24);display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:16px">B</span>느긋한 판다팀 차례
+          </div>
+          <div style="width:240px;height:74px;border-radius:999px;border:1px solid #c0b6a5;color:#645c50;display:grid;place-items:center;font-size:18px;font-weight:700">로비로</div>
+        </div>
+      </div>
+      <div style="font-size:14px;line-height:1.55;color:#645c50;max-width:900px"><strong style="color:#201e1d">라운드 결과</strong> — 획득 점수만 보여주던 모달을 <strong>전체 순위표</strong>로 바꿨습니다. 점수 막대 길이로 격차가 즉시 보이고, &lsquo;2위 → 1위&rsquo; 태그가 이 라운드의 의미를 문장으로 만들어 줍니다. 다음 팀 이름이 그대로 다음 동작 버튼이 됩니다.</div>
+    </div>
+  </div>
+
+</section>
+
+<section style="padding:72px 72px 120px;display:flex;flex-direction:column;gap:56px">
+
+  <div style="display:flex;flex-direction:column;gap:20px;max-width:1080px">
+    <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:13px;letter-spacing:0.24em;text-transform:uppercase;color:#b2622d">Turn 1 · 스타일 정리안 (기존 구성 유지)</div>
+    <h1 style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:56px;line-height:1.14;margin:0;letter-spacing:-0.02em">로운네 파티게임<br>디자인 개선 시안</h1>
+    <p style="margin:0;font-size:18px;line-height:1.6;color:#645c50;max-width:760px;text-wrap:pretty">3D 입체 버튼·무지개 그라데이션·직접 그린 아바타를 걷어내고, 따뜻한 크림 지면 위에 <strong>한 개의 강조색 + 게임별 뮤트 컬러</strong>로 정리했습니다. 게임별 색 구분과 두 테마는 그대로 유지하되 톤만 낮췄습니다.</p>
+    <div style="display:flex;flex-wrap:wrap;gap:14px;margin-top:8px">
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:20px;padding:18px 22px;width:250px">
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.14em;color:#b2622d;margin-bottom:8px">01 SURFACE</div>
+        <div style="font-size:15px;line-height:1.5;color:#474238">그라데이션 카드 → 크림 지면 + 단색 면. 입체 버튼의 5px 하단 그림자를 없애고 눌림은 톤 변화로 표현.</div>
+      </div>
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:20px;padding:18px 22px;width:250px">
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.14em;color:#b2622d;margin-bottom:8px">02 ICON</div>
+        <div style="font-size:15px;line-height:1.5;color:#474238">직접 그린 삽화 → 라인 아이콘 한 세트(굵기 2.75)로 통일. 카드마다 색 타일 1개만.</div>
+      </div>
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:20px;padding:18px 22px;width:250px">
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.14em;color:#b2622d;margin-bottom:8px">03 AVATAR</div>
+        <div style="font-size:15px;line-height:1.5;color:#474238">동물 그림 → 팀 색 + 이니셜 모노그램. 캐릭터의 재미는 추천 <em>팀 이름</em>에 남깁니다.</div>
+      </div>
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:20px;padding:18px 22px;width:250px">
+        <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:12px;letter-spacing:0.14em;color:#b2622d;margin-bottom:8px">04 TYPE</div>
+        <div style="font-size:15px;line-height:1.5;color:#474238">제목·제시어는 GmarketSans, 본문은 Pretendard, 숫자는 Outfit 고정폭. 3단계 크기만 사용.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="1a" style="display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.1em;background:#201e1d;color:#f5ead8;padding:6px 14px;border-radius:999px">1a</span>
+      <h2 style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:30px;margin:0">파티 모드 · 크림 테마</h2>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:44px;align-items:flex-start">
+
+      <div style="display:flex;flex-direction:column;gap:14px;width:390px">
+        <div data-screen-label="01 모드 선택" style="width:390px;height:800px;border-radius:40px;background:#f5ead8;overflow:hidden;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;border:1px solid #dcd3c4">
+          <div style="display:flex;align-items:center;gap:10px;padding:18px 20px 8px">
+            <div style="width:36px;height:36px;border-radius:12px;background:#c67139;display:grid;place-items:center;color:#fff">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 21 14 3"></path><path d="M20.5 21 10 3"></path><path d="M15.5 21 12 15l-3.5 6"></path><path d="M2 21h20"></path></svg>
+            </div>
+            <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;letter-spacing:-0.01em;flex:1">PARTY<span style="color:#c67139">GAME</span></div>
+            <div style="width:36px;height:36px;border-radius:999px;border:1px solid #dcd3c4;background:#fffdf6;display:grid;place-items:center;color:#645c50">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
+            </div>
+          </div>
+
+          <div style="flex:1;display:flex;flex-direction:column;justify-content:center;padding:0 28px 40px;gap:32px">
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.24em;text-transform:uppercase;color:#b2622d">Let's play</div>
+              <div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:38px;line-height:1.22;letter-spacing:-0.02em;word-break:keep-all">오늘은 누구와<br>함께 노실 건가요?</div>
+              <div style="font-size:15px;line-height:1.55;color:#82796a">모임에 맞는 모드를 골라주세요.<br>테마 색도 함께 바뀝니다.</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:14px">
+              <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:26px;padding:22px;display:flex;align-items:center;gap:18px;box-shadow:0 3px 10px rgba(46,43,37,0.08)">
+                <div style="width:64px;height:64px;border-radius:20px;background:#fff2eb;display:grid;place-items:center;color:#b2622d;flex-shrink:0">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M5.8 11.3 2 22l10.7-3.79"></path><path d="M4 3h.01"></path><path d="M22 8h.01"></path><path d="M15 2h.01"></path><path d="M22 20h.01"></path><path d="m22 2-2.24.75a2.9 2.9 0 0 0-1.96 3.12c.1.86-.57 1.63-1.45 1.63h-.38c-.86 0-1.6.6-1.76 1.44L14 10"></path><path d="m22 13-.82-.33c-.86-.34-1.82.2-1.98 1.11-.11.7-.72 1.22-1.43 1.22H17"></path><path d="m11 2 .33.82c.34.86-.2 1.82-1.11 1.98C9.52 4.9 9 5.52 9 6.23V7"></path><path d="M11 13c1.93 1.93 2.83 4.17 2 5-.83.83-3.07-.07-5-2-1.93-1.93-2.83-4.17-2-5 .83-.83 3.07.07 5 2Z"></path></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                  <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.2em;color:#a19786">MODE 01</span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:23px;line-height:1.2">파티 모드</span>
+                  <span style="font-size:14px;color:#82796a">가족 · 친구 · 2~4팀</span>
+                </div>
+              </div>
+              <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:26px;padding:22px;display:flex;align-items:center;gap:18px;box-shadow:0 3px 10px rgba(46,43,37,0.08)">
+                <div style="width:64px;height:64px;border-radius:20px;background:#f0fae1;display:grid;place-items:center;color:#56633f;flex-shrink:0">
+                  <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M18 21a8 8 0 0 0-16 0"></path><circle cx="10" cy="8" r="5"></circle><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"></path></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:3px;min-width:0">
+                  <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.2em;color:#a19786">MODE 02</span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:23px;line-height:1.2">워크샵 모드</span>
+                  <span style="font-size:14px;color:#82796a">단체 행사 · 4~10팀</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50"><strong style="color:#201e1d">01 모드 선택</strong> — 풀블리드 그라데이션 카드를 크림 카드 + 색 타일로 교체. 모드 성격은 타일 색(테라코타/세이지)으로만 구분합니다.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;width:390px">
+        <div data-screen-label="02 팀 설정" style="width:390px;height:800px;border-radius:40px;background:#f5ead8;overflow:hidden;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;border:1px solid #dcd3c4">
+          <div style="display:flex;align-items:center;gap:10px;padding:18px 20px;border-bottom:1px solid #e3d8c4">
+            <div style="width:36px;height:36px;border-radius:12px;background:#c67139;display:grid;place-items:center;color:#fff">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 21 14 3"></path><path d="M20.5 21 10 3"></path><path d="M15.5 21 12 15l-3.5 6"></path><path d="M2 21h20"></path></svg>
+            </div>
+            <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;flex:1">PARTY<span style="color:#c67139">GAME</span></div>
+            <div style="width:36px;height:36px;border-radius:999px;border:1px solid #dcd3c4;background:#fffdf6;display:grid;place-items:center;color:#645c50">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
+            </div>
+          </div>
+
+          <div style="flex:1;overflow:hidden;padding:20px;display:flex;flex-direction:column;gap:20px">
+            <div style="display:inline-flex;align-items:center;gap:6px;align-self:flex-start;padding:9px 16px;border-radius:999px;background:transparent;border:1px solid #dcd3c4;color:#645c50;font-size:14px;font-weight:700">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>모드 선택
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.24em;text-transform:uppercase;color:#b2622d">Team setup</div>
+              <div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:28px;line-height:1.2">팀을 만들어 주세요</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <div style="font-size:13px;font-weight:700;color:#82796a">참가 팀 수</div>
+              <div style="height:52px;border-radius:999px;border:1px solid #dcd3c4;background:#fffdf6;display:flex;align-items:center;justify-content:space-between;padding:0 20px;font-size:16px;font-weight:700">4팀
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#a19786" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"></path></svg>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px;flex:1;min-height:0">
+              <div style="display:flex;align-items:center;justify-content:space-between;gap:10px">
+                <span style="font-size:13px;font-weight:700;color:#82796a">팀 이름 — 자유롭게 수정</span>
+                <span style="display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:800;color:#8c491a;background:#fff2eb;padding:7px 12px;border-radius:999px">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="4"></rect><circle cx="8" cy="8" r="1"></circle><circle cx="16" cy="8" r="1"></circle><circle cx="12" cy="12" r="1"></circle><circle cx="8" cy="16" r="1"></circle><circle cx="16" cy="16" r="1"></circle></svg>다시 뽑기
+                </span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="display:flex;align-items:center;gap:12px;background:#fffdf6;border:1px solid #dcd3c4;border-radius:999px;padding:9px 12px">
+                  <span style="width:38px;height:38px;border-radius:999px;background:#c67139;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;flex-shrink:0">A</span>
+                  <span style="flex:1;font-size:16px;font-weight:700">불꽃 여우팀</span>
+                  <span style="width:34px;height:34px;border-radius:999px;background:#f5ead8;display:grid;place-items:center;color:#82796a;flex-shrink:0">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;background:#fffdf6;border:1px solid #dcd3c4;border-radius:999px;padding:9px 12px">
+                  <span style="width:38px;height:38px;border-radius:999px;background:#728157;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;flex-shrink:0">B</span>
+                  <span style="flex:1;font-size:16px;font-weight:700">느긋한 판다팀</span>
+                  <span style="width:34px;height:34px;border-radius:999px;background:#f5ead8;display:grid;place-items:center;color:#82796a;flex-shrink:0">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;background:#fffdf6;border:1px solid #dcd3c4;border-radius:999px;padding:9px 12px">
+                  <span style="width:38px;height:38px;border-radius:999px;background:#5b7d8c;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;flex-shrink:0">C</span>
+                  <span style="flex:1;font-size:16px;font-weight:700">뜀박질 토끼팀</span>
+                  <span style="width:34px;height:34px;border-radius:999px;background:#f5ead8;display:grid;place-items:center;color:#82796a;flex-shrink:0">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg>
+                  </span>
+                </div>
+                <div style="display:flex;align-items:center;gap:12px;background:#fffdf6;border:2px solid #c67139;border-radius:999px;padding:9px 12px;box-shadow:0 0 0 4px rgba(198,113,57,0.16)">
+                  <span style="width:38px;height:38px;border-radius:999px;background:#b8952f;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;flex-shrink:0">D</span>
+                  <span style="flex:1;font-size:16px;font-weight:700">까만 고양이팀</span>
+                  <span style="width:34px;height:34px;border-radius:999px;background:#f5ead8;display:grid;place-items:center;color:#82796a;flex-shrink:0">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 2v6h-6"></path><path d="M3 12a9 9 0 0 1 15-6.7L21 8"></path><path d="M3 22v-6h6"></path><path d="M21 12a9 9 0 0 1-15 6.7L3 16"></path></svg>
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div style="height:58px;border-radius:999px;background:#c67139;color:#fffdf6;display:grid;place-items:center;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:19px">설정 완료</div>
+          </div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50"><strong style="color:#201e1d">02 팀 설정</strong> — 동물 아바타를 팀 색 모노그램으로. 입력 행은 알약형으로 통일하고 포커스는 강조색 링 하나로만 표시합니다.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;width:390px">
+        <div data-screen-label="03 게임 목록" style="width:390px;height:800px;border-radius:40px;background:#f5ead8;overflow:hidden;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;border:1px solid #dcd3c4">
+          <div style="display:flex;align-items:center;gap:8px;padding:18px 20px;border-bottom:1px solid #e3d8c4">
+            <div style="width:36px;height:36px;border-radius:12px;background:#c67139;display:grid;place-items:center;color:#fff">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 21 14 3"></path><path d="M20.5 21 10 3"></path><path d="M15.5 21 12 15l-3.5 6"></path><path d="M2 21h20"></path></svg>
+            </div>
+            <div style="display:flex;gap:6px;flex:1;justify-content:flex-end;overflow:hidden">
+              <div style="display:flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border-radius:999px;background:#fffdf6;border:1.5px solid #c67139">
+                <span style="width:26px;height:26px;border-radius:999px;background:#c67139;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:12px">A</span>
+                <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:15px">120</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;opacity:0.7">
+                <span style="width:26px;height:26px;border-radius:999px;background:#728157;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:12px">B</span>
+                <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:15px">95</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:7px;padding:4px 12px 4px 4px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;opacity:0.7">
+                <span style="width:26px;height:26px;border-radius:999px;background:#5b7d8c;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:12px">C</span>
+                <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:15px">80</span>
+              </div>
+            </div>
+          </div>
+
+          <div style="flex:1;overflow:hidden;padding:20px;display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:12px;letter-spacing:0.24em;text-transform:uppercase;color:#b2622d">Pick a game</div>
+              <div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:27px;line-height:1.2">어떤 게임으로 시작할까요?</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:11px">
+              <div style="background:#fffdf6;border:1px solid #dcd3c4;border-left:5px solid #c67139;border-radius:22px;padding:16px 18px;display:flex;align-items:center;gap:15px;box-shadow:0 3px 10px rgba(46,43,37,0.07)">
+                <div style="width:50px;height:50px;border-radius:16px;background:#fff2eb;color:#b2622d;display:grid;place-items:center;flex-shrink:0">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
+                  <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:0.2em;color:#a19786">GAME 01</span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:20px;line-height:1.2">스피드 게임</span>
+                  <span style="font-size:13px;color:#82796a">설명 없이 단어 맞추기</span>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0b6a5" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+              </div>
+
+              <div style="background:#fffdf6;border:1px solid #dcd3c4;border-left:5px solid #728157;border-radius:22px;padding:16px 18px;display:flex;align-items:center;gap:15px;box-shadow:0 3px 10px rgba(46,43,37,0.07)">
+                <div style="width:50px;height:50px;border-radius:16px;background:#f0fae1;color:#56633f;display:grid;place-items:center;flex-shrink:0">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"></circle><path d="m9 20 3-6 3 6"></path><path d="m6 8 6 2 6-2"></path><path d="M12 10v4"></path></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
+                  <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:0.2em;color:#a19786">GAME 02</span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:20px;line-height:1.2">몸으로 말해요</span>
+                  <span style="font-size:13px;color:#82796a">말하지 않고 액션으로</span>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0b6a5" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+              </div>
+
+              <div style="background:#fffdf6;border:1px solid #dcd3c4;border-left:5px solid #5b7d8c;border-radius:22px;padding:16px 18px;display:flex;align-items:center;gap:15px;box-shadow:0 3px 10px rgba(46,43,37,0.07)">
+                <div style="width:50px;height:50px;border-radius:16px;background:#e9f1f3;color:#3f5b67;display:grid;place-items:center;flex-shrink:0">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
+                  <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:0.2em;color:#a19786">GAME 03</span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:20px;line-height:1.2">초성 퀴즈</span>
+                  <span style="font-size:13px;color:#82796a">어려운 주제는 자동 힌트</span>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0b6a5" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+              </div>
+
+              <div style="background:#fffdf6;border:1px solid #dcd3c4;border-left:5px solid #8a6a86;border-radius:22px;padding:16px 18px;display:flex;align-items:center;gap:15px;box-shadow:0 3px 10px rgba(46,43,37,0.07)">
+                <div style="width:50px;height:50px;border-radius:16px;background:#f5ecf3;color:#6b4f67;display:grid;place-items:center;flex-shrink:0">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
+                  <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:0.2em;color:#a19786">GAME 04</span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:20px;line-height:1.2">이어서 말해요</span>
+                  <span style="font-size:13px;color:#82796a">주제 추첨 릴레이</span>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0b6a5" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+              </div>
+
+              <div style="background:#fffdf6;border:1px solid #dcd3c4;border-left:5px solid #b8952f;border-radius:22px;padding:16px 18px;display:flex;align-items:center;gap:15px;box-shadow:0 3px 10px rgba(46,43,37,0.07)">
+                <div style="width:50px;height:50px;border-radius:16px;background:#fbf2d9;color:#8a6d17;display:grid;place-items:center;flex-shrink:0">
+                  <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="2"></rect><rect width="7" height="7" x="14" y="3" rx="2"></rect><rect width="7" height="7" x="14" y="14" rx="2"></rect><rect width="7" height="7" x="3" y="14" rx="2"></rect></svg>
+                </div>
+                <div style="display:flex;flex-direction:column;gap:2px;flex:1;min-width:0">
+                  <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:10.5px;letter-spacing:0.2em;color:#a19786">GAME 05</span>
+                  <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:20px;line-height:1.2">네 글자 퀴즈</span>
+                  <span style="font-size:13px;color:#82796a">목표 개수 연속 성공하기</span>
+                </div>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#c0b6a5" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50"><strong style="color:#201e1d">03 게임 목록</strong> — 게임별 색은 왼쪽 5px 스트라이프와 아이콘 타일에만. 카드 본체는 전부 같은 크림 면이라 다섯 개가 한 세트로 읽힙니다.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;width:390px">
+        <div data-screen-label="04 라운드 설정" style="width:390px;height:800px;border-radius:40px;background:#f5ead8;overflow:hidden;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;border:1px solid #dcd3c4">
+          <div style="display:flex;align-items:center;gap:10px;padding:18px 20px;border-bottom:1px solid #e3d8c4">
+            <div style="width:36px;height:36px;border-radius:12px;background:#c67139;display:grid;place-items:center;color:#fff">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 21 14 3"></path><path d="M20.5 21 10 3"></path><path d="M15.5 21 12 15l-3.5 6"></path><path d="M2 21h20"></path></svg>
+            </div>
+            <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;flex:1">PARTY<span style="color:#c67139">GAME</span></div>
+            <div style="width:36px;height:36px;border-radius:999px;border:1px solid #dcd3c4;background:#fffdf6;display:grid;place-items:center;color:#645c50">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 7h-9"></path><path d="M14 17H5"></path><circle cx="17" cy="17" r="3"></circle><circle cx="7" cy="7" r="3"></circle></svg>
+            </div>
+          </div>
+
+          <div style="flex:1;overflow:hidden;padding:20px;display:flex;flex-direction:column;gap:18px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:44px;height:44px;border-radius:14px;background:#fff2eb;color:#b2622d;display:grid;place-items:center;flex-shrink:0">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:1px">
+                <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:11px;letter-spacing:0.2em;color:#a19786">ROUND SETUP</span>
+                <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:24px;line-height:1.15">스피드 게임</span>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <div style="font-size:13px;font-weight:700;color:#82796a">1 · 도전 팀</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:999px;background:#c67139;color:#fffdf6;font-size:14px;font-weight:700">
+                  <span style="width:26px;height:26px;border-radius:999px;background:rgba(255,255,255,0.25);display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:12px">A</span>불꽃 여우팀
+                </div>
+                <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#474238;font-size:14px;font-weight:700">
+                  <span style="width:26px;height:26px;border-radius:999px;background:#728157;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:12px">B</span>느긋한 판다팀
+                </div>
+                <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#474238;font-size:14px;font-weight:700">
+                  <span style="width:26px;height:26px;border-radius:999px;background:#5b7d8c;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:12px">C</span>뜀박질 토끼팀
+                </div>
+                <div style="display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#474238;font-size:14px;font-weight:700">
+                  <span style="width:26px;height:26px;border-radius:999px;background:#b8952f;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:12px">D</span>까만 고양이팀
+                </div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <div style="font-size:13px;font-weight:700;color:#82796a">2 · 주제</div>
+              <div style="display:flex;flex-wrap:wrap;gap:8px">
+                <span style="padding:10px 16px;border-radius:999px;background:#201e1d;color:#f5ead8;font-size:14px;font-weight:700">동물</span>
+                <span style="padding:10px 16px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#474238;font-size:14px;font-weight:700">음식</span>
+                <span style="padding:10px 16px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#474238;font-size:14px;font-weight:700">직업</span>
+                <span style="padding:10px 16px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#474238;font-size:14px;font-weight:700">영화</span>
+                <span style="padding:10px 16px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#474238;font-size:14px;font-weight:700">전체</span>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px">
+              <div style="font-size:13px;font-weight:700;color:#82796a">3 · 제한 시간</div>
+              <div style="display:flex;border:1px solid #dcd3c4;border-radius:999px;overflow:hidden;background:#fffdf6">
+                <span style="flex:1;text-align:center;padding:13px 0;font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;color:#645c50">60초</span>
+                <span style="flex:1;text-align:center;padding:13px 0;font-family:'Outfit',sans-serif;font-weight:800;font-size:16px;background:#201e1d;color:#f5ead8">90초</span>
+                <span style="flex:1;text-align:center;padding:13px 0;font-family:'Outfit',sans-serif;font-weight:700;font-size:16px;color:#645c50">120초</span>
+              </div>
+            </div>
+
+            <div style="margin-top:auto;background:#ebddc5;border-radius:28px;padding:22px;text-align:center;display:flex;flex-direction:column;gap:14px">
+              <div style="font-family:'Outfit',sans-serif;font-weight:700;font-size:11.5px;letter-spacing:0.24em;text-transform:uppercase;color:#8c491a">Now playing</div>
+              <div style="display:flex;align-items:center;justify-content:center;gap:11px">
+                <span style="width:36px;height:36px;border-radius:999px;background:#c67139;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:15px">A</span>
+                <span style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:26px">불꽃 여우팀</span>
+              </div>
+              <div style="height:62px;border-radius:999px;background:#c67139;color:#fffdf6;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:22px;letter-spacing:0.1em">START</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50"><strong style="color:#201e1d">04 라운드 설정</strong> — 번호가 붙은 3단 흐름. 시간 선택은 세그먼트 컨트롤로 바꿔 드롭다운 탭 횟수를 줄였습니다.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;width:390px">
+        <div data-screen-label="06 결과 모달" style="width:390px;height:800px;border-radius:40px;overflow:hidden;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;border:1px solid #dcd3c4;background:#f5ead8;position:relative">
+          <div style="position:absolute;inset:0;background:#f5ead8;opacity:0.55"></div>
+          <div style="position:absolute;inset:0;background:rgba(46,43,37,0.45)"></div>
+          <div style="position:relative;margin:auto;width:334px;background:#fffdf6;border-radius:32px;padding:30px 26px;display:flex;flex-direction:column;align-items:center;gap:14px;box-shadow:0 12px 32px rgba(46,43,37,0.30)">
+            <div style="width:74px;height:74px;border-radius:999px;background:#c67139;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:30px">A</div>
+            <div style="display:inline-flex;align-items:center;gap:7px;padding:7px 14px;border-radius:999px;background:#f0fae1;color:#56633f;font-size:12.5px;font-weight:800;letter-spacing:0.08em">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"></path><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"></path><path d="M4 22h16"></path><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"></path><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"></path><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"></path></svg>ROUND CLEAR
+            </div>
+            <div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:28px;line-height:1.2;text-align:center">불꽃 여우팀</div>
+            <div style="display:flex;align-items:stretch;width:100%;background:#f5ead8;border-radius:22px;padding:18px 10px;margin-top:4px">
+              <div style="flex:1;text-align:center;display:flex;flex-direction:column;gap:4px">
+                <div style="font-size:12px;font-weight:700;color:#82796a;letter-spacing:0.04em">획득 점수</div>
+                <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:38px;line-height:1;color:#728157">+42</div>
+              </div>
+              <div style="width:1px;background:#dcd3c4"></div>
+              <div style="flex:1;text-align:center;display:flex;flex-direction:column;gap:4px">
+                <div style="font-size:12px;font-weight:700;color:#82796a;letter-spacing:0.04em">총 점수</div>
+                <div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:38px;line-height:1;color:#201e1d">162</div>
+              </div>
+            </div>
+            <div style="width:100%;height:56px;border-radius:999px;background:#c67139;color:#fffdf6;display:grid;place-items:center;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:18px;margin-top:6px">다음 팀 도전</div>
+            <div style="width:100%;height:50px;border-radius:999px;border:1px solid #dcd3c4;color:#645c50;display:grid;place-items:center;font-size:16px;font-weight:700">게임 목록으로</div>
+          </div>
+        </div>
+        <div style="font-size:14px;lineageHeight:1.55;line-height:1.55;color:#645c50"><strong style="color:#201e1d">06 결과 모달</strong> — 폭죽·트로피 일러스트 대신 점수 두 개를 주역으로. 성공 여부는 상단 태그 색(세이지/테라코타)으로만 알립니다.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;width:390px">
+        <div data-screen-label="07 설정 모달" style="width:390px;height:800px;border-radius:40px;overflow:hidden;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;border:1px solid #dcd3c4;background:#f5ead8;position:relative">
+          <div style="position:absolute;inset:0;background:rgba(46,43,37,0.45)"></div>
+          <div style="position:relative;margin:auto;width:334px;background:#fffdf6;border-radius:32px;padding:26px 22px;display:flex;flex-direction:column;gap:6px;box-shadow:0 12px 32px rgba(46,43,37,0.30)">
+            <div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:24px">배점 설정</div>
+            <div style="font-size:14px;color:#82796a;line-height:1.5;margin-bottom:10px">문제 1개 성공 시 획득 점수<br>(네 글자·이어서 말해요는 1라운드)</div>
+
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #eee7db">
+              <span style="width:36px;height:36px;border-radius:12px;background:#fff2eb;color:#b2622d;display:grid;place-items:center;flex-shrink:0">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>
+              </span>
+              <span style="flex:1;font-size:15.5px;font-weight:700">스피드 게임</span>
+              <span style="width:74px;height:42px;border-radius:999px;border:1px solid #dcd3c4;background:#f9f4ed;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">2</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #eee7db">
+              <span style="width:36px;height:36px;border-radius:12px;background:#f0fae1;color:#56633f;display:grid;place-items:center;flex-shrink:0">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="5" r="1"></circle><path d="m9 20 3-6 3 6"></path><path d="m6 8 6 2 6-2"></path><path d="M12 10v4"></path></svg>
+              </span>
+              <span style="flex:1;font-size:15.5px;font-weight:700">몸으로 말해요</span>
+              <span style="width:74px;height:42px;border-radius:999px;border:1px solid #dcd3c4;background:#f9f4ed;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">3</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #eee7db">
+              <span style="width:36px;height:36px;border-radius:12px;background:#e9f1f3;color:#3f5b67;display:grid;place-items:center;flex-shrink:0">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>
+              </span>
+              <span style="flex:1;font-size:15.5px;font-weight:700">초성 퀴즈</span>
+              <span style="width:74px;height:42px;border-radius:999px;border:1px solid #dcd3c4;background:#f9f4ed;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">3</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid #eee7db">
+              <span style="width:36px;height:36px;border-radius:12px;background:#f5ecf3;color:#6b4f67;display:grid;place-items:center;flex-shrink:0">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M14 9a2 2 0 0 1-2 2H6l-4 4V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2z"></path><path d="M18 9h2a2 2 0 0 1 2 2v11l-4-4h-6a2 2 0 0 1-2-2v-1"></path></svg>
+              </span>
+              <span style="flex:1;font-size:15.5px;font-weight:700">이어서 말해요</span>
+              <span style="width:74px;height:42px;border-radius:999px;border:1px solid #dcd3c4;background:#f9f4ed;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">10</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px;padding:11px 0">
+              <span style="width:36px;height:36px;border-radius:12px;background:#fbf2d9;color:#8a6d17;display:grid;place-items:center;flex-shrink:0">
+                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><rect width="7" height="7" x="3" y="3" rx="2"></rect><rect width="7" height="7" x="14" y="3" rx="2"></rect><rect width="7" height="7" x="14" y="14" rx="2"></rect><rect width="7" height="7" x="3" y="14" rx="2"></rect></svg>
+              </span>
+              <span style="flex:1;font-size:15.5px;font-weight:700">네 글자 퀴즈</span>
+              <span style="width:74px;height:42px;border-radius:999px;border:1px solid #dcd3c4;background:#f9f4ed;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">15</span>
+            </div>
+
+            <div style="display:flex;gap:10px;margin-top:16px">
+              <div style="flex:1;height:52px;border-radius:999px;border:1px solid #dcd3c4;color:#645c50;display:grid;place-items:center;font-size:16px;font-weight:700">취소</div>
+              <div style="flex:1;height:52px;border-radius:999px;background:#c67139;color:#fffdf6;display:grid;place-items:center;font-size:16px;font-weight:800">저장</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50"><strong style="color:#201e1d">07 설정 모달</strong> — 그라데이션 타일을 게임 색 틴트 타일로. 숫자 입력은 Outfit 고정폭 알약형으로 정렬합니다.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <div id="1b" style="display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.1em;background:#201e1d;color:#f5ead8;padding:6px 14px;border-radius:999px">1b</span>
+      <h2 style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:30px;margin:0">게임 플레이 화면 — TV · 태블릿</h2>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start">
+      <div style="display:flex;flex-direction:column;gap:14px;width:1120px;max-width:100%">
+        <div data-screen-label="05 게임 플레이 (파티)" style="width:1120px;height:630px;border-radius:28px;overflow:hidden;background:#f5ead8;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;border:1px solid #dcd3c4">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 28px">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#c67139;color:#fffdf6;font-size:15px;font-weight:800">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"></path></svg>스피드 게임
+              </span>
+              <span style="display:inline-flex;align-items:center;gap:8px;padding:5px 16px 5px 5px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;font-size:15px;font-weight:700">
+                <span style="width:28px;height:28px;border-radius:999px;background:#c67139;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px">A</span>불꽃 여우팀
+              </span>
+              <span style="padding:9px 16px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;font-size:15px;font-weight:700;color:#474238">동물</span>
+              <span style="padding:9px 16px;border-radius:999px;background:#201e1d;color:#f5ead8;font-family:'Outfit',sans-serif;font-weight:800;font-size:15px">12 / 30</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:22px">
+              <div style="display:flex;align-items:baseline;gap:6px">
+                <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:78px;line-height:0.9;letter-spacing:-0.03em;color:#201e1d;font-variant-numeric:tabular-nums">{{ timerValue }}</span>
+                <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:20px;color:#a19786">초</span>
+              </div>
+              <div style="height:52px;padding:0 26px;border-radius:999px;border:1px solid #c0b6a5;color:#645c50;display:grid;place-items:center;font-size:16px;font-weight:700">정지</div>
+            </div>
+          </div>
+          <div style="height:6px;background:#e1d6c0;flex-shrink:0"><div style="height:6px;background:#c67139;width: {{ progressPercent }}%"></div></div>
+
+          <div style="flex:1;min-height:0;display:flex;align-items:center;justify-content:center;padding:36px">
+            <div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:150px;line-height:1.1;letter-spacing:-0.03em;color:#201e1d;text-align:center;word-break:keep-all">{{ sampleWord }}</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:16px;padding:0 36px 22px">
+            <div style="flex:1;height:88px;border-radius:999px;background:#ebddc5;border:1px solid #dcd3c4;color:#645c50;display:flex;align-items:center;justify-content:center;gap:12px;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:28px">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path><path d="m15 18 6-6-6-6"></path></svg>패스
+            </div>
+            <div style="flex:2;height:88px;border-radius:999px;background:#728157;color:#fffdf6;display:flex;align-items:center;justify-content:center;gap:14px;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:30px">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>성공
+            </div>
+          </div>
+          <div style="display:flex;justify-content:center;gap:22px;padding-bottom:18px;font-size:13px;color:#a19786;font-weight:600">
+            <span>← 패스</span><span>→ 성공</span><span>Esc 정지</span>
+          </div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50;max-width:860px"><strong style="color:#201e1d">05 게임 플레이</strong> — 제시어가 화면의 유일한 주인공. 상단은 얇은 알약 배지 한 줄, 타이머는 Outfit 고정폭 78px, 진행 바는 6px 한 줄. 하단 버튼은 입체 그림자 없이 성공(세이지) 2배 폭 · 패스(뉴트럴)로 실수 방지. 버튼 라벨은 한글로 통일했습니다.</div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px;width:1120px;max-width:100%">
+        <div data-screen-label="05b 게임 플레이 (워크샵)" style="width:1120px;height:630px;border-radius:28px;overflow:hidden;background:#f9f4ed;box-shadow:0 16px 40px rgba(46,43,37,0.20);display:flex;flex-direction:column;border:1px solid #dcd3c4">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding:20px 28px">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+              <span style="display:inline-flex;align-items:center;gap:8px;padding:9px 16px;border-radius:999px;background:#56633f;color:#f9f4ed;font-size:15px;font-weight:800">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m5 8 6 6"></path><path d="m4 14 6-6 2-3"></path><path d="M2 5h12"></path><path d="M7 2h1"></path><path d="m22 22-5-10-5 10"></path><path d="M14 18h6"></path></svg>초성 퀴즈
+              </span>
+              <span style="display:inline-flex;align-items:center;gap:8px;padding:5px 16px 5px 5px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#201e1d;font-size:15px;font-weight:700">
+                <span style="width:28px;height:28px;border-radius:999px;background:#5b7d8c;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:13px">C</span>3조 · 기획팀
+              </span>
+              <span style="padding:9px 16px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#474238;font-size:15px;font-weight:700">사자성어</span>
+              <span style="padding:9px 16px;border-radius:999px;background:#201e1d;color:#f5ead8;font-family:'Outfit',sans-serif;font-weight:800;font-size:15px">5 / 12</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:22px">
+              <div style="display:flex;align-items:baseline;gap:6px">
+                <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:78px;line-height:0.9;letter-spacing:-0.03em;color:#201e1d;font-variant-numeric:tabular-nums">18</span>
+                <span style="font-family:'Outfit',sans-serif;font-weight:700;font-size:20px;color:#a19786">초</span>
+              </div>
+              <div style="height:52px;padding:0 26px;border-radius:999px;border:1px solid #c0b6a5;color:#645c50;display:grid;place-items:center;font-size:16px;font-weight:700">정지</div>
+            </div>
+          </div>
+          <div style="height:6px;background:#e1d6c0;flex-shrink:0"><div style="height:6px;background:#56633f;width:24%"></div></div>
+
+          <div style="flex:1;min-height:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:26px;padding:30px">
+            <div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:132px;line-height:1;letter-spacing:0.08em;color:#201e1d">ㄷㄱㅈㅁ</div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <span style="padding:10px 18px;border-radius:999px;background:#fffdf6;border:1px solid #dcd3c4;color:#474238;font-size:16px;font-weight:700">사자성어</span>
+              <span style="display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:999px;border:1px solid #728157;color:#56633f;font-size:16px;font-weight:800">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"></path><path d="M9 18h6"></path><path d="M10 22h4"></path></svg>힌트 2 / 3
+              </span>
+            </div>
+            <div style="padding:14px 26px;border-radius:20px;background:#ebddc5;color:#474238;font-size:20px;font-weight:600">첫 글자는 &lsquo;동&rsquo; — 어떤 관계를 뜻합니다</div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:16px;padding:0 36px 30px">
+            <div style="flex:1;height:88px;border-radius:999px;background:#ebddc5;border:1px solid #dcd3c4;color:#645c50;display:flex;align-items:center;justify-content:center;gap:12px;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:28px">
+              <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"></path><path d="m15 18 6-6-6-6"></path></svg>패스
+            </div>
+            <div style="flex:2;height:88px;border-radius:999px;background:#56633f;color:#f9f4ed;display:flex;align-items:center;justify-content:center;gap:14px;font-family:'GmarketSans',sans-serif;font-weight:700;font-size:30px">
+              <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg>정답
+            </div>
+          </div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50;max-width:860px"><strong style="color:#201e1d">워크샵 테마 — 밝은 화면</strong> — 다크를 버리고 한 톤 밝은 오프화이트 지면(#f9f4ed)으로. 파티 모드와의 차이는 강조색만 세이지로 바꿔 표시하므로, 프로젝터에서도 글자 대비가 그대로 유지됩니다.</div>
+      </div>
+    </div>
+  </div>
+
+  <div id="1c" style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:center;gap:14px">
+      <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:13px;letter-spacing:0.1em;background:#201e1d;color:#f5ead8;padding:6px 14px;border-radius:999px">1c</span>
+      <h2 style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:30px;margin:0">컴포넌트 · 컬러 정리</h2>
+    </div>
+
+    <div style="display:flex;flex-wrap:wrap;gap:20px">
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:26px;padding:26px;width:520px;display:flex;flex-direction:column;gap:18px">
+        <div style="font-size:13px;font-weight:800;letter-spacing:0.14em;color:#a19786">BUTTONS — 입체 그림자 제거</div>
+        <div style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+          <div style="height:56px;padding:0 30px;border-radius:999px;background:#c67139;color:#fffdf6;display:grid;place-items:center;font-size:17px;font-weight:800">주요 동작</div>
+          <div style="height:56px;padding:0 30px;border-radius:999px;background:#728157;color:#fffdf6;display:grid;place-items:center;font-size:17px;font-weight:800">성공</div>
+          <div style="height:56px;padding:0 30px;border-radius:999px;background:#ebddc5;border:1px solid #dcd3c4;color:#645c50;display:grid;place-items:center;font-size:17px;font-weight:800">패스</div>
+          <div style="height:56px;padding:0 30px;border-radius:999px;border:1px solid #c0b6a5;color:#8c491a;display:grid;place-items:center;font-size:17px;font-weight:700">보조</div>
+          <div style="height:56px;padding:0 30px;border-radius:999px;background:#b2622d;color:#fffdf6;display:grid;place-items:center;font-size:17px;font-weight:800">누른 상태</div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50">눌림은 한 단계 짙은 색으로만. 그림자는 카드에 <code style="font-family:'Outfit',sans-serif">0 3px 10px</code> 하나만 씁니다.</div>
+      </div>
+
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:26px;padding:26px;width:520px;display:flex;flex-direction:column;gap:18px">
+        <div style="font-size:13px;font-weight:800;letter-spacing:0.14em;color:#a19786">GAME COLORS — 채도만 낮춤</div>
+        <div style="display:flex;gap:12px">
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px"><div style="height:64px;border-radius:18px;background:#c67139"></div><div style="font-size:13px;font-weight:700;text-align:center">스피드</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px"><div style="height:64px;border-radius:18px;background:#728157"></div><div style="font-size:13px;font-weight:700;text-align:center">몸으로</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px"><div style="height:64px;border-radius:18px;background:#5b7d8c"></div><div style="font-size:13px;font-weight:700;text-align:center">초성</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px"><div style="height:64px;border-radius:18px;background:#8a6a86"></div><div style="font-size:13px;font-weight:700;text-align:center">이어서</div></div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:8px"><div style="height:64px;border-radius:18px;background:#b8952f"></div><div style="font-size:13px;font-weight:700;text-align:center">네 글자</div></div>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50">다섯 색 모두 같은 명도 단계라 나란히 놓아도 튀지 않습니다. 그라데이션 없이 단색 + 연한 틴트(배경)로만 사용.</div>
+      </div>
+
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:26px;padding:26px;width:520px;display:flex;flex-direction:column;gap:18px">
+        <div style="font-size:13px;font-weight:800;letter-spacing:0.14em;color:#a19786">TEAM MONOGRAM — 아바타 대체</div>
+        <div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap">
+          <span style="width:56px;height:56px;border-radius:999px;background:#c67139;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:24px">A</span>
+          <span style="width:56px;height:56px;border-radius:999px;background:#728157;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:24px">B</span>
+          <span style="width:56px;height:56px;border-radius:999px;background:#5b7d8c;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:24px">C</span>
+          <span style="width:56px;height:56px;border-radius:999px;background:#8a6a86;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:24px">D</span>
+          <span style="width:56px;height:56px;border-radius:999px;background:#b8952f;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:24px">E</span>
+          <span style="width:56px;height:56px;border-radius:999px;background:#645c50;color:#fff;display:grid;place-items:center;font-family:'Outfit',sans-serif;font-weight:800;font-size:24px">F</span>
+        </div>
+        <div style="font-size:14px;line-height:1.55;color:#645c50">동물 일러스트를 없애도 &lsquo;불꽃 여우팀 / 느긋한 판다팀&rsquo; 추천 이름은 그대로 남아 재미가 유지됩니다. 팀 색은 위 5색 + 뉴트럴에서 순서대로 배정.</div>
+      </div>
+
+      <div style="background:#fffdf6;border:1px solid #dcd3c4;border-radius:26px;padding:26px;width:520px;display:flex;flex-direction:column;gap:16px">
+        <div style="font-size:13px;font-weight:800;letter-spacing:0.14em;color:#a19786">TYPE — 3단계</div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <div><div style="font-size:12px;color:#a19786;font-weight:700;margin-bottom:4px">제시어 · GmarketSans 700</div><div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:56px;line-height:1.1">코끼리</div></div>
+          <div><div style="font-size:12px;color:#a19786;font-weight:700;margin-bottom:4px">제목 · GmarketSans 700 / 24–38px</div><div style="font-family:'GmarketSans',sans-serif;font-weight:700;font-size:26px">어떤 게임으로 시작할까요?</div></div>
+          <div><div style="font-size:12px;color:#a19786;font-weight:700;margin-bottom:4px">본문 · Pretendard 400–700 / 13–16px</div><div style="font-size:16px;color:#474238">모임에 맞는 모드를 골라주세요.</div></div>
+          <div><div style="font-size:12px;color:#a19786;font-weight:700;margin-bottom:4px">숫자 · Outfit 800 tabular</div><div style="font-family:'Outfit',sans-serif;font-weight:800;font-size:40px;font-variant-numeric:tabular-nums">90 · 162 · 12/30</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</section>
+
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;sampleWord&quot;:{&quot;editor&quot;:&quot;text&quot;,&quot;default&quot;:&quot;코끼리&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;게임 화면 미리보기&quot;},&quot;timerValue&quot;:{&quot;editor&quot;:&quot;int&quot;,&quot;default&quot;:47,&quot;min&quot;:0,&quot;max&quot;:120,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;게임 화면 미리보기&quot;},&quot;progressPercent&quot;:{&quot;editor&quot;:&quot;range&quot;,&quot;default&quot;:52,&quot;min&quot;:0,&quot;max&quot;:100,&quot;unit&quot;:&quot;%&quot;,&quot;tsType&quot;:&quot;number&quot;,&quot;section&quot;:&quot;게임 화면 미리보기&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    return {
+      sampleWord: this.props.sampleWord ?? '코끼리',
+      timerValue: this.props.timerValue ?? 47,
+      progressPercent: this.props.progressPercent ?? 52,
+      ticksDone: Array.from({ length: 8 }, (_, i) => i),
+      ticksPass: Array.from({ length: 3 }, (_, i) => i),
+      ticksLeft: Array.from({ length: 18 }, (_, i) => i)
+    };
+  }
+}
+</script>
+</body>
+</html>
