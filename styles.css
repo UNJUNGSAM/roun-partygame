@@ -873,6 +873,94 @@ button:focus:not(:focus-visible) { outline: none; }
 .start-team .avatar { width: 36px; height: 36px; font-size: 15px; }
 
 /* =============================================================
+   큰 화면(≥1024px) — 모드 선택 · 팀 설정 · 게임 목록 · 라운드 설정
+   TV·프로젝터 미러링처럼 멀리서 보는 화면을 기준으로 카드·글씨를 키우고,
+   TV 출력 모드(--stage-scale 1.35)를 이 화면들에도 반영합니다. 폰·태블릿 세로는 영향 없음.
+   ============================================================= */
+.setup-wrap { max-width: 720px; }
+
+@media (min-width: 1024px) {
+    #screen-mode, #screen-setup, #screen-menu, #screen-pregame { --s: var(--stage-scale, 1); }
+    .screen-pad { max-width: calc(1440px * var(--s)); padding: calc(44px * var(--s)) calc(48px * var(--s)) calc(72px * var(--s)); }
+    #screen-menu .screen-pad { margin: auto; } /* 카드 5장이 화면 세로 가운데에 오도록 */
+    .panel { padding: calc(40px * var(--s)); }
+
+    /* 공통 타이포 · 컨트롤 */
+    .overline { font-size: calc(14px * var(--s)); margin-bottom: calc(12px * var(--s)); }
+    .section-title { margin-bottom: calc(26px * var(--s)); }
+    .section-title h2 { font-size: calc(clamp(32px, 2.6vw, 44px) * var(--s)); }
+    .display-1 { font-size: calc(56px * var(--s)); }
+    .display-sub { font-size: calc(20px * var(--s)); }
+    .form-row { margin-bottom: calc(28px * var(--s)); }
+    .form-label { font-size: calc(15px * var(--s)); margin-bottom: calc(12px * var(--s)); }
+    .label-action { font-size: calc(14px * var(--s)); padding: calc(8px * var(--s)) calc(16px * var(--s)); }
+    .label-action svg { width: calc(15px * var(--s)); height: calc(15px * var(--s)); }
+    .form-select, .form-input { font-size: calc(18px * var(--s)); min-height: calc(58px * var(--s)); padding: calc(15px * var(--s)) calc(24px * var(--s)); }
+    .form-select { padding-right: calc(52px * var(--s)); background-position: right calc(20px * var(--s)) center; }
+    .chip { font-size: calc(16px * var(--s)); padding: calc(12px * var(--s)) calc(18px * var(--s)); min-height: calc(52px * var(--s)); gap: calc(9px * var(--s)); }
+    .chip .avatar { width: calc(34px * var(--s)); height: calc(34px * var(--s)); font-size: calc(14px * var(--s)); }
+    .selector-row { gap: calc(10px * var(--s)); grid-template-columns: repeat(auto-fill, minmax(calc(190px * var(--s)), 1fr)); } /* 배율에 따라 칩 최소 폭 보장 → 팀 이름이 글자 중간에서 꺾이지 않음 */
+    .segmented button { font-size: calc(18px * var(--s)); padding: calc(15px * var(--s)) 0; }
+    .btn-big { font-size: calc(22px * var(--s)); min-height: calc(64px * var(--s)); padding: calc(18px * var(--s)) calc(28px * var(--s)); }
+    .btn-xl { font-size: calc(24px * var(--s)); min-height: calc(72px * var(--s)); }
+    .btn-ghost { font-size: calc(16px * var(--s)); min-height: calc(50px * var(--s)); padding: calc(12px * var(--s)) calc(20px * var(--s)); }
+
+    /* 모드 선택 */
+    .mode-wrap { max-width: calc(1040px * var(--s)); }
+    .mode-cards { max-width: calc(960px * var(--s)); gap: calc(26px * var(--s)); margin-top: calc(40px * var(--s)); }
+    .mode-card { padding: calc(30px * var(--s)); gap: calc(24px * var(--s)); }
+    .mode-card-art { width: calc(84px * var(--s)); height: calc(84px * var(--s)); border-radius: calc(24px * var(--s)); }
+    .mode-card-art svg { width: calc(42px * var(--s)); height: calc(42px * var(--s)); }
+    .mode-card-tag { font-size: calc(13px * var(--s)); }
+    .mode-card-title { font-size: calc(30px * var(--s)); }
+    .mode-card-sub { font-size: calc(17px * var(--s)); }
+
+    /* 팀 설정 */
+    .setup-wrap { max-width: calc(780px * var(--s)); }
+    .team-rows { gap: calc(14px * var(--s)); }
+    .team-row { padding: calc(10px * var(--s)) calc(16px * var(--s)); gap: calc(14px * var(--s)); }
+    .team-row .avatar { width: calc(46px * var(--s)); height: calc(46px * var(--s)); font-size: calc(19px * var(--s)); }
+    .team-row .form-input { font-size: calc(18px * var(--s)); min-height: calc(40px * var(--s)); }
+    .team-row:focus-within { padding: calc(9px * var(--s)) calc(15px * var(--s)); }
+    .reroll-btn { width: calc(40px * var(--s)); height: calc(40px * var(--s)); }
+    .reroll-btn svg { width: calc(20px * var(--s)); height: calc(20px * var(--s)); }
+
+    /* 게임 목록 — 5열 세로 카드(아이콘 위 · 제목 · 설명)로 폭을 채우고, 크기는 화면 폭에 비례 */
+    .games-grid { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: calc(clamp(16px, 1.3vw, 24px) * var(--s)); }
+    .game-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: calc(clamp(24px, 1.8vw, 32px) * var(--s));
+        gap: calc(clamp(18px, 1.5vw, 26px) * var(--s));
+        min-height: calc(clamp(240px, 21vw, 340px) * var(--s));
+        border-left-width: 6px;
+        border-radius: calc(clamp(24px, 1.7vw, 30px) * var(--s));
+    }
+    .game-card-art {
+        order: -1;
+        width: calc(clamp(60px, 4.6vw, 84px) * var(--s)); height: calc(clamp(60px, 4.6vw, 84px) * var(--s));
+        border-radius: calc(clamp(18px, 1.4vw, 26px) * var(--s));
+    }
+    .game-card-art svg { width: calc(clamp(30px, 2.3vw, 42px) * var(--s)); height: calc(clamp(30px, 2.3vw, 42px) * var(--s)); }
+    .game-card-info { gap: calc(6px * var(--s)); flex: 1; justify-content: flex-end; }
+    .game-card-tag { font-size: calc(clamp(11.5px, 0.8vw, 13.5px) * var(--s)); }
+    .game-card-title { font-size: calc(clamp(22px, 1.75vw, 31px) * var(--s)); line-height: 1.2; }
+    .game-card-sub { font-size: calc(clamp(14px, 1.05vw, 17.5px) * var(--s)); line-height: 1.4; word-break: keep-all; }
+    .game-card-chev {
+        position: absolute;
+        right: calc(clamp(20px, 1.5vw, 26px) * var(--s)); top: calc(clamp(24px, 1.8vw, 32px) * var(--s));
+        width: calc(22px * var(--s)); height: calc(22px * var(--s));
+    }
+
+    /* 라운드 설정 */
+    .pregame-wrap { max-width: calc(980px * var(--s)); }
+    .start-block { padding: calc(28px * var(--s)); gap: calc(16px * var(--s)); margin-top: calc(30px * var(--s)); }
+    .start-label { font-size: calc(13px * var(--s)); }
+    .start-team { font-size: calc(32px * var(--s)); gap: calc(14px * var(--s)); }
+    .start-team .avatar { width: calc(44px * var(--s)); height: calc(44px * var(--s)); font-size: calc(18px * var(--s)); }
+}
+
+/* =============================================================
    GAME SCREEN — 무대 (좌: 본문 / 우: 시간 기둥)
    --s = 무대 배율. TV 출력 모드(body[data-display="tv"])에서 1.35
    ============================================================= */
