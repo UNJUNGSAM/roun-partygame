@@ -104,6 +104,10 @@
         <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
         </symbol>
+        <!-- tv — TV 출력 모드 -->
+        <symbol id="i-tv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/>
+        </symbol>
 
         <!-- =========== 모드 / 게임 아이콘 =========== -->
         <!-- party-popper — 파티 모드 -->
@@ -170,6 +174,8 @@
             <div class="menu-item" onclick="openScoreBoard()"><svg><use href="#i-trophy"/></svg>점수 관리</div>
             <div class="menu-item" onclick="openGameScoreSettings()"><svg><use href="#i-target"/></svg>배점 설정</div>
             <div class="menu-item" onclick="openTeamSettings()"><svg><use href="#i-users"/></svg>팀 설정</div>
+            <div class="menu-divider"></div>
+            <div class="menu-item" onclick="toggleTvMode()"><svg><use href="#i-tv"/></svg>TV 출력 모드<span class="menu-state" id="tv-mode-state">꺼짐</span></div>
             <div class="menu-divider"></div>
             <div class="menu-item danger" onclick="openResetModal()"><svg><use href="#i-home"/></svg>처음으로</div>
         </div>
@@ -354,87 +360,97 @@
         </div>
     </section>
 
-    <!-- ==================== SCREEN: GAME ==================== -->
+    <!-- ==================== SCREEN: GAME — 무대 (좌: 본문 / 우: 시간 기둥) ==================== -->
     <section id="screen-game" class="screen">
+        <div class="stage" id="stage">
 
-        <div class="game-topbar">
-            <div class="game-meta">
-                <span class="badge badge-game" id="ingame-game-name"><svg id="ingame-game-icon"><use href="#i-game-speed"/></svg><span id="ingame-game-text">게임</span></span>
-                <span class="badge badge-team" id="ingame-team-badge">A팀</span>
-                <span class="badge badge-cat" id="ingame-category">주제</span>
-                <span class="badge badge-progress hidden" id="ingame-progress">1 / 4</span>
-            </div>
-            <div class="timer-zone">
-                <div class="timer-count">
-                    <div class="timer" id="timer-display">60</div>
-                    <span class="timer-unit">초</span>
+            <div class="stage-main">
+                <!-- 상단 행: 팀 배지 · 게임명 · 주제 · 현재 점수/순위 -->
+                <div class="stage-top">
+                    <span class="stage-team" id="ingame-team-badge">A팀</span>
+                    <span class="stage-meta"><span id="ingame-game-text">게임</span><span class="stage-meta-dot">·</span><span id="ingame-category">주제</span></span>
+                    <span class="stage-score">
+                        <span class="stage-score-num" id="stage-score">0</span>
+                        <span class="stage-score-sub" id="stage-rank">점 · 1위</span>
+                    </span>
                 </div>
-                <button class="btn-ghost" onclick="stopGame(false)"><svg width="16" height="16"><use href="#i-pause"/></svg>정지</button>
-            </div>
-        </div>
-        <div class="timer-progress" id="timer-progress-wrap">
-            <div class="timer-progress-fill" id="timer-progress-fill"></div>
-        </div>
 
-        <div class="game-stage">
-            <div class="quiz-card" id="quiz-card">
-                <div id="quiz-content" class="quiz-text">제시어</div>
-                <div id="quiz-sub" class="quiz-answer hidden">정답</div>
+                <div class="game-stage">
+                    <div class="quiz-card" id="quiz-card">
+                        <div id="combo-badge" class="combo-badge hidden"><svg><use href="#i-check"/></svg><span id="combo-text">2연속 성공</span></div>
+                        <div id="quiz-content" class="quiz-text">제시어</div>
+                        <div id="quiz-sub" class="quiz-answer hidden">정답</div>
 
-                <div id="placeholder-stage" class="placeholder-stage hidden">
-                    <div class="relay-wheel" id="relay-wheel" onclick="pickRelayTopic()">
-                        <svg><use href="#i-pick-big"/></svg>
+                        <div id="placeholder-stage" class="placeholder-stage hidden">
+                            <div class="relay-wheel" id="relay-wheel" onclick="pickRelayTopic()">
+                                <svg><use href="#i-pick-big"/></svg>
+                            </div>
+                            <div>
+                                <div class="placeholder-title">어떤 주제일까요?</div>
+                                <div class="placeholder-hint">아래 버튼 또는 휠을 눌러 주제를 추첨하세요</div>
+                            </div>
+                        </div>
+
+                        <div id="slot-stage" class="slot-display hidden">
+                            <div class="slot-label">SPINNING…</div>
+                            <div class="slot-text" id="slot-text">&nbsp;</div>
+                        </div>
+
+                        <div id="hint-area" class="hint-zone hidden">
+                            <div class="hint-meta">
+                                <span class="hint-cat-badge" id="current-quiz-category">주제</span>
+                                <button id="btn-hint" class="hint-btn" onclick="showHint()">
+                                    <svg><use href="#i-bulb"/></svg>
+                                    <span>힌트 (3/3)</span>
+                                </button>
+                            </div>
+                            <div id="hint-text" class="hint-text hidden"></div>
+                        </div>
                     </div>
-                    <div>
-                        <div class="placeholder-title">어떤 주제일까요?</div>
-                        <div class="placeholder-hint">아래 버튼 또는 휠을 눌러 주제를 추첨하세요</div>
+                </div>
+
+                <!-- 진행 눈금: 성공(세이지) / 패스(회색) / 현재(테라코타) / 미출제 -->
+                <div class="stage-ticks" id="stage-ticks" aria-hidden="true"></div>
+
+                <div class="game-controls">
+                    <div class="control-bar">
+                        <div id="controls-basic" class="control-row hidden">
+                            <button class="btn btn-3d btn-stone btn-pass" onclick="passQuiz()"><svg><use href="#i-pass"/></svg>패스</button>
+                            <button class="btn btn-3d btn-emerald btn-ok" onclick="correctQuiz()"><svg><use href="#i-check"/></svg>성공</button>
+                        </div>
+                        <div id="controls-chosung" class="control-row hidden">
+                            <button class="btn btn-3d btn-stone btn-pass" onclick="handleChosungPass()"><svg><use href="#i-pass"/></svg>패스</button>
+                            <button class="btn btn-3d btn-emerald btn-ok" onclick="handleChosungCorrect()"><svg><use href="#i-check"/></svg>정답</button>
+                        </div>
+                        <div id="controls-relay" class="control-row hidden">
+                            <button id="btn-relay-pick" class="btn btn-3d btn-orange btn-ok" onclick="pickRelayTopic()"><svg><use href="#i-pick-big"/></svg>주제 추첨하기</button>
+                            <div id="relay-actions" class="control-row hidden">
+                                <button id="btn-relay-redraw" class="btn btn-3d btn-stone btn-compact" onclick="redrawRelayTopic()"><svg><use href="#i-refresh"/></svg>다시 추첨</button>
+                                <button class="btn btn-3d btn-coral btn-fail" onclick="handleRelayResult(false)">실패</button>
+                                <button class="btn btn-3d btn-emerald btn-ok" onclick="handleRelayResult(true)"><svg><use href="#i-check"/></svg>성공</button>
+                            </div>
+                        </div>
+                        <div id="controls-fourletter" class="control-row hidden">
+                            <button class="btn btn-3d btn-coral btn-fail" onclick="handleFourLetterFail()">실패</button>
+                            <button class="btn btn-3d btn-emerald btn-ok" onclick="handleFourLetterCorrect()"><svg><use href="#i-check"/></svg>정답</button>
+                        </div>
+                        <button class="btn-stop btn-stop--stage" onclick="stopGame(false)" aria-label="정지"><svg><use href="#i-pause"/></svg></button>
+                    </div>
+                    <div class="shortcut-guide" id="shortcut-guide">
+                        <span><kbd>←</kbd>패스 / 실패</span>
+                        <span><kbd>→</kbd>성공 / 정답</span>
+                        <span><kbd>Esc</kbd>정지</span>
                     </div>
                 </div>
+            </div>
 
-                <div id="slot-stage" class="slot-display hidden">
-                    <div class="slot-label">SPINNING…</div>
-                    <div class="slot-text" id="slot-text">&nbsp;</div>
-                </div>
-
-                <div id="hint-area" class="hint-zone hidden">
-                    <div class="hint-meta">
-                        <span class="hint-cat-badge" id="current-quiz-category">주제</span>
-                        <button id="btn-hint" class="hint-btn" onclick="showHint()">
-                            <svg width="16" height="16"><use href="#i-bulb"/></svg>
-                            <span>힌트 (3/3)</span>
-                        </button>
-                    </div>
-                    <div id="hint-text" class="hint-text hidden"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="game-controls">
-            <div id="controls-basic" class="control-row hidden">
-                <button class="btn btn-3d btn-stone btn-big" onclick="passQuiz()"><svg><use href="#i-pass"/></svg>패스</button>
-                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="correctQuiz()"><svg><use href="#i-check"/></svg>성공</button>
-            </div>
-            <div id="controls-chosung" class="control-row hidden">
-                <button class="btn btn-3d btn-stone btn-big" onclick="handleChosungPass()"><svg><use href="#i-pass"/></svg>패스</button>
-                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleChosungCorrect()"><svg><use href="#i-check"/></svg>정답</button>
-            </div>
-            <div id="controls-relay" class="control-row hidden">
-                <button id="btn-relay-pick" class="btn btn-3d btn-orange btn-big w-full" onclick="pickRelayTopic()">주제 추첨하기</button>
-                <div id="relay-actions" class="control-row hidden" style="padding:0;width:100%">
-                    <button id="btn-relay-redraw" class="btn btn-3d btn-stone btn-big" onclick="redrawRelayTopic()">다시 추첨</button>
-                    <button class="btn btn-3d btn-coral btn-big" onclick="handleRelayResult(false)">실패</button>
-                    <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleRelayResult(true)"><svg><use href="#i-check"/></svg>성공</button>
-                </div>
-            </div>
-            <div id="controls-fourletter" class="control-row hidden">
-                <button class="btn btn-3d btn-coral btn-big" onclick="handleFourLetterFail()">실패</button>
-                <button class="btn btn-3d btn-emerald btn-big flex-2" onclick="handleFourLetterCorrect()"><svg><use href="#i-check"/></svg>정답</button>
-            </div>
-            <div class="shortcut-guide" id="shortcut-guide">
-                <span><kbd>←</kbd>패스 / 실패</span>
-                <span><kbd>→</kbd>성공 / 정답</span>
-                <span><kbd>Esc</kbd>정지</span>
-            </div>
+            <!-- 오른쪽 시간 기둥: 남은 초 · SEC · 아래에서 위로 채워진 트랙 (폰 세로에서는 상단 가로 바) -->
+            <aside class="stage-time" id="stage-time">
+                <div class="timer" id="timer-display">60</div>
+                <div class="timer-label">SEC</div>
+                <div class="time-column" id="time-column"><div class="time-column-fill" id="time-column-fill"></div></div>
+                <button class="btn-stop btn-stop--phone" onclick="stopGame(false)" aria-label="정지"><svg><use href="#i-pause"/></svg></button>
+            </aside>
         </div>
     </section>
 
@@ -984,6 +1000,7 @@ const Sound = {
    ================================================================= */
 const App = {
     mode: null,
+    display: 'normal',   // 'tv' = TV 출력 모드 (무대 배율 1.35)
     teams: [],
     currentTeamIndex: 0,
     round: 1,
@@ -992,6 +1009,7 @@ const App = {
     game: {
         type: null, category: 'random', targetCount: 8,
         timer: 90, timerChoice: 90, words: [], currentIndex: 0, score: 0,
+        combo: 0, marks: [],  // 연속 성공 수 / 문제별 결과('ok'|'pass'|'fail') — 무대 눈금·콤보 배지
         timerInterval: null, pendingTimeout: null, hintsLeft: 3,
         isTransitioning: false, ended: false,
         difficulty: 2,      // 이어말하기 주제 난이도: 1 순한맛 / 2 보통 / 3 매운맛
@@ -1227,10 +1245,79 @@ function prepareGame(type, keepSettings = false) {
 }
 
 /* ---------- 제한 시간 세그먼트 ---------- */
-// 시간제한 없는 게임(이어서/네 글자)은 '초' 단위 라벨을 감춥니다
-function showTimerUnit(show) {
-    const el = document.querySelector('.timer-unit');
-    if (el) el.style.display = show ? '' : 'none';
+/* ---------- 무대 화면 헬퍼 ---------- */
+// 시간제한 없는 게임(이어서/네 글자): ∞ 숫자만 남기고 SEC 라벨·트랙을 감춤
+function setTimedUI(timed) {
+    const col = document.getElementById('stage-time');
+    if (col) col.classList.toggle('untimed', !timed);
+    if (!timed) document.getElementById('timer-display').textContent = '∞';
+}
+// 눈금 개수 = 라운드 출제 수 (시간제 게임은 ROUND_CAP으로 잘린 words 길이, 네 글자는 목표 개수, 이어서는 없음)
+function tickCount() {
+    const t = App.game.type;
+    if (t === 'relay') return 0;
+    if (t === 'fourLetter') return App.game.targetCount || 0;
+    return (App.game.words || []).length;
+}
+function renderTicks() {
+    const el = document.getElementById('stage-ticks');
+    if (!el) return;
+    const n = tickCount();
+    if (!n) { el.innerHTML = ''; return; }
+    const marks = App.game.marks || [];
+    let html = '';
+    for (let i = 0; i < n; i++) {
+        let cls = '';
+        if (i < marks.length) cls = marks[i];
+        else if (i === marks.length && !App.game.ended) cls = 'now';
+        html += '<span class="' + cls + '"></span>';
+    }
+    el.innerHTML = html;
+}
+// 콤보 배지 — 2연속부터 표시
+function updateComboBadge() {
+    const el = document.getElementById('combo-badge');
+    if (!el) return;
+    const c = App.game.combo || 0;
+    const show = c >= 2 && App.game.type !== 'relay';
+    el.classList.toggle('hidden', !show);
+    if (show) document.getElementById('combo-text').textContent = c + '연속 성공';
+}
+// 현재 팀의 실시간 총점(누적 + 이번 라운드 획득) · 순위
+function updateStageScore() {
+    const team = App.teams[App.currentTeamIndex];
+    const numEl = document.getElementById('stage-score');
+    const rankEl = document.getElementById('stage-rank');
+    if (!team || !numEl || !rankEl) return;
+    const pts = App.scoreSettings[App.game.type] || 10;
+    const live = team.score + (App.game.score || 0) * pts;
+    const rank = 1 + App.teams.filter((t, i) => i !== App.currentTeamIndex && t.score > live).length;
+    numEl.textContent = live;
+    rankEl.textContent = '점 · ' + rank + '위';
+}
+function refreshStage() {
+    renderTicks();
+    updateComboBadge();
+    updateStageScore();
+}
+
+/* ---------- TV 출력 모드 — 미러링은 감지 불가하므로 수동 토글, 별도 키에 저장 ---------- */
+const DISPLAY_KEY = 'partygame_display';
+function applyDisplayMode(mode) {
+    App.display = (mode === 'tv') ? 'tv' : 'normal';
+    if (App.display === 'tv') document.body.dataset.display = 'tv';
+    else delete document.body.dataset.display;
+    const st = document.getElementById('tv-mode-state');
+    if (st) {
+        st.textContent = App.display === 'tv' ? '켜짐' : '꺼짐';
+        st.classList.toggle('on', App.display === 'tv');
+    }
+}
+function toggleTvMode() {
+    applyDisplayMode(App.display === 'tv' ? 'normal' : 'tv');
+    try { localStorage.setItem(DISPLAY_KEY, App.display); } catch (e) {}
+    Sound.play('tap');
+    closeMenu();
 }
 
 function setTimerChoice(sec) {
@@ -1264,6 +1351,8 @@ function startGame() {
     App.game.score = 0;
     App.game.currentIndex = 0;
     App.game.hintsLeft = 3;
+    App.game.combo = 0;
+    App.game.marks = [];
     App.game.isTransitioning = false;
     App.game.ended = false;
     clearTimeout(App.game.pendingTimeout);
@@ -1276,35 +1365,20 @@ function startGame() {
 
     if (!loadGameData()) return;
 
+    // 상단 행: 팀 배지(accent 채움) · 게임명 · 주제
     const playTeam = App.teams[App.currentTeamIndex];
     document.getElementById('ingame-team-badge').innerHTML =
         avatarHtml(App.currentTeamIndex, '') + '<span>' + escapeHtml(playTeam.name) + '</span>';
-
-    // 현재 진행 중인 게임 이름·아이콘
     const gameLabels = {
         speed:'스피드 게임', body:'몸으로 말해요', chosung:'초성 퀴즈',
         relay:'이어서 말해요', fourLetter:'네 글자 퀴즈'
     };
-    const gameIcons = {
-        speed:'#i-game-speed', body:'#i-game-body', chosung:'#i-game-chosung',
-        relay:'#i-game-relay', fourLetter:'#i-game-fourletter'
-    };
-    const gameColors = {
-        speed:'#c67139', body:'#728157', chosung:'#5b7d8c',
-        relay:'#8a6a86', fourLetter:'#b8952f'
-    };
     document.getElementById('ingame-game-text').textContent = gameLabels[App.game.type] || '';
-    document.getElementById('ingame-game-icon').innerHTML = `<use href="${gameIcons[App.game.type] || '#i-game-speed'}"/>`;
-    const gameBadge = document.getElementById('ingame-game-name');
-    if (gameColors[App.game.type]) gameBadge.style.setProperty('--game-color', gameColors[App.game.type]);
-    else gameBadge.style.removeProperty('--game-color');
-
     const catDisplay = (!App.game.category || App.game.category === 'random') ? '전체 랜덤' : App.game.category;
     document.getElementById('ingame-category').textContent = catDisplay;
 
     document.getElementById('timer-display').textContent = App.game.timer;
     document.getElementById('timer-display').classList.remove('danger');
-    showTimerUnit(true);
     resetTimerProgress();
 
     // Hide all controls
@@ -1318,22 +1392,13 @@ function startGame() {
 
     updateHintButtonState();
 
-    if (App.game.type === 'fourLetter') {
-        document.getElementById('ingame-progress').classList.remove('hidden');
-    } else {
-        document.getElementById('ingame-progress').classList.add('hidden');
-    }
-
-    const progressWrap = document.getElementById('timer-progress-wrap');
     // slot-stage는 relay 진입 시마다 초기화
     const slotStage = document.getElementById('slot-stage');
     if (slotStage) slotStage.classList.add('hidden');
 
     if (App.game.type === 'relay') {
+        setTimedUI(false);
         document.getElementById('controls-relay').classList.remove('hidden');
-        document.getElementById('timer-display').textContent = '∞';
-        showTimerUnit(false);
-        progressWrap.style.visibility = 'hidden';
         document.getElementById('quiz-content').classList.add('hidden');
         document.getElementById('placeholder-stage').classList.remove('hidden');
         document.getElementById('btn-relay-pick').classList.remove('hidden');
@@ -1341,23 +1406,22 @@ function startGame() {
         App.game.redrawUsed = false; // 재추첨 기회 리셋 (라운드당 1회)
         document.getElementById('btn-relay-redraw').classList.remove('hidden');
     } else if (App.game.type === 'fourLetter') {
+        setTimedUI(false);
         document.getElementById('controls-fourletter').classList.remove('hidden');
-        document.getElementById('timer-display').textContent = '∞';
-        showTimerUnit(false);
-        progressWrap.style.visibility = 'hidden';
         renderQuiz();
     } else if (App.game.type === 'chosung') {
-        progressWrap.style.visibility = 'visible';
+        setTimedUI(true);
         document.getElementById('controls-chosung').classList.remove('hidden');
         renderQuiz();
         startTimer();
     } else {
-        progressWrap.style.visibility = 'visible';
+        setTimedUI(true);
         document.getElementById('controls-basic').classList.remove('hidden');
         renderQuiz();
         startTimer();
     }
 
+    refreshStage();
     showScreen('screen-game');
 }
 
@@ -1495,8 +1559,6 @@ function renderQuiz() {
             document.getElementById('btn-hint').classList.remove('hidden');
         }
     } else if (App.game.type === 'fourLetter') {
-        document.getElementById('ingame-progress').textContent =
-            `${App.game.currentIndex + 1} / ${App.game.targetCount}`;
         qContent.textContent = item.q;
         qSub.textContent = item.a;
         hintArea.classList.add('hidden');
@@ -1517,6 +1579,9 @@ function renderQuiz() {
         }
     }
 
+    syncHintLayout();
+    refreshStage();
+
     const card = document.getElementById('quiz-card');
     card.classList.remove('burst');
     void card.offsetWidth;
@@ -1528,8 +1593,19 @@ function showHint() {
         App.game.hintsLeft--;
         updateHintButtonState();
         document.getElementById('hint-text').classList.remove('hidden');
+        syncHintLayout();
         Sound.play('hint');
     }
+}
+
+// 힌트 본문이 보이는 상태(초성은 항상)면 제시어를 한 단계 줄여 낮은 화면에서도 한 화면에 담습니다
+function syncHintLayout() {
+    const card = document.getElementById('quiz-card');
+    const area = document.getElementById('hint-area');
+    const txt = document.getElementById('hint-text');
+    if (!card || !area || !txt) return;
+    const dense = !area.classList.contains('hidden') && (App.game.type === 'chosung' || !txt.classList.contains('hidden'));
+    card.classList.toggle('has-hint', dense);
 }
 
 function updateHintButtonState() {
@@ -1571,21 +1647,24 @@ function startTimer() {
     }, 200);
 }
 
+// 시간 기둥: 남은 비율을 --pct로 넘기고 CSS가 세로(무대)/가로(폰) 방향을 결정
 function updateTimerProgress(remaining, total) {
-    const fill = document.getElementById('timer-progress-fill');
+    const fill = document.getElementById('time-column-fill');
     if (!fill) return;
-    const pct = Math.max(0, (remaining / total) * 100);
-    fill.style.width = pct + '%';
-    if (remaining <= 10) fill.classList.add('danger');
-    else fill.classList.remove('danger');
+    const pct = Math.max(0, Math.min(100, (remaining / total) * 100));
+    fill.style.setProperty('--pct', pct + '%');
+    fill.classList.toggle('danger', remaining <= 10);          // 마지막 10초: 진한 테라코타
+    fill.classList.toggle('pulse', remaining <= 5 && remaining > 0); // 마지막 5초: opacity 펄스
 }
 
 function resetTimerProgress() {
-    const fill = document.getElementById('timer-progress-fill');
-    if (fill) {
-        fill.style.width = '100%';
-        fill.classList.remove('danger');
-    }
+    const fill = document.getElementById('time-column-fill');
+    if (!fill) return;
+    fill.style.transition = 'none'; // 새 라운드 시작 시 0→100% 애니메이션 없이 즉시 채움
+    fill.style.setProperty('--pct', '100%');
+    fill.classList.remove('danger', 'pulse');
+    void fill.offsetHeight;
+    fill.style.transition = '';
 }
 
 function stopGame(isTimeOver = false) {
@@ -1640,6 +1719,8 @@ function correctQuiz() {
     Sound.play('success');
     buzz(12);
     App.game.score++;
+    App.game.combo++;
+    App.game.marks.push('ok');
     App.game.currentIndex++;
     renderQuiz();
 }
@@ -1648,6 +1729,8 @@ function passQuiz() {
     if (App.game.isTransitioning) return;
     App.game.isTransitioning = true;
     Sound.play('pass');
+    App.game.combo = 0;
+    App.game.marks.push('pass');
     App.game.currentIndex++;
     renderQuiz();
 }
@@ -1657,6 +1740,9 @@ function handleChosungPass() {
     App.game.isTransitioning = true;
     document.getElementById('quiz-sub').classList.remove('hidden');
     Sound.play('pass');
+    App.game.combo = 0;
+    App.game.marks.push('pass');
+    refreshStage();
     App.game.pendingTimeout = setTimeout(() => {
         App.game.currentIndex++;
         renderQuiz();
@@ -1671,6 +1757,9 @@ function handleChosungCorrect() {
     buzz(12);
     fx({ particleCount: 40, spread: 60, origin: { y: 0.7 }, colors: FX_COLORS });
     App.game.score++;
+    App.game.combo++;
+    App.game.marks.push('ok');
+    refreshStage();
     App.game.pendingTimeout = setTimeout(() => {
         App.game.currentIndex++;
         renderQuiz();
@@ -1773,6 +1862,9 @@ function handleFourLetterFail() {
     if (App.game.isTransitioning) return;
     App.game.isTransitioning = true;
     App.game.score = 0;
+    App.game.combo = 0;
+    App.game.marks.push('fail');
+    refreshStage();
     Sound.play('fail');
     document.getElementById('quiz-sub').classList.remove('hidden');
     App.game.pendingTimeout = setTimeout(() => stopGame(false), 1800);
@@ -1783,6 +1875,9 @@ function handleFourLetterCorrect() {
     App.game.isTransitioning = true;
     document.getElementById('quiz-sub').classList.remove('hidden');
     Sound.play('success');
+    App.game.combo++;
+    App.game.marks.push('ok');
+    refreshStage();
 
     if (App.game.currentIndex + 1 >= App.game.targetCount) {
         App.game.score = 1;
@@ -1986,6 +2081,7 @@ document.body.addEventListener('pointerdown', async () => {
 window.addEventListener('DOMContentLoaded', () => {
     // 결과 모달은 Esc로 닫히지 않도록 — 버튼 선택을 강제해 어중간한 상태 방지
     document.getElementById('modal-result').addEventListener('cancel', e => e.preventDefault());
+    try { applyDisplayMode(localStorage.getItem(DISPLAY_KEY)); } catch (e) {}
     if (restore()) {
         applyMode(App.mode); // 저장된 모드의 컬러 테마 복원
         updateScoreboard();

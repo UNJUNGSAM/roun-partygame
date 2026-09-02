@@ -13,3 +13,6 @@ desktop.ini
 # Logs & temp
 *.log
 .gemini/
+
+# 캡처 하네스
+_shot.html
