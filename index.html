@@ -104,6 +104,10 @@
         <symbol id="i-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
             <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
         </symbol>
+        <!-- crown — 최종 결과 -->
+        <symbol id="i-crown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/>
+        </symbol>
         <!-- tv — TV 출력 모드 -->
         <symbol id="i-tv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
             <rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/>
@@ -171,6 +175,8 @@
             <svg><use href="#i-cog"/></svg>
         </button>
         <div class="menu-pop" id="settings-menu" role="menu">
+            <button type="button" role="menuitem" class="menu-item menu-item--final" onclick="openFinalResults()"><svg><use href="#i-crown"/></svg>최종 결과 발표</button>
+            <div class="menu-divider"></div>
             <button type="button" role="menuitem" class="menu-item" onclick="openScoreBoard()"><svg><use href="#i-trophy"/></svg>점수 관리</button>
             <button type="button" role="menuitem" class="menu-item" onclick="openGameScoreSettings()"><svg><use href="#i-target"/></svg>배점 설정</button>
             <button type="button" role="menuitem" class="menu-item" onclick="openTeamSettings()"><svg><use href="#i-users"/></svg>팀 설정</button>
@@ -301,6 +307,10 @@
             <div class="panel">
                 <div class="section-title">
                     <h2 id="pregame-title">게임 설정</h2>
+                </div>
+                <div class="howto" id="pregame-howto">
+                    <svg><use href="#i-bulb"/></svg>
+                    <p id="pregame-howto-text"></p>
                 </div>
 
                 <div class="form-row">
@@ -477,6 +487,18 @@
 
         <button class="btn btn-3d btn-primary btn-big w-full mb-4" id="btn-next-team" onclick="prepareNextTeam()">다음 팀 도전</button>
         <button class="btn-ghost w-full" onclick="closeAndShow('screen-menu')">게임 목록으로</button>
+    </div>
+</dialog>
+
+<dialog id="modal-final" aria-labelledby="final-team">
+    <div class="modal modal-final">
+        <div class="final-crown" id="final-crown"></div>
+        <div class="final-tag" id="final-tag"><svg><use href="#i-crown"/></svg>우승</div>
+        <div class="final-team" id="final-team">팀 이름</div>
+        <div class="final-score" id="final-score"><span>0</span>점</div>
+        <div class="result-standings final-standings" id="final-standings"></div>
+        <button class="btn btn-3d btn-primary btn-big w-full mb-4" onclick="closeDialog('modal-final')">계속 플레이하기</button>
+        <button class="btn-ghost w-full" onclick="closeDialog('modal-final'); openResetModal()">새 게임 시작 (점수 초기화)</button>
     </div>
 </dialog>
 
@@ -1196,6 +1218,8 @@ function prepareGame(type, keepSettings = false) {
         relay: '이어서 말해요', fourLetter: '네 글자 퀴즈'
     };
     document.getElementById('pregame-title').textContent = titles[type];
+    const howto = document.getElementById('pregame-howto-text');
+    if (howto) howto.textContent = HOW_TO_PLAY[type] || '';
 
     // 팀 선택자
     const tCon = document.getElementById('team-selector-container');
@@ -1680,6 +1704,15 @@ function resetTimerProgress() {
     fill.style.transition = '';
 }
 
+// 게임 방법 — 라운드 설정 화면 제목 아래에 표시 (사회자가 읽어 주기 좋게 한두 문장)
+const HOW_TO_PLAY = {
+    speed:      '한 명이 제시어를 말로 설명하고 팀원들이 맞혀요. 제시어에 들어간 낱말은 말하면 안 돼요. 맞히면 성공, 어려우면 패스!',
+    body:       '한 명이 말없이 몸짓으로만 제시어를 표현하고 팀원들이 맞혀요. 소리를 내거나 입 모양으로 알려 주면 안 돼요.',
+    chosung:    '초성만 보고 단어를 맞혀요. 어려운 주제는 힌트가 바로 나오고, 다른 주제는 힌트를 라운드당 3번까지 볼 수 있어요.',
+    relay:      '주제를 추첨한 뒤, 팀원이 돌아가며 주제에 맞는 낱말을 하나씩 말해요. 막히거나 앞사람과 겹치면 실패예요. 주제가 어려우면 한 번 다시 뽑을 수 있어요.',
+    fourLetter: '앞 두 글자를 보고 뒤 두 글자를 맞혀 네 글자 말을 완성해요 (예: 금시 → 초문). 목표 개수를 연속으로 맞히면 성공, 한 번 틀리면 끝나요.'
+};
+
 // 순위 = 1 + 나보다 점수가 높은 팀 수 (동점은 같은 순위)
 const rankOf = (scores, i) => 1 + scores.filter((s, j) => j !== i && s > scores[i]).length;
 
@@ -1786,6 +1819,54 @@ function renderResultStandings(before, after) {
             + '<span class="standing-score">' + after[i] + '</span>'
             + '</div>';
     }).join('');
+}
+
+/* =============== 최종 결과 발표 — 점수는 지우지 않음 =============== */
+function openFinalResults() {
+    closeMenu();
+    if (!App.teams.length) return;
+    const scores = App.teams.map(t => t.score);
+    const top = Math.max(...scores);
+    const winners = App.teams.map((t, i) => i).filter(i => scores[i] === top);
+    const crown = document.getElementById('final-crown');
+    const tag = document.getElementById('final-tag');
+    const nameEl = document.getElementById('final-team');
+    const scoreEl = document.getElementById('final-score');
+    const noScore = top <= 0;
+
+    crown.innerHTML = noScore ? '' : winners.slice(0, 3).map(i => avatarHtml(i, 'avatar-final')).join('');
+    crown.classList.toggle('multi', winners.length > 1);
+    tag.classList.toggle('hidden', noScore);
+    tag.innerHTML = '<svg><use href="#i-crown"/></svg>' + (winners.length > 1 ? '공동 우승' : '우승');
+    nameEl.textContent = noScore ? '아직 점수가 없어요'
+        : winners.map(i => App.teams[i].name).join(' · ');
+    scoreEl.innerHTML = noScore ? '게임을 한 판 이상 하고 다시 열어 주세요' : '<span>' + top + '</span>점';
+    scoreEl.classList.toggle('empty', noScore);
+
+    // 전체 순위 (변동 표시 없이)
+    const order = App.teams.map((t, i) => i).sort((a, b) => scores[b] - scores[a] || a - b);
+    const max = Math.max(1, top);
+    document.getElementById('final-standings').innerHTML = '<div class="standings-head">최종 순위</div>' + order.map(i =>
+        '<div class="standing' + (!noScore && scores[i] === top ? ' is-current' : '') + '">'
+        + '<span class="standing-rank">' + rankOf(scores, i) + '</span>'
+        + avatarHtml(i, 'avatar-xs')
+        + '<span class="standing-name">' + escapeHtml(App.teams[i].name) + '</span>'
+        + '<span></span>'
+        + '<span class="standing-bar"><span style="width:' + Math.round(scores[i] / max * 100) + '%"></span></span>'
+        + '<span class="standing-score">' + scores[i] + '</span>'
+        + '</div>'
+    ).join('');
+
+    const dlg = document.getElementById('modal-final');
+    dlg.showModal();
+    const m = dlg.querySelector('.modal'); if (m) m.scrollTop = 0;
+    if (!noScore) {
+        Sound.play('big-success');
+        buzz(40);
+        fx({ particleCount: 140, spread: 110, origin: { y: 0.55 }, colors: FX_COLORS });
+        setTimeout(() => fx({ particleCount: 80, angle: 60, spread: 70, origin: { x: 0, y: 0.7 }, colors: FX_COLORS }), 250);
+        setTimeout(() => fx({ particleCount: 80, angle: 120, spread: 70, origin: { x: 1, y: 0.7 }, colors: FX_COLORS }), 400);
+    }
 }
 
 /* =============== 일시정지 — 정지 버튼·Esc·설정·로고·앱 전환 시 =============== */

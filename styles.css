@@ -1898,3 +1898,57 @@ body[data-display="tv"] .shortcut-guide { display: none; } /* TV에선 키보드
 /* 결과 모달은 TV 배율(--s)을 따름 */
 #modal-result .standing-name, #modal-result .standing-rank, #modal-result .standing-score { font-size: calc(15px * var(--s)); }
 #modal-result .standing-bar { height: calc(8px * var(--s)); }
+
+/* 게임 방법 안내 — 라운드 설정 제목 아래 */
+.howto {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    background: var(--bg);
+    border-radius: var(--radius-md);
+    padding: 12px 16px;
+    margin: -6px 0 22px;
+}
+.howto svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 2px; color: var(--accent-text); }
+.howto p { margin: 0; font-size: 14.5px; line-height: 1.6; color: var(--ink-700); font-weight: 500; word-break: keep-all; }
+.howto p:empty { display: none; }
+@media (min-width: 768px) { .howto p { font-size: 16px; } .howto { padding: 14px 20px; } }
+@media (min-width: 1024px) {
+    .howto { padding: calc(16px * var(--s)) calc(22px * var(--s)); margin-bottom: calc(28px * var(--s)); gap: calc(12px * var(--s)); }
+    .howto p { font-size: calc(17px * var(--s)); }
+    .howto svg { width: calc(20px * var(--s)); height: calc(20px * var(--s)); }
+}
+
+/* 설정 메뉴 — 최종 결과 발표는 강조 */
+.menu-item--final { color: var(--accent-text); }
+.menu-item--final svg { color: var(--accent-text); }
+
+/* 최종 결과 발표 */
+.modal-final { text-align: center; max-width: calc(480px * var(--s, 1)); }
+.final-crown { display: flex; justify-content: center; margin: 6px 0 16px; }
+.final-crown:empty { display: none; }
+.avatar-final { width: 120px; height: 120px; font-size: 50px; }
+.final-crown.multi .avatar-final { width: 84px; height: 84px; font-size: 35px; outline: 4px solid var(--panel); }
+.final-crown.multi .avatar-final + .avatar-final { margin-left: -14px; }
+.final-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 7px 16px; border-radius: 999px;
+    background: var(--accent-2-tint); color: #56633f;
+    font-weight: 800; font-size: 14px; margin-bottom: 10px;
+}
+.final-tag svg { width: 16px; height: 16px; }
+.final-team {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: clamp(28px, 7vw, 40px); line-height: 1.2;
+    color: var(--ink-900); word-break: keep-all; overflow-wrap: anywhere;
+    margin-bottom: 6px;
+}
+.final-score { font-weight: 700; font-size: 16px; color: var(--ink-500); margin-bottom: 20px; }
+.final-score span { font-family: var(--font-num); font-weight: 800; font-size: 44px; color: var(--accent-2); margin-right: 4px; font-variant-numeric: tabular-nums; }
+.final-score.empty { font-size: 14.5px; }
+.final-standings { text-align: left; max-height: 40dvh; overflow-y: auto; }
+@media (min-width: 768px) {
+    .avatar-final { width: 150px; height: 150px; font-size: 63px; }
+    .final-crown.multi .avatar-final { width: 104px; height: 104px; font-size: 44px; }
+    .final-score span { font-size: 56px; }
+}
