@@ -17,7 +17,6 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <script src="questions.js"></script>
     <script src="characters.js"></script>
@@ -108,6 +107,14 @@
         <symbol id="i-crown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/>
         </symbol>
+        <!-- music — 배경음악 -->
+        <symbol id="i-music" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+        </symbol>
+        <!-- volume-2 — 효과음 -->
+        <symbol id="i-volume" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M11 4.702a.705.705 0 0 0-1.203-.498L6.413 7.587A1.4 1.4 0 0 1 5.416 8H3a1 1 0 0 0-1 1v6a1 1 0 0 0 1 1h2.416a1.4 1.4 0 0 1 .997.413l3.383 3.384A.705.705 0 0 0 11 19.298z"/><path d="M16 9a5 5 0 0 1 0 6"/><path d="M19.364 18.364a9 9 0 0 0 0-12.728"/>
+        </symbol>
         <!-- tv — TV 출력 모드 -->
         <symbol id="i-tv" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
             <rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/>
@@ -182,6 +189,8 @@
             <button type="button" role="menuitem" class="menu-item" onclick="openTeamSettings()"><svg><use href="#i-users"/></svg>팀 설정</button>
             <div class="menu-divider"></div>
             <button type="button" role="menuitem" class="menu-item" onclick="toggleTvMode()"><svg><use href="#i-tv"/></svg>TV 출력 모드<span class="menu-state" id="tv-mode-state">꺼짐</span></button>
+            <button type="button" role="menuitem" class="menu-item" onclick="toggleSoundPref('bgm')"><svg><use href="#i-music"/></svg>배경음악<span class="menu-state on" id="bgm-state">켜짐</span></button>
+            <button type="button" role="menuitem" class="menu-item" onclick="toggleSoundPref('sfx')"><svg><use href="#i-volume"/></svg>효과음<span class="menu-state on" id="sfx-state">켜짐</span></button>
             <div class="menu-divider"></div>
             <button type="button" role="menuitem" class="menu-item danger" onclick="openResetModal()"><svg><use href="#i-refresh"/></svg>새 게임 (점수 초기화)</button>
         </div>
@@ -626,395 +635,328 @@ function applyMode(mode) {
 }
 
 /* =================================================================
-   SOUND ENGINE — 음악적 풍부함을 더한 고품질 사운드
+   SOUND ENGINE — 악기 음색(마림바·칼림바·종·펠트 피아노) 모달 합성 + 룸 리버브
    ================================================================= */
 const Sound = {
+    // 외부 라이브러리 없이 Web Audio만 사용 — CDN이 막힌 행사장 와이파이에서도 소리가 남
     isInit: false,
-    muted: false,
+    muted: false,             // 효과음 끔
+    bgmOff: false,            // 배경음악 끔
     userGestureDone: false,   // 브라우저 자동재생 정책: 첫 터치 전 오디오 시작 불가
     bgmWanted: false,         // 터치 전 BGM 요청을 예약해 두는 플래그
-    _bgmDisposeTimer: null,
-    nodes: {},
     bgmActive: false,
     successCount: 0,
+    ctx: null,
+    _offline: false,
+    _bgmTimer: null,
+    _bgmStopTimer: null,
 
-    async init() {
-        if (this.isInit || typeof Tone === 'undefined') return;
-        try { await Tone.start(); } catch(e) {}
+    // C장조 펜타토닉 기준 주파수
+    NOTE: { C2:65.41, G2:98.00, A2:110.00, F2:87.31, C3:130.81, D3:146.83, E3:164.81, F3:174.61, G3:196.00, A3:220.00, B3:246.94,
+            C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392.00, A4:440.00, B4:493.88,
+            C5:523.25, D5:587.33, E5:659.25, G5:783.99, A5:880.00, C6:1046.50, D6:1174.66, E6:1318.51, G6:1567.98, A6:1760.00, C7:2093.00 },
 
-        // ----- 마스터 체인: EQ → 컴프레서 → 리미터 (폰 스피커에서도 안 깨지게) -----
-        const limiter = new Tone.Limiter(-1.5).toDestination();
-        const masterComp = new Tone.Compressor({ threshold: -16, ratio: 2.5, attack: 0.004, release: 0.18 }).connect(limiter);
-        const masterEQ = new Tone.EQ3({ low: 0.5, mid: 0, high: 1.5 }).connect(masterComp);
-
-        // 공간 센드 — 짧고 밝은 룸 리버브 + 가벼운 8분 딜레이
-        const reverbSend = new Tone.Gain(0.16).connect(masterEQ);
-        const reverb = new Tone.Reverb({ decay: 1.7, wet: 1, preDelay: 0.015 }).connect(reverbSend);
-        const delaySend = new Tone.Gain(0.1).connect(masterEQ);
-        const delay = new Tone.FeedbackDelay({ delayTime: '8n', feedback: 0.22, wet: 1 }).connect(delaySend);
-
-        // 노드를 드라이 + 센드에 동시에 연결
-        const route = (node, rev = 0.3, del = 0) => {
-            node.connect(masterEQ);
-            if (rev > 0) { const s = new Tone.Gain(rev); node.connect(s); s.connect(reverb); }
-            if (del > 0) { const s = new Tone.Gain(del); node.connect(s); s.connect(delay); }
-        };
-
-        // ===== PLUCK — 마림바 톤. UI 멜로디의 기본 목소리 =====
-        const pluck = new Tone.PolySynth(Tone.Synth, {
-            oscillator: { type: 'sine' },
-            envelope: { attack: 0.002, decay: 0.28, sustain: 0, release: 0.4 }
-        });
-        pluck.volume.value = -10;
-        const pluckLp = new Tone.Filter(3400, 'lowpass');
-        pluck.connect(pluckLp);
-        route(pluckLp, 0.35, 0.08);
-        this.nodes.pluck = pluck;
-
-        // ===== GLASS — 부드러운 유리 벨 (성공의 반짝임) =====
-        const glass = new Tone.PolySynth(Tone.FMSynth, {
-            harmonicity: 3.01,
-            modulationIndex: 8,
-            envelope: { attack: 0.001, decay: 0.6, sustain: 0, release: 1.1 },
-            modulationEnvelope: { attack: 0.001, decay: 0.4, sustain: 0, release: 0.4 }
-        });
-        glass.volume.value = -14;
-        route(glass, 0.5, 0.18);
-        this.nodes.glass = glass;
-
-        // ===== KEYS — 팡파레/BGM용 일렉피아노 =====
-        const keys = new Tone.PolySynth(Tone.Synth, {
-            oscillator: { type: 'sine' },
-            envelope: { attack: 0.004, decay: 0.5, sustain: 0.12, release: 0.8 }
-        });
-        keys.volume.value = -12;
-        route(keys, 0.4, 0.08);
-        this.nodes.keys = keys;
-
-        // ===== PAD — 배경 스트링 =====
-        const pad = new Tone.PolySynth(Tone.Synth, {
-            oscillator: { type: 'fatsawtooth', count: 3, spread: 16 },
-            envelope: { attack: 0.7, decay: 0.4, sustain: 0.7, release: 1.8 }
-        });
-        pad.volume.value = -26;
-        const padLp = new Tone.Filter(1400, 'lowpass');
-        pad.connect(padLp);
-        route(padLp, 0.55);
-        this.nodes.pad = pad;
-
-        // ===== BASS =====
-        const bass = new Tone.MonoSynth({
-            oscillator: { type: 'triangle' },
-            envelope: { attack: 0.01, decay: 0.35, sustain: 0.35, release: 0.35 },
-            filterEnvelope: { attack: 0.01, decay: 0.25, sustain: 0.4, baseFrequency: 90, octaves: 2 }
-        });
-        bass.volume.value = -12;
-        route(bass, 0.1);
-        this.nodes.bass = bass;
-
-        // ===== 드럼: KICK / SNARE / WOOD / SHAKER =====
-        const kick = new Tone.MembraneSynth({
-            pitchDecay: 0.04, octaves: 4,
-            envelope: { attack: 0.001, decay: 0.32, sustain: 0.01, release: 0.3 }
-        });
-        kick.volume.value = -10;
-        route(kick, 0.08);
-        this.nodes.kick = kick;
-
-        const snare = new Tone.NoiseSynth({
-            noise: { type: 'white' },
-            envelope: { attack: 0.001, decay: 0.09, sustain: 0 }
-        });
-        snare.volume.value = -22;
-        const snareHp = new Tone.Filter(1800, 'highpass');
-        snare.connect(snareHp);
-        route(snareHp, 0.3);
-        this.nodes.snare = snare;
-
-        // 우드블록 — 틱/탭의 기본 (짧고 둥근 '똑')
-        const wood = new Tone.MembraneSynth({
-            pitchDecay: 0.006, octaves: 1.1,
-            envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.04 }
-        });
-        wood.volume.value = -12;
-        route(wood, 0.12);
-        this.nodes.wood = wood;
-
-        const shaker = new Tone.NoiseSynth({
-            noise: { type: 'white' },
-            envelope: { attack: 0.001, decay: 0.04, sustain: 0 }
-        });
-        shaker.volume.value = -30;
-        const shakerHp = new Tone.Filter(6000, 'highpass');
-        shaker.connect(shakerHp);
-        route(shakerHp, 0.15);
-        this.nodes.shaker = shaker;
-
-        // ===== SWOOSH — PASS/스핀용 바람 소리 =====
-        const swoosh = new Tone.NoiseSynth({
-            noise: { type: 'pink' },
-            envelope: { attack: 0.015, decay: 0.22, sustain: 0 }
-        });
-        swoosh.volume.value = -22;
-        const swooshBp = new Tone.Filter(900, 'bandpass');
-        swoosh.connect(swooshBp);
-        route(swooshBp, 0.2);
-        this.nodes.swoosh = swoosh;
-
-        // ===== GONG — 시간 종료 =====
-        const gong = new Tone.MetalSynth({
-            frequency: 70,
-            envelope: { attack: 0.001, decay: 1.6, release: 1.6 },
-            harmonicity: 3.1, modulationIndex: 36,
-            resonance: 1800, octaves: 1.8
-        });
-        gong.volume.value = -18;
-        route(gong, 0.6, 0.15);
-        this.nodes.gong = gong;
-
-        this.isInit = true;
+    init() {
+        if (this.isInit) return;
+        const AC = window.AudioContext || window.webkitAudioContext;
+        if (!AC) return;
+        try {
+            this.ctx = new AC({ latencyHint: 'interactive' });
+            this._build(this.ctx, this.ctx.destination);
+            this.isInit = true;
+        } catch (e) {}
     },
 
-    async ensure() {
-        if (typeof Tone === 'undefined') return;
-        if (!this.isInit) await this.init();
-        if (Tone.context.state !== 'running') { try { await Tone.context.resume(); } catch(e){} }
+    // 마스터 체인: 저역 컷(폰 스피커 보호) → 고역 셸프(쨍함 완화) → 컴프레서 → 출력
+    //             + 공용 룸 리버브(직접 생성한 임펄스 응답) 센드
+    _build(ctx, dest) {
+        const hp = ctx.createBiquadFilter(); hp.type = 'highpass'; hp.frequency.value = 80;
+        const shelf = ctx.createBiquadFilter(); shelf.type = 'highshelf'; shelf.frequency.value = 5500; shelf.gain.value = -4;
+        const comp = ctx.createDynamicsCompressor();
+        comp.threshold.value = -20; comp.knee.value = 14; comp.ratio.value = 3; comp.attack.value = 0.003; comp.release.value = 0.22;
+        const master = ctx.createGain(); master.gain.value = 0.85;
+        hp.connect(shelf); shelf.connect(comp); comp.connect(master); master.connect(dest);
+
+        this.sfx = ctx.createGain(); this.sfx.connect(hp);
+        this.music = ctx.createGain(); this.music.gain.value = 0.0001; this.music.connect(hp);
+
+        const conv = ctx.createConvolver();
+        conv.buffer = this._impulse(ctx, 2.4, 2.6);
+        const verbOut = ctx.createGain(); verbOut.gain.value = 0.42;
+        this.verb = ctx.createGain();
+        this.verb.connect(conv); conv.connect(verbOut); verbOut.connect(hp);
+
+        // 공용 노이즈 버퍼 (스윽·타격음 질감)
+        const nb = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
+        const d = nb.getChannelData(0);
+        for (let i = 0; i < d.length; i++) d[i] = Math.random() * 2 - 1;
+        this._noise = nb;
     },
 
-    setMuted(v) {
-        this.muted = !!v;
-        if (this.muted) this.stopBgm();
+    // 따뜻한 홀 잔향 — 스테레오 노이즈 × 지수 감쇠, 시간이 지날수록 고역이 먼저 사라지게 저역 통과
+    _impulse(ctx, seconds, decay) {
+        const rate = ctx.sampleRate, len = Math.floor(rate * seconds), pre = Math.floor(rate * 0.014);
+        const buf = ctx.createBuffer(2, len, rate);
+        for (let ch = 0; ch < 2; ch++) {
+            const out = buf.getChannelData(ch);
+            let y = 0;
+            for (let i = pre; i < len; i++) {
+                const t = (i - pre) / (len - pre);
+                const a = 0.85 - 0.78 * t;                 // 필터 계수: 밝게 시작해 어둡게
+                y += a * ((Math.random() * 2 - 1) - y);
+                out[i] = y * Math.pow(1 - t, decay) * (ch ? 0.96 : 1);
+            }
+        }
+        return buf;
     },
+
+    // ---------- 보이스 공통 ----------
+    _voice(t, { wet = 0.25, pan = 0, bus } = {}) {
+        const ctx = this.ctx;
+        const g = ctx.createGain();
+        let node = g;
+        if (ctx.createStereoPanner && pan) { const p = ctx.createStereoPanner(); p.pan.value = pan; g.connect(p); node = p; }
+        node.connect(bus || this.sfx);
+        if (wet > 0) { const s = ctx.createGain(); s.gain.value = wet; node.connect(s); s.connect(this.verb); }
+        return g;
+    },
+    _env(param, t, peak, attack, decay) {
+        param.setValueAtTime(0.0001, t);
+        param.exponentialRampToValueAtTime(Math.max(peak, 0.0002), t + attack);
+        param.exponentialRampToValueAtTime(0.0001, t + attack + decay);
+    },
+    // 모달 합성: 비정수배 배음마다 다른 감쇠 → 실제 타악기처럼 '때리는' 음색
+    _partials(freq, t, o) {
+        const ctx = this.ctx, out = this._voice(t, o);
+        out.gain.value = 1;
+        let target = out;
+        if (o.lp) { const f = ctx.createBiquadFilter(); f.type = 'lowpass'; f.frequency.value = o.lp; f.Q.value = 0.3; f.connect(out); target = f; }
+        const attack = o.attack || 0.002, vel = o.vel == null ? 0.6 : o.vel;
+        let end = t;
+        o.ratios.forEach((r, i) => {
+            const f = freq * r;
+            if (f > 15000) return;
+            const osc = ctx.createOscillator(), g = ctx.createGain();
+            osc.type = 'sine';
+            osc.frequency.value = f;
+            if (o.detune) osc.detune.value = (i % 2 ? 1 : -1) * o.detune;
+            this._env(g.gain, t, o.amps[i] * vel, attack, o.decays[i]);
+            osc.connect(g); g.connect(target);
+            osc.start(t); osc.stop(t + attack + o.decays[i] + 0.05);
+            end = Math.max(end, t + attack + o.decays[i]);
+        });
+        if (o.click) this._click(t, o.click * vel, o.clickFreq || 3000, target);
+        return end;
+    },
+    // 말렛이 닿는 순간의 짧은 '틱' 질감
+    _click(t, level, freq, dest) {
+        const ctx = this.ctx, src = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), g = ctx.createGain();
+        src.buffer = this._noise;
+        bp.type = 'bandpass'; bp.frequency.value = freq; bp.Q.value = 1.4;
+        this._env(g.gain, t, level, 0.0008, 0.014);
+        src.connect(bp); bp.connect(g); g.connect(dest);
+        src.start(t, Math.random()); src.stop(t + 0.03);
+    },
+
+    // ---------- 악기 ----------
+    marimba(f, t, vel = 0.6, o = {}) {
+        const base = Math.min(1.1, Math.max(0.22, 0.85 * Math.sqrt(440 / f))) * (o.damp || 1);
+        return this._partials(f, t, { ratios: [1, 3.93, 9.2], amps: [1, 0.26, 0.06], decays: [base, base * 0.24, base * 0.07],
+            vel, click: 0.14, clickFreq: 2600, wet: o.wet ?? 0.2, pan: o.pan || 0, lp: o.lp, bus: o.bus });
+    },
+    kalimba(f, t, vel = 0.6, o = {}) {
+        const base = Math.min(1.4, Math.max(0.35, 1.1 * Math.sqrt(523 / f)));
+        return this._partials(f, t, { ratios: [1, 2.01, 5.86], amps: [1, 0.1, 0.16], decays: [base, base * 0.35, base * 0.1],
+            vel, click: 0.09, clickFreq: 3800, wet: o.wet ?? 0.3, pan: o.pan || 0, bus: o.bus });
+    },
+    bell(f, t, vel = 0.4, o = {}) {
+        const k = o.len || 1;
+        return this._partials(f, t, { ratios: [1, 2.76, 5.40, 8.93], amps: [1, 0.42, 0.2, 0.09], decays: [2.0 * k, 1.0 * k, 0.45 * k, 0.22 * k],
+            vel, attack: 0.0015, click: 0.04, clickFreq: 5200, wet: o.wet ?? 0.45, pan: o.pan || 0, bus: o.bus, detune: 1.5 });
+    },
+    felt(f, t, vel = 0.4, o = {}) {
+        const k = o.len || 1;
+        return this._partials(f, t, { ratios: [1, 2, 3, 4, 5], amps: [1, 0.42, 0.18, 0.09, 0.04], decays: [1.7 * k, 1.0 * k, 0.6 * k, 0.4 * k, 0.25 * k],
+            vel, attack: o.attack || 0.006, lp: o.lp || 2200, wet: o.wet ?? 0.35, pan: o.pan || 0, bus: o.bus, detune: 2 });
+    },
+    // 우드블록 — 카운트다운·탭
+    wood(f, t, vel = 0.3, o = {}) {
+        return this._partials(f, t, { ratios: [1, 2.71], amps: [1, 0.35], decays: [0.05, 0.022], vel, click: 0.35, clickFreq: 4200,
+            wet: o.wet ?? 0.08, pan: o.pan || 0 });
+    },
+    // 공기 스윽 — 대역 통과 필터를 쓸어 올리며 좌→우 이동
+    whoosh(t, dur, f0, f1, level, pan0 = -0.35, pan1 = 0.35) {
+        const ctx = this.ctx, src = ctx.createBufferSource(), bp = ctx.createBiquadFilter(), g = this._voice(t, { wet: 0.25 });
+        src.buffer = this._noise;
+        bp.type = 'bandpass'; bp.Q.value = 0.9;
+        bp.frequency.setValueAtTime(f0, t); bp.frequency.exponentialRampToValueAtTime(f1, t + dur);
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(level, t + dur * 0.45);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+        if (ctx.createStereoPanner) {
+            const p = ctx.createStereoPanner();
+            p.pan.setValueAtTime(pan0, t); p.pan.linearRampToValueAtTime(pan1, t + dur);
+            src.connect(bp); bp.connect(p); p.connect(g);
+        } else { src.connect(bp); bp.connect(g); }
+        src.start(t, Math.random() * 0.8); src.stop(t + dur + 0.05);
+    },
+    // 물방울 '퐁' — 창 열림
+    pop(t, vel = 0.3) {
+        const ctx = this.ctx, osc = ctx.createOscillator(), g = this._voice(t, { wet: 0.18 });
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(620, t); osc.frequency.exponentialRampToValueAtTime(380, t + 0.07);
+        this._env(g.gain, t, vel, 0.003, 0.09);
+        osc.connect(g); osc.start(t); osc.stop(t + 0.15);
+    },
+
+    ensure() {
+        if (!this.isInit) this.init();
+        if (this.ctx && !this._offline && this.ctx.state !== 'running' && this.ctx.resume) {
+            try { this.ctx.resume(); } catch (e) {}
+        }
+    },
+    setMuted(v) { this.muted = !!v; },
 
     // ---------------------------------------------------------------
-    //  BGM — 8마디 lo-fi 진행 (스윙 + 휴머나이즈로 기계적인 느낌 제거)
+    //  BGM — 라운지 앰비언트: 펠트 피아노 화음이 천천히 바뀌고, 칼림바 음이 가끔 떨어짐
+    //  (드럼·반복 멜로디 없음 → 대화를 방해하지 않는 배경)
     // ---------------------------------------------------------------
-    async startBgm() {
-        if (this.muted) return;
-        // 첫 사용자 터치 전에는 예약만 — 터치 시 pointerdown 핸들러가 시작
-        if (!this.userGestureDone || typeof Tone === 'undefined') { this.bgmWanted = true; return; }
-        await this.ensure();
+    startBgm() {
+        if (this.bgmOff) return;
+        if (!this.userGestureDone) { this.bgmWanted = true; return; }
+        this.ensure();
         if (!this.isInit || this.bgmActive) return;
-        // 직전 stopBgm의 지연 dispose 타이머와 경합하면 새 루프가 삭제되어 영구 침묵 → 먼저 정리
-        if (this._bgmDisposeTimer) { clearTimeout(this._bgmDisposeTimer); this._bgmDisposeTimer = null; }
-        this._disposeBgmLoops();
+        clearTimeout(this._bgmStopTimer);
         this.bgmActive = true;
-
-        Tone.Transport.bpm.value = 76;
-        Tone.Transport.swing = 0.12;           // 살짝 스윙 — lo-fi 그루브
-        Tone.Transport.swingSubdivision = '8n';
-        try { Tone.Transport.start(); } catch(e) {}
-
-        // 8마디 화성 — CMaj7 · Em7 · Am7 · C7 · FMaj7 · Dm7 · G7sus · CMaj7
-        const chords = [
-            ['C3','E3','G3','B3'], ['E3','G3','B3','D4'], ['A2','C3','E3','G3'], ['C3','E3','G3','Bb3'],
-            ['F2','A2','C3','E3'], ['D3','F3','A3','C4'], ['G2','C3','D3','F3'], ['C3','E3','G3','B3']
-        ];
-        const bassNotes = ['C2','E2','A1','C2','F1','D2','G1','C2'];
-        const melody = [
-            'E5', null, 'G5', null, 'C6', null, 'B5', null,
-            'D5', null, 'B5', null, 'G5', null, null, null,
-            'C5', null, 'E5', null, 'A5', null, 'E5', null,
-            'G5', null, 'Bb5', null, 'C6', null, null, null,
-            'A5', null, 'C6', null, 'F5', null, 'E5', null,
-            'F5', null, 'A5', null, 'D6', null, null, null,
-            'D5', null, 'F5', null, 'G5', null, 'C6', null,
-            'E5', null, 'G5', null, 'C6', null, null, null
-        ];
-
-        let chordIdx = 0;
-        this._bgmPad = new Tone.Loop((time) => {
-            this.nodes.pad.triggerAttackRelease(chords[chordIdx % 8], '1n', time, 0.45);
-            chordIdx++;
-        }, '1n').start(0);
-
-        let bassIdx = 0;
-        this._bgmBass = new Tone.Loop((time) => {
-            this.nodes.bass.triggerAttackRelease(bassNotes[bassIdx % 8], '2n', time, 0.4);
-            bassIdx++;
-        }, '1n').start(0);
-
-        this._bgmMelody = new Tone.Sequence((time, note) => {
-            // 휴머나이즈: 벨로시티에 미세한 랜덤 — 기계적인 반복감 제거
-            if (note) this.nodes.keys.triggerAttackRelease(note, '8n', time, 0.2 + Math.random() * 0.07);
-        }, melody, '8n').start(0);
-
-        // 셰이커 백비트 (2·4박)
-        let hatStep = 0;
-        this._bgmHat = new Tone.Loop((time) => {
-            if (hatStep % 2 === 1) this.nodes.shaker.triggerAttackRelease('32n', time, 0.5);
-            hatStep++;
-        }, '4n').start('0:0');
-
-        // 페이드인
-        const t = Tone.now();
-        this.nodes.pad.volume.cancelScheduledValues(t);
-        this.nodes.pad.volume.setValueAtTime(-60, t);
-        this.nodes.pad.volume.linearRampToValueAtTime(-26, t + 2);
-
-        this.nodes.keys.volume.cancelScheduledValues(t);
-        this.nodes.keys.volume.setValueAtTime(-60, t);
-        this.nodes.keys.volume.linearRampToValueAtTime(-18, t + 2);
-
-        this.nodes.bass.volume.cancelScheduledValues(t);
-        this.nodes.bass.volume.setValueAtTime(-60, t);
-        this.nodes.bass.volume.linearRampToValueAtTime(-16, t + 2);
+        const ctx = this.ctx, now = ctx.currentTime;
+        this.music.gain.cancelScheduledValues(now);
+        this.music.gain.setValueAtTime(Math.max(this.music.gain.value, 0.0001), now);
+        this.music.gain.exponentialRampToValueAtTime(0.12, now + 3); // 효과음보다 10dB가량 아래 — 대화를 덮지 않게
+        this._bgmNext = now + 0.1;
+        this._bgmBar = 0;
+        const tick = () => {
+            if (!this.bgmActive) return;
+            while (this._bgmNext < this.ctx.currentTime + 0.6) { this._bgmBarAt(this._bgmNext, this._bgmBar++); this._bgmNext += this._BAR; }
+        };
+        tick();
+        this._bgmTimer = setInterval(tick, 250);
     },
-
+    _BAR: 4.8,
+    _bgmBarAt(t, i) {
+        const N = this.NOTE, bus = this.music;
+        const chords = [
+            [N.C3, N.G3, N.B3, N.D4, N.E4],   // Cmaj9
+            [N.A2, N.E3, N.G3, N.B3, N.C4],   // Am9
+            [N.F2, N.C3, N.E3, N.G3, N.A3],   // Fmaj9
+            [N.G2, N.D3, N.E3, N.A3, N.C4]    // G6sus
+        ];
+        chords[i % 4].forEach((f, k) => this.felt(f, t + k * 0.035, k === 0 ? 0.3 : 0.2, { len: 2.6, attack: 0.05, lp: 1500, wet: 0.6, bus, pan: (k - 2) * 0.12 }));
+        // 칼림바: 마디마다 1~2음, 박자에서 살짝 벗어나게 (사람이 치는 느낌)
+        const pent = [N.E5, N.G5, N.A5, N.C6, N.D6, N.E6];
+        const count = 1 + (Math.random() < 0.55 ? 1 : 0);
+        for (let j = 0; j < count; j++) {
+            const at = t + 1.2 + j * 1.6 + Math.random() * 0.35;
+            this.kalimba(pent[Math.floor(Math.random() * pent.length)], at, 0.13 + Math.random() * 0.06, { wet: 0.7, bus, pan: Math.random() * 0.6 - 0.3 });
+        }
+    },
     stopBgm() {
         this.bgmWanted = false;
         if (!this.bgmActive) return;
         this.bgmActive = false;
-        if (typeof Tone === 'undefined') return;
-        const t = Tone.now();
-
-        // 1. 즉시 시퀀스 정지 — 새 노트가 더 이상 schedule 되지 않도록
-        try { this._bgmPad && this._bgmPad.stop(); } catch(e){}
-        try { this._bgmBass && this._bgmBass.stop(); } catch(e){}
-        try { this._bgmMelody && this._bgmMelody.stop(); } catch(e){}
-        try { this._bgmHat && this._bgmHat.stop(); } catch(e){}
-
-        // 2. 재생 중인 사운드 페이드아웃 (0.25s)
-        try {
-            this.nodes.pad.volume.cancelScheduledValues(t);
-            this.nodes.pad.volume.linearRampToValueAtTime(-60, t + 0.25);
-            this.nodes.keys.volume.cancelScheduledValues(t);
-            this.nodes.keys.volume.linearRampToValueAtTime(-60, t + 0.25);
-            this.nodes.bass.volume.cancelScheduledValues(t);
-            this.nodes.bass.volume.linearRampToValueAtTime(-60, t + 0.25);
-        } catch (e) {}
-
-        // 3. 페이드 끝나면 dispose + SFX용 볼륨 복원 (핸들 보관 — startBgm과의 경합 방지)
-        this._bgmDisposeTimer = setTimeout(() => {
-            this._bgmDisposeTimer = null;
-            this._disposeBgmLoops();
-
-            try {
-                this.nodes.pad.volume.setValueAtTime(-26, Tone.now());
-                this.nodes.keys.volume.setValueAtTime(-12, Tone.now());
-                this.nodes.bass.volume.setValueAtTime(-12, Tone.now());
-            } catch(e){}
-        }, 280);
-    },
-
-    _disposeBgmLoops() {
-        try { this._bgmPad && this._bgmPad.dispose(); } catch(e){}
-        try { this._bgmBass && this._bgmBass.dispose(); } catch(e){}
-        try { this._bgmMelody && this._bgmMelody.dispose(); } catch(e){}
-        try { this._bgmHat && this._bgmHat.dispose(); } catch(e){}
-        this._bgmPad = this._bgmBass = this._bgmMelody = this._bgmHat = null;
+        clearInterval(this._bgmTimer); this._bgmTimer = null;
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        this.music.gain.cancelScheduledValues(now);
+        this.music.gain.setValueAtTime(Math.max(this.music.gain.value, 0.0001), now);
+        this.music.gain.exponentialRampToValueAtTime(0.0001, now + 0.6);
     },
 
     // ---------------------------------------------------------------
-    //  SFX — 모든 소리는 C장조 펜타토닉 계열로 통일 (게임 전체가 한 곡처럼)
+    //  SFX — 짧고 부드럽게, 악기 음색으로. 모든 음은 C장조 펜타토닉 안에서
     // ---------------------------------------------------------------
-    async play(kind, arg) {
+    play(kind, arg) {
         if (this.muted) return;
         try {
-            await this.ensure();
+            this.ensure();
             if (!this.isInit) return;
-            const now = Tone.now();
-            const n = this.nodes;
-
+            const t = this.ctx.currentTime + 0.01, N = this.NOTE;
             switch (kind) {
-                case 'tap': // 짧은 '똑' — 어느 화면에서도 튀지 않는 낮은 톤
-                    n.wood.triggerAttackRelease('G4', '32n', now, 0.4);
+                case 'tap': // 아주 작은 나무 '톡' — 자주 눌러도 거슬리지 않게
+                    this.wood(1650, t, 0.09);
                     break;
 
-                case 'modal': // 두 음 '또롱' (4도 상행)
-                    n.pluck.triggerAttackRelease('E5', '16n', now, 0.35);
-                    n.pluck.triggerAttackRelease('A5', '16n', now + 0.07, 0.3);
+                case 'modal': // 물방울 '퐁' + 칼림바 한 음
+                    this.pop(t, 0.22);
+                    this.kalimba(N.A5, t + 0.02, 0.22);
                     break;
 
-                case 'hint': // 반짝이는 3음 글리산도
-                    n.glass.triggerAttackRelease('C6', '32n', now, 0.22);
-                    n.glass.triggerAttackRelease('E6', '32n', now + 0.055, 0.2);
-                    n.glass.triggerAttackRelease('G6', '16n', now + 0.11, 0.22);
+                case 'hint': // 유리 종 두 음
+                    this.bell(N.E6, t, 0.16, { len: 0.7 });
+                    this.bell(N.A6, t + 0.075, 0.13, { len: 0.8 });
                     break;
 
-                case 'pass': // 스윽 + 가벼운 하강 — 아쉬움 없이 산뜻하게 넘김
-                    n.swoosh.triggerAttackRelease('8n', now);
-                    n.pluck.triggerAttackRelease('B4', '32n', now + 0.02, 0.28);
-                    n.pluck.triggerAttackRelease('F#4', '16n', now + 0.09, 0.24);
+                case 'pass': // 공기 스윽 + 낮은 마림바 한 음 — 산뜻하게 넘김
+                    this.whoosh(t, 0.3, 450, 2400, 0.16);
+                    this.marimba(N.G4, t + 0.05, 0.22, { damp: 0.6 });
                     break;
 
-                case 'success': { // 시그니처 3음 아르페지오 — 연속 성공마다 온음씩 상승
+                case 'success': { // 마림바 5도 상행 '띵-동' — 연속 성공마다 펜타토닉 한 계단씩 상승
                     this.successCount = Math.min((this.successCount || 0) + 1, 5);
-                    const tr = (this.successCount - 1) * 2;
-                    const tt = (note) => Tone.Frequency(note).transpose(tr);
-                    n.pluck.triggerAttackRelease(tt('C5'), '16n', now, 0.55);
-                    n.pluck.triggerAttackRelease(tt('E5'), '16n', now + 0.055, 0.55);
-                    n.pluck.triggerAttackRelease(tt('G5'), '16n', now + 0.11, 0.6);
-                    n.glass.triggerAttackRelease(tt('C6'), '8n', now + 0.165, 0.5);
-                    n.kick.triggerAttackRelease('C2', '16n', now + 0.165, 0.35);
-                    // 4연속 이상: 보너스 반짝임 한 겹
-                    if (this.successCount >= 4) n.glass.triggerAttackRelease(tt('E6'), '8n', now + 0.23, 0.35);
+                    const steps = [0, 2, 4, 7, 9];
+                    const f1 = N.C5 * Math.pow(2, steps[this.successCount - 1] / 12);
+                    this.marimba(f1, t, 0.62, { pan: -0.08 });
+                    this.marimba(f1 * 1.5, t + 0.075, 0.72, { pan: 0.08 });
+                    this.bell(f1 * 3, t + 0.075, 0.07 + this.successCount * 0.015, { len: 0.6 }); // 반짝임 한 겹
                     break;
                 }
 
-                case 'big-success': { // 팡파레 — I·IV·V·I 케이던스 + 스네어 롤 크레셴도
+                case 'big-success': { // 칼림바 상행 캐스케이드 + 펠트 피아노 화음 + 종
                     this.successCount = 0;
-                    n.keys.triggerAttackRelease(['C4','E4','G4'], '8n', now, 0.5);
-                    n.keys.triggerAttackRelease(['F4','A4','C5'], '8n', now + 0.22, 0.55);
-                    n.keys.triggerAttackRelease(['G4','B4','D5'], '8n', now + 0.44, 0.6);
-                    n.keys.triggerAttackRelease(['C4','E4','G4','C5'], '2n', now + 0.68, 0.8);
-
-                    n.bass.triggerAttackRelease('C2', '8n', now, 0.6);
-                    n.bass.triggerAttackRelease('F2', '8n', now + 0.22, 0.6);
-                    n.bass.triggerAttackRelease('G2', '8n', now + 0.44, 0.65);
-                    n.bass.triggerAttackRelease('C2', '2n', now + 0.68, 0.75);
-
-                    for (let i = 0; i < 6; i++) n.snare.triggerAttackRelease('16n', now + 0.44 + i * 0.04, 0.12 + i * 0.06);
-                    n.kick.triggerAttackRelease('C2', '8n', now, 0.7);
-                    n.kick.triggerAttackRelease('C2', '8n', now + 0.68, 0.9);
-
-                    n.glass.triggerAttackRelease('C6', '8n', now + 0.68, 0.4);
-                    n.glass.triggerAttackRelease('E6', '8n', now + 0.75, 0.35);
-                    n.glass.triggerAttackRelease('G6', '8n', now + 0.82, 0.3);
-                    n.glass.triggerAttackRelease('C7', '4n', now + 0.89, 0.25);
+                    this.whoosh(t, 0.55, 280, 2600, 0.06, -0.2, 0.2);
+                    [N.C5, N.E5, N.G5, N.C6, N.E6, N.G6].forEach((f, i) =>
+                        this.kalimba(f, t + 0.08 + i * 0.07, 0.55 - i * 0.04, { pan: -0.3 + i * 0.12, wet: 0.35 }));
+                    [N.C3, N.G3, N.E4, N.G4].forEach((f, i) => this.felt(f, t + 0.08 + i * 0.012, i ? 0.22 : 0.32, { len: 1.6 }));
+                    this.bell(N.C7, t + 0.55, 0.09, { len: 1.2 });
                     break;
                 }
 
-                case 'fail': // 짧고 다정한 두 음 — 창피 주지 않는 '아쉽다'
+                case 'fail': // 짧고 다정한 하강 — 소리를 죽인 마림바
                     this.successCount = 0;
-                    n.pluck.triggerAttackRelease('Eb4', '8n', now, 0.4);
-                    n.pluck.triggerAttackRelease('C4', '4n', now + 0.16, 0.38);
-                    n.bass.triggerAttackRelease('C2', '4n', now + 0.16, 0.3);
+                    this.marimba(N.E4, t, 0.42, { damp: 0.55, lp: 2000 });
+                    this.marimba(N.C4, t + 0.14, 0.46, { damp: 0.7, lp: 1800 });
+                    this.felt(N.C3, t + 0.14, 0.18, { len: 0.6, lp: 900 });
                     break;
 
-                case 'tick': { // 카운트다운 — 마지막 5초는 톤·세기 상승
+                case 'tick': { // 카운트다운 시계 '톡' — 마지막 5초는 조금 높고 또렷하게
                     const remaining = typeof arg === 'number' ? arg : 10;
                     const urgent = remaining <= 5;
-                    n.wood.triggerAttackRelease(urgent ? 'C5' : 'A4', '32n', now, urgent ? 0.5 : 0.3);
+                    this.wood(urgent ? 1900 : 1450, t, urgent ? 0.3 : 0.18);
                     break;
                 }
 
-                case 'timesup': // 공 + 부드러운 단조 하강
+                case 'timesup': // 로비 차임 '딩-동'(장3도 하강) + 펠트 화음
                     this.successCount = 0;
-                    n.gong.triggerAttackRelease(0.7, now, 0.8);
-                    n.keys.triggerAttackRelease(['A3','C4','E4'], '2n', now + 0.05, 0.5);
-                    n.pluck.triggerAttackRelease('A4', '8n', now + 0.3, 0.35);
-                    n.pluck.triggerAttackRelease('G4', '8n', now + 0.48, 0.32);
-                    n.pluck.triggerAttackRelease('E4', '4n', now + 0.66, 0.3);
+                    this.bell(N.E5, t, 0.42, { len: 1.3 });
+                    this.bell(N.C5, t + 0.42, 0.44, { len: 1.6 });
+                    this.felt(N.C3, t + 0.42, 0.24, { len: 1.2, lp: 1200 });
+                    this.felt(N.G3, t + 0.43, 0.18, { len: 1.2, lp: 1200 });
                     break;
 
-                case 'start': // "레디— 고!" 상승 픽업
-                    n.wood.triggerAttackRelease('G4', '32n', now, 0.4);
-                    n.pluck.triggerAttackRelease('C5', '16n', now + 0.11, 0.5);
-                    n.pluck.triggerAttackRelease('E5', '16n', now + 0.22, 0.55);
-                    n.glass.triggerAttackRelease(['G5','C6'], '4n', now + 0.33, 0.55);
-                    n.kick.triggerAttackRelease('C2', '8n', now + 0.33, 0.6);
+                case 'start': // 차오르는 스윽 → 칼림바 화음
+                    this.whoosh(t, 0.42, 260, 3000, 0.1, -0.25, 0.25);
+                    this.kalimba(N.G5, t + 0.38, 0.5, { pan: -0.12 });
+                    this.kalimba(N.C6, t + 0.39, 0.5, { pan: 0.12 });
+                    this.bell(N.C7, t + 0.4, 0.07, { len: 0.8 });
                     break;
 
-                case 'spinTick': { // 슬롯 회전 째깍 — 회전할 때마다 다른 펜타토닉 음
-                    const notes = ['C5','D5','E5','G5','A5'];
-                    n.wood.triggerAttackRelease(notes[Math.floor(Math.random() * notes.length)], '32n', now, 0.22);
-                    n.shaker.triggerAttackRelease('32n', now, 0.3);
+                case 'spinTick': { // 슬롯 회전 — 작은 나무 '톡', 음높이를 조금씩 다르게
+                    const fs = [1320, 1480, 1660, 1980, 2220];
+                    this.wood(fs[Math.floor(Math.random() * fs.length)], t, 0.13, { pan: Math.random() * 0.4 - 0.2 });
                     break;
                 }
 
                 case 'roll': // 스핀 시작 스윽
-                    n.swoosh.triggerAttackRelease('4n', now);
+                    this.whoosh(t, 0.5, 380, 1900, 0.3);
                     break;
             }
         } catch (e) { /* silent */ }
@@ -2103,7 +2045,7 @@ function showScreen(id) {
     window.scrollTo(0, 0);
 
     // BGM: 메뉴/설정 화면에서 잔잔한 음악, 게임 진행 화면에서는 SFX만
-    if (id === 'screen-menu' || id === 'screen-mode' || id === 'screen-setup' || id === 'screen-pregame') {
+    if (MENU_SCREENS.includes(id)) {
         Sound.startBgm();
     } else if (id === 'screen-game') {
         Sound.stopBgm();
@@ -2271,19 +2213,54 @@ function saveGameScoreSettings() {
     Sound.play('success');
 }
 
+/* =============== 소리 설정 — 배경음악 / 효과음 켜고 끄기 (별도 키에 저장) =============== */
+const SOUND_KEY = 'partygame_sound';
+const MENU_SCREENS = ['screen-menu', 'screen-mode', 'screen-setup', 'screen-pregame'];
+function paintSoundPrefs() {
+    [['bgm', !Sound.bgmOff], ['sfx', !Sound.muted]].forEach(([k, on]) => {
+        const el = document.getElementById(k + '-state');
+        if (el) { el.textContent = on ? '켜짐' : '꺼짐'; el.classList.toggle('on', on); }
+    });
+}
+function loadSoundPrefs() {
+    try {
+        const p = JSON.parse(localStorage.getItem(SOUND_KEY) || '{}');
+        Sound.bgmOff = p.bgm === false;
+        Sound.muted = p.sfx === false;
+    } catch (e) {}
+    paintSoundPrefs();
+}
+function toggleSoundPref(kind) {
+    if (kind === 'bgm') {
+        Sound.bgmOff = !Sound.bgmOff;
+        if (Sound.bgmOff) Sound.stopBgm();
+        else {
+            const cur = document.querySelector('.screen.active');
+            if (cur && MENU_SCREENS.includes(cur.id)) Sound.startBgm();
+        }
+    } else {
+        Sound.muted = !Sound.muted;
+    }
+    try { localStorage.setItem(SOUND_KEY, JSON.stringify({ bgm: !Sound.bgmOff, sfx: !Sound.muted })); } catch (e) {}
+    paintSoundPrefs();
+    Sound.play('tap');
+}
+
 /* =============== Init =============== */
 // 첫 사용자 터치: 오디오 컨텍스트 초기화 + 예약된 BGM 시작
-document.body.addEventListener('pointerdown', async () => {
+document.body.addEventListener('pointerdown', () => {
     Sound.userGestureDone = true;
-    await Sound.init();
+    Sound.ensure(); // iOS: 첫 터치 안에서 오디오 컨텍스트를 만들고 깨워야 소리가 남
     if (Sound.bgmWanted && !Sound.bgmActive) Sound.startBgm();
 }, { once: true });
+document.addEventListener('keydown', () => { Sound.userGestureDone = true; Sound.ensure(); }, { once: true });
 
 // Restore from storage if available
 window.addEventListener('DOMContentLoaded', () => {
     // 결과 모달은 Esc로 닫히지 않도록 — 버튼 선택을 강제해 어중간한 상태 방지
     document.getElementById('modal-result').addEventListener('cancel', e => e.preventDefault());
     try { applyDisplayMode(localStorage.getItem(DISPLAY_KEY)); } catch (e) {}
+    loadSoundPrefs();
     if (restore()) {
         applyMode(App.mode); // 저장된 모드의 컬러 테마 복원
         updateScoreboard();
