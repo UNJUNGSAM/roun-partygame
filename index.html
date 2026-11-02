@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#f5ead8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -160,31 +160,30 @@
 
     <!-- HEADER -->
     <header class="header">
-        <div class="brand" onclick="goHome()">
-            <div class="brand-mark"><svg><use href="#i-logo"/></svg></div>
-            <div class="brand-text">PARTY<span>GAME</span></div>
-        </div>
+        <button type="button" class="brand" onclick="goHome()" aria-label="게임 목록으로">
+            <span class="brand-mark"><svg><use href="#i-logo"/></svg></span>
+            <span class="brand-text">PARTY<span>GAME</span></span>
+        </button>
 
         <div id="header-scoreboard" class="scoreboard"></div>
 
         <button class="icon-btn" id="settings-trigger" onclick="toggleMenu(event)" aria-label="설정">
             <svg><use href="#i-cog"/></svg>
         </button>
-        <div class="menu-pop" id="settings-menu">
-            <div class="menu-item" onclick="openScoreBoard()"><svg><use href="#i-trophy"/></svg>점수 관리</div>
-            <div class="menu-item" onclick="openGameScoreSettings()"><svg><use href="#i-target"/></svg>배점 설정</div>
-            <div class="menu-item" onclick="openTeamSettings()"><svg><use href="#i-users"/></svg>팀 설정</div>
+        <div class="menu-pop" id="settings-menu" role="menu">
+            <button type="button" role="menuitem" class="menu-item" onclick="openScoreBoard()"><svg><use href="#i-trophy"/></svg>점수 관리</button>
+            <button type="button" role="menuitem" class="menu-item" onclick="openGameScoreSettings()"><svg><use href="#i-target"/></svg>배점 설정</button>
+            <button type="button" role="menuitem" class="menu-item" onclick="openTeamSettings()"><svg><use href="#i-users"/></svg>팀 설정</button>
             <div class="menu-divider"></div>
-            <div class="menu-item" onclick="toggleTvMode()"><svg><use href="#i-tv"/></svg>TV 출력 모드<span class="menu-state" id="tv-mode-state">꺼짐</span></div>
+            <button type="button" role="menuitem" class="menu-item" onclick="toggleTvMode()"><svg><use href="#i-tv"/></svg>TV 출력 모드<span class="menu-state" id="tv-mode-state">꺼짐</span></button>
             <div class="menu-divider"></div>
-            <div class="menu-item danger" onclick="openResetModal()"><svg><use href="#i-home"/></svg>처음으로</div>
+            <button type="button" role="menuitem" class="menu-item danger" onclick="openResetModal()"><svg><use href="#i-refresh"/></svg>새 게임 (점수 초기화)</button>
         </div>
     </header>
 
     <!-- ==================== SCREEN: MODE ==================== -->
     <section id="screen-mode" class="screen active">
         <div class="mode-wrap">
-            <p class="overline">Let's Play</p>
             <h1 class="display-1">오늘은 누구와<br>함께 노실 건가요?</h1>
             <p class="display-sub">모임에 맞는 모드를 골라주세요 · 테마 색도 함께 바뀌어요</p>
 
@@ -192,7 +191,6 @@
                 <button class="mode-card mode-card--party" onclick="setMode('party')">
                     <div class="mode-card-art"><svg><use href="#i-mode-party"/></svg></div>
                     <div class="mode-card-body">
-                        <span class="mode-card-tag">MODE 01</span>
                         <span class="mode-card-title">파티 모드</span>
                         <span class="mode-card-sub">가족 · 친구 · 2~4팀</span>
                     </div>
@@ -200,7 +198,6 @@
                 <button class="mode-card mode-card--workshop" onclick="setMode('workshop')">
                     <div class="mode-card-art"><svg><use href="#i-mode-workshop"/></svg></div>
                     <div class="mode-card-body">
-                        <span class="mode-card-tag">MODE 02</span>
                         <span class="mode-card-title">워크샵 모드</span>
                         <span class="mode-card-sub">단체 행사 · 4~10팀</span>
                     </div>
@@ -216,12 +213,11 @@
 
             <div class="panel">
                 <div class="section-title" style="margin-bottom: 24px;">
-                    <p class="overline">Team Setup</p>
                     <h2>팀을 만들어 주세요</h2>
                 </div>
 
                 <div class="form-row">
-                    <label class="form-label">참가 팀 수</label>
+                    <label class="form-label" for="team-count-select">참가 팀 수</label>
                     <select id="team-count-select" class="form-select" onchange="renderTeamInputs()"></select>
                 </div>
 
@@ -244,14 +240,13 @@
             <button class="btn-ghost" onclick="showScreen('screen-setup')" style="margin-bottom:20px"><svg width="16" height="16" style="margin-right:4px"><use href="#i-back"/></svg>팀 설정</button>
 
             <div class="section-title">
-                <p class="overline">Pick a Game</p>
                 <h2>어떤 게임으로 시작할까요?</h2>
             </div>
 
             <div class="games-grid">
                 <button class="game-card game-card--speed" onclick="prepareGame('speed')">
                     <div class="game-card-info">
-                        <span class="game-card-tag">GAME 01</span>
+                        <span class="game-card-tag">시간제 · 최대 30문제</span>
                         <span class="game-card-title">스피드 게임</span>
                         <span class="game-card-sub">설명 없이 단어 맞추기</span>
                     </div>
@@ -260,7 +255,7 @@
                 </button>
                 <button class="game-card game-card--body" onclick="prepareGame('body')">
                     <div class="game-card-info">
-                        <span class="game-card-tag">GAME 02</span>
+                        <span class="game-card-tag">시간제 · 최대 25문제</span>
                         <span class="game-card-title">몸으로 말해요</span>
                         <span class="game-card-sub">말하지 않고 액션으로!</span>
                     </div>
@@ -269,7 +264,7 @@
                 </button>
                 <button class="game-card game-card--chosung" onclick="prepareGame('chosung')">
                     <div class="game-card-info">
-                        <span class="game-card-tag">GAME 03</span>
+                        <span class="game-card-tag">시간제 · 최대 12문제</span>
                         <span class="game-card-title">초성 퀴즈</span>
                         <span class="game-card-sub">어려운 주제는 자동 힌트</span>
                     </div>
@@ -278,7 +273,7 @@
                 </button>
                 <button class="game-card game-card--relay" onclick="prepareGame('relay')">
                     <div class="game-card-info">
-                        <span class="game-card-tag">GAME 04</span>
+                        <span class="game-card-tag">릴레이 · 재추첨 1회</span>
                         <span class="game-card-title">이어서 말해요</span>
                         <span class="game-card-sub">주제 추첨 릴레이</span>
                     </div>
@@ -287,7 +282,7 @@
                 </button>
                 <button class="game-card game-card--fourletter" onclick="prepareGame('fourLetter')">
                     <div class="game-card-info">
-                        <span class="game-card-tag">GAME 05</span>
+                        <span class="game-card-tag">목표 4~20문제</span>
                         <span class="game-card-title">네 글자 퀴즈</span>
                         <span class="game-card-sub">목표 개수 연속 성공하기</span>
                     </div>
@@ -305,22 +300,21 @@
 
             <div class="panel">
                 <div class="section-title">
-                    <p class="overline">Round Setup</p>
                     <h2 id="pregame-title">게임 설정</h2>
                 </div>
 
                 <div class="form-row">
-                    <label class="form-label">1 · 도전 팀</label>
+                    <label class="form-label">도전 팀</label>
                     <div id="team-selector-container" class="selector-row"></div>
                 </div>
 
                 <div class="form-row" id="category-section">
-                    <label class="form-label">2 · 주제</label>
+                    <label class="form-label">주제</label>
                     <div id="category-selector-container" class="selector-row"></div>
                 </div>
 
                 <div class="form-row hidden" id="difficulty-section">
-                    <label class="form-label">3 · 주제 난이도</label>
+                    <label class="form-label">주제 난이도</label>
                     <div class="selector-row" id="difficulty-selector" style="grid-template-columns:repeat(3,1fr);">
                         <button class="chip" data-d="1" onclick="setDifficulty(1)">순한맛 · 쉬운 주제만</button>
                         <button class="chip" data-d="2" onclick="setDifficulty(2)">보통 · 추천</button>
@@ -329,7 +323,7 @@
                 </div>
 
                 <div class="form-row" id="timer-section">
-                    <label class="form-label">3 · 제한 시간</label>
+                    <label class="form-label">제한 시간</label>
                     <div class="segmented" id="timer-segment" role="group" aria-label="제한 시간">
                         <button type="button" data-timer="60" aria-pressed="false" onclick="setTimerChoice(60)">60초</button>
                         <button type="button" data-timer="90" aria-pressed="true" onclick="setTimerChoice(90)">90초</button>
@@ -338,7 +332,7 @@
                 </div>
 
                 <div class="form-row hidden" id="fourletter-count-section">
-                    <label class="form-label">3 · 목표 문제 수 (연속 성공)</label>
+                    <label class="form-label" for="fourletter-count-select">목표 문제 수 (연속 성공)</label>
                     <select id="fourletter-count-select" class="form-select">
                         <option value="4">4문제</option>
                         <option value="5">5문제</option>
@@ -352,9 +346,9 @@
                 </div>
 
                 <div class="start-block">
-                    <div class="start-label">Now Playing</div>
+                    <div class="start-label">이번 차례</div>
                     <div id="ready-team-name" class="start-team">팀 이름</div>
-                    <button class="btn btn-3d btn-primary btn-xl w-full" onclick="startGame()" style="max-width:480px;margin:0 auto;display:flex">START</button>
+                    <button class="btn btn-3d btn-primary btn-xl w-full" onclick="startGame()" style="max-width:480px;margin:0 auto;display:flex">게임 시작</button>
                 </div>
             </div>
         </div>
@@ -434,12 +428,12 @@
                             <button class="btn btn-3d btn-coral btn-fail" onclick="handleFourLetterFail()">실패</button>
                             <button class="btn btn-3d btn-emerald btn-ok" onclick="handleFourLetterCorrect()"><svg><use href="#i-check"/></svg>정답</button>
                         </div>
-                        <button class="btn-stop btn-stop--stage" onclick="stopGame(false)" aria-label="정지"><svg><use href="#i-pause"/></svg></button>
+                        <button class="btn-stop btn-stop--stage" onclick="pauseGame()" aria-label="일시정지"><svg><use href="#i-pause"/></svg></button>
                     </div>
                     <div class="shortcut-guide" id="shortcut-guide">
                         <span><kbd>←</kbd>패스 / 실패</span>
                         <span><kbd>→</kbd>성공 / 정답</span>
-                        <span><kbd>Esc</kbd>정지</span>
+                        <span><kbd>Esc</kbd>일시정지</span>
                     </div>
                 </div>
             </div>
@@ -449,7 +443,7 @@
                 <div class="timer" id="timer-display">60</div>
                 <div class="timer-label">SEC</div>
                 <div class="time-column" id="time-column"><div class="time-column-fill" id="time-column-fill"></div></div>
-                <button class="btn-stop btn-stop--phone" onclick="stopGame(false)" aria-label="정지"><svg><use href="#i-pause"/></svg></button>
+                <button class="btn-stop btn-stop--phone" onclick="pauseGame()" aria-label="일시정지"><svg><use href="#i-pause"/></svg></button>
             </aside>
         </div>
     </section>
@@ -459,10 +453,10 @@
 <!-- =========================================================
      MODALS
      ========================================================= -->
-<dialog id="modal-result">
+<dialog id="modal-result" aria-labelledby="result-team">
     <div class="modal">
         <div class="result-avatar" id="result-avatar"></div>
-        <div class="result-status" id="result-title">ROUND CLEAR</div>
+        <div class="result-status" id="result-title">라운드 종료</div>
 
         <div class="result-team-name" id="result-team">A팀</div>
         <p class="result-round-line" id="result-team-line">결과 발표</p>
@@ -479,14 +473,25 @@
             </div>
         </div>
 
-        <button class="btn btn-3d btn-primary btn-big w-full mb-4" onclick="prepareNextTeam()">다음 팀 도전</button>
+        <div class="result-standings" id="result-standings"></div>
+
+        <button class="btn btn-3d btn-primary btn-big w-full mb-4" id="btn-next-team" onclick="prepareNextTeam()">다음 팀 도전</button>
         <button class="btn-ghost w-full" onclick="closeAndShow('screen-menu')">게임 목록으로</button>
     </div>
 </dialog>
 
-<dialog id="modal-reset-confirm">
+<dialog id="modal-pause" aria-labelledby="pause-title">
+    <div class="modal modal-pause">
+        <h3 class="modal-title" id="pause-title">잠깐 멈췄어요</h3>
+        <p class="modal-sub" id="pause-sub">타이머가 멈춘 상태예요.</p>
+        <button class="btn btn-3d btn-primary btn-big w-full mb-4" onclick="resumeGame()">계속하기</button>
+        <button class="btn-ghost w-full" onclick="endRoundFromPause()">라운드 끝내기 · 지금까지 점수 반영</button>
+    </div>
+</dialog>
+
+<dialog id="modal-reset-confirm" aria-labelledby="reset-title">
     <div class="modal" style="max-width:380px">
-        <h3 class="modal-title">초기화 경고</h3>
+        <h3 class="modal-title" id="reset-title">새 게임을 시작할까요?</h3>
         <p class="modal-sub">모든 팀의 점수와 출제 기록이 삭제됩니다.<br>정말 처음으로 돌아가시겠습니까?</p>
         <div style="display:flex; gap:10px;">
             <button class="btn-ghost w-full" onclick="closeDialog('modal-reset-confirm')">취소</button>
@@ -511,7 +516,7 @@
     <div class="modal">
         <h3 class="modal-title">점수 관리</h3>
         <p class="modal-sub">각 팀의 점수를 직접 조정할 수 있어요</p>
-        <div id="scoreboard-list"></div>
+        <div id="scoreboard-list" class="modal-scroll no-scrollbar"></div>
         <button class="btn-ghost w-full mt-4" onclick="closeDialog('modal-scoreboard')">닫기</button>
     </div>
 </dialog>
@@ -521,11 +526,11 @@
         <h3 class="modal-title">배점 설정</h3>
         <p class="modal-sub">문제 1개(네 글자/이어서 말해요는 1라운드)<br>성공 시 획득 점수입니다</p>
         <div>
-            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--speed"><svg><use href="#i-game-speed"/></svg></div><span class="score-edit-name">스피드 게임</span></div><input type="number" id="score-input-speed" class="game-score-input"></div>
-            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--body"><svg><use href="#i-game-body"/></svg></div><span class="score-edit-name">몸으로 말해요</span></div><input type="number" id="score-input-body" class="game-score-input"></div>
-            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--chosung"><svg><use href="#i-game-chosung"/></svg></div><span class="score-edit-name">초성 퀴즈</span></div><input type="number" id="score-input-chosung" class="game-score-input"></div>
-            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--relay"><svg><use href="#i-game-relay"/></svg></div><span class="score-edit-name">이어서 말해요</span></div><input type="number" id="score-input-relay" class="game-score-input"></div>
-            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--fourletter"><svg><use href="#i-game-fourletter"/></svg></div><span class="score-edit-name">네 글자 퀴즈</span></div><input type="number" id="score-input-fourLetter" class="game-score-input"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--speed"><svg><use href="#i-game-speed"/></svg></div><span class="score-edit-name">스피드 게임</span></div><input type="number" id="score-input-speed" class="game-score-input" min="0" inputmode="numeric" aria-label="스피드 게임 배점"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--body"><svg><use href="#i-game-body"/></svg></div><span class="score-edit-name">몸으로 말해요</span></div><input type="number" id="score-input-body" class="game-score-input" min="0" inputmode="numeric" aria-label="몸으로 말해요 배점"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--chosung"><svg><use href="#i-game-chosung"/></svg></div><span class="score-edit-name">초성 퀴즈</span></div><input type="number" id="score-input-chosung" class="game-score-input" min="0" inputmode="numeric" aria-label="초성 퀴즈 배점"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--relay"><svg><use href="#i-game-relay"/></svg></div><span class="score-edit-name">이어서 말해요</span></div><input type="number" id="score-input-relay" class="game-score-input" min="0" inputmode="numeric" aria-label="이어서 말해요 배점"></div>
+            <div class="game-score-row"><div><div class="game-score-tile game-score-tile--fourletter"><svg><use href="#i-game-fourletter"/></svg></div><span class="score-edit-name">네 글자 퀴즈</span></div><input type="number" id="score-input-fourLetter" class="game-score-input" min="0" inputmode="numeric" aria-label="네 글자 퀴즈 배점"></div>
         </div>
         <div style="display:flex; gap:10px; margin-top:20px;">
             <button class="btn-ghost w-full" onclick="closeDialog('modal-game-scores')">취소</button>
@@ -1102,7 +1107,7 @@ function paintTeamRows() {
     div.innerHTML = setupDraft.map((d, i) =>
         '<div class="team-row" data-index="' + i + '">'
         + avatarHtml(i, 'avatar-md')
-        + '<input type="text" class="form-input team-name-input" maxlength="10" value="' + escapeHtml(d.name) + '">'
+        + '<input type="text" class="form-input team-name-input" maxlength="10" aria-label="' + teamInitial(i) + '팀 이름" value="' + escapeHtml(d.name) + '">'
         + '<button class="reroll-btn" onclick="rerollTeamRow(' + i + ')" aria-label="팀 이름 다시 뽑기"><svg><use href="#i-dice"/></svg></button>'
         + '</div>'
     ).join('');
@@ -1164,6 +1169,13 @@ function updateScoreboard() {
             </div>
         </div>`;
     }).join('');
+    // 활성 팀 칩이 잘려 보이지 않도록 가로 스크롤 위치 보정
+    const active = board.querySelector('.score-chip.active');
+    if (active && board.scrollWidth > board.clientWidth) {
+        const left = active.offsetLeft - board.offsetLeft;
+        const target = left - (board.clientWidth - active.offsetWidth) / 2;
+        board.scrollLeft = Math.max(0, target);
+    }
 }
 
 function escapeHtml(s) {
@@ -1512,7 +1524,7 @@ function renderQuiz() {
     App.game.isTransitioning = false;
 
     const item = App.game.words[App.game.currentIndex];
-    if (!item) { stopGame(false); return; } // 준비된 문제 모두 소진 = 클리어 (TIME UP 아님)
+    if (!item) { stopGame(false, 'complete'); return; } // 준비된 문제 모두 소진 = 완주 (시간 종료 아님)
 
     const historyKey = keyOf(item);
     if (!App.history[App.game.type].includes(historyKey)) {
@@ -1619,16 +1631,17 @@ function updateHintButtonState() {
     }
 }
 
-function startTimer() {
+function startTimer(resume = false) {
     clearInterval(App.game.timerInterval);
-    const total = App.game.timer;
-    App.game.timerTotal = total;
+    if (!resume) App.game.timerTotal = App.game.timer;
+    const total = App.game.timerTotal || App.game.timer;
+    const from = App.game.timer;   // 남은 초 (일시정지 후 재개 시 이어서)
     const startedAt = Date.now(); // 시작 시각 기준 계산 — 탭 전환/랙에도 드리프트 없음
-    let lastShown = total;
-    updateTimerProgress(total, total);
+    let lastShown = from;
+    updateTimerProgress(from, total);
 
     App.game.timerInterval = setInterval(() => {
-        const remaining = Math.max(0, total - Math.floor((Date.now() - startedAt) / 1000));
+        const remaining = Math.max(0, from - Math.floor((Date.now() - startedAt) / 1000));
         if (remaining === lastShown) return; // 초 단위가 바뀔 때만 갱신
         lastShown = remaining;
         App.game.timer = remaining;
@@ -1667,30 +1680,43 @@ function resetTimerProgress() {
     fill.style.transition = '';
 }
 
-function stopGame(isTimeOver = false) {
+// 순위 = 1 + 나보다 점수가 높은 팀 수 (동점은 같은 순위)
+const rankOf = (scores, i) => 1 + scores.filter((s, j) => j !== i && s > scores[i]).length;
+
+// reason: 'time' 시간 종료 · 'manual' 사회자가 끝냄 · 'complete' 문제 모두 소화/목표 달성 · 'success' · 'fail'
+function stopGame(isTimeOver = false, reason = 'manual') {
     if (App.game.ended) return; // 중복 정산 방지 — Esc·예약 타이머·이중 클릭 경합 모두 차단
     App.game.ended = true;
+    App.game.paused = false;
     clearInterval(App.game.timerInterval);
     clearTimeout(App.game.pendingTimeout);
     App.game.pendingTimeout = null;
+    const pauseDlg = document.getElementById('modal-pause');
+    if (pauseDlg && pauseDlg.open) pauseDlg.close();
+    if (isTimeOver) reason = 'time';
 
     const pts = App.scoreSettings[App.game.type] || 10;
     const earned = App.game.score * pts;
+    const before = App.teams.map(t => t.score);
     App.teams[App.currentTeamIndex].score += earned;
+    const after = App.teams.map(t => t.score);
 
     const titleEl = document.getElementById('result-title');
     const avatarEl = document.getElementById('result-avatar');
     if (avatarEl) avatarEl.innerHTML = avatarHtml(App.currentTeamIndex, 'avatar-lg');
-    if (isTimeOver) {
-        titleEl.className = 'result-status timeup';
-        titleEl.innerHTML = '<svg><use href="#i-clock"/></svg>TIME UP';
-        Sound.play('timesup');
-    } else {
-        titleEl.className = 'result-status';
-        titleEl.innerHTML = '<svg><use href="#i-trophy"/></svg>ROUND CLEAR';
-        if (earned > 0) Sound.play('big-success');
-        else Sound.play('fail');
-    }
+    const isFourLetterWin = App.game.type === 'fourLetter' && reason === 'complete';
+    const STATUS = {
+        time:     { cls: 'timeup', icon: 'i-clock',  text: '시간 종료' },
+        manual:   { cls: 'neutral', icon: '',        text: '라운드 종료' },
+        complete: { cls: '',       icon: 'i-trophy', text: isFourLetterWin ? '목표 달성' : '완주' },
+        success:  { cls: '',       icon: 'i-trophy', text: '성공' },
+        fail:     { cls: 'timeup', icon: '',         text: App.game.type === 'fourLetter' ? '도전 실패' : '실패' }
+    }[reason] || { cls: 'neutral', icon: '', text: '라운드 종료' };
+    titleEl.className = 'result-status' + (STATUS.cls ? ' ' + STATUS.cls : '');
+    titleEl.innerHTML = (STATUS.icon ? '<svg><use href="#' + STATUS.icon + '"/></svg>' : '') + STATUS.text;
+    if (isTimeOver) Sound.play('timesup');
+    else if (earned > 0) Sound.play('big-success');
+    else Sound.play('fail');
     if (earned > 0) buzz(30);
 
     // 라운드/팀 정보 부제
@@ -1703,14 +1729,108 @@ function stopGame(isTimeOver = false) {
     document.getElementById('result-team').textContent = App.teams[App.currentTeamIndex].name;
     document.getElementById('result-score-display').textContent = `+${earned}`;
     document.getElementById('result-total-score').textContent = App.teams[App.currentTeamIndex].score;
+    renderResultStandings(before, after);
+
+    // 다음 버튼에 다음 차례 팀을 직접 표시
+    const nextIdx = (App.currentTeamIndex + 1) % App.teams.length;
+    const nextBtn = document.getElementById('btn-next-team');
+    if (nextBtn) {
+        nextBtn.innerHTML = App.teams.length > 1
+            ? avatarHtml(nextIdx, 'avatar-sm') + '<span class="btn-label-trim">' + escapeHtml(App.teams[nextIdx].name) + ' 차례</span>'
+            : '한 번 더 도전';
+    }
 
     updateScoreboard();
     persist();
-    document.getElementById('modal-result').showModal();
-    if (earned > 0) {
+    const resultDlg = document.getElementById('modal-result');
+    resultDlg.showModal();
+    // 첫 포커스(아래쪽 버튼) 때문에 내용이 아래로 스크롤돼 아바타가 잘리지 않게
+    const resultModal = resultDlg.querySelector('.modal');
+    if (resultModal) resultModal.scrollTop = 0;
+
+    // 폭죽은 1위가 바뀌었을 때만 (매 라운드 발사는 과함). 네 글자 목표 달성은 자체 폭죽이 이미 터짐
+    const leaderBefore = before.indexOf(Math.max(...before));
+    const top = Math.max(...after);
+    const tookLead = earned > 0 && after[App.currentTeamIndex] === top &&
+        after.filter(v => v === top).length === 1 && leaderBefore !== App.currentTeamIndex;
+    if (tookLead && !isFourLetterWin) {
         fx({ particleCount: 90, spread: 90, origin: { y: 0.6 }, colors: FX_COLORS });
     }
 }
+
+// 결과 모달 순위표 — 순위 · 모노그램 · 이름 · 점수 막대 · 점수 · 순위 변동
+function renderResultStandings(before, after) {
+    const el = document.getElementById('result-standings');
+    if (!el) return;
+    if (App.teams.length < 2) { el.innerHTML = ''; return; }
+    const order = App.teams.map((t, i) => i).sort((a, b) => after[b] - after[a] || a - b);
+    const top = Math.max(1, ...after);
+    // 팀이 많으면 상위 5팀 + 이번 팀만
+    let shown = order;
+    if (order.length > 6) {
+        shown = order.slice(0, 5);
+        if (!shown.includes(App.currentTeamIndex)) shown.push(App.currentTeamIndex);
+    }
+    el.innerHTML = '<div class="standings-head">현재 순위</div>' + shown.map(i => {
+        const r0 = rankOf(before, i), r1 = rankOf(after, i);
+        let move = '<span></span>'; // 변동 없음도 자리를 차지해 열이 맞도록
+        if (r1 < r0) move = '<span class="rank-move up" aria-label="' + (r0 - r1) + '계단 상승"><svg><use href="#i-chevron-up"/></svg>' + (r0 - r1) + '</span>';
+        else if (r1 > r0) move = '<span class="rank-move down" aria-label="' + (r1 - r0) + '계단 하락"><svg><use href="#i-chevron-down"/></svg>' + (r1 - r0) + '</span>';
+        const pct = Math.round((after[i] / top) * 100);
+        return '<div class="standing' + (i === App.currentTeamIndex ? ' is-current' : '') + '">'
+            + '<span class="standing-rank">' + r1 + '</span>'
+            + avatarHtml(i, 'avatar-xs')
+            + '<span class="standing-name">' + escapeHtml(App.teams[i].name) + '</span>'
+            + move
+            + '<span class="standing-bar"><span style="width:' + pct + '%"></span></span>'
+            + '<span class="standing-score">' + after[i] + '</span>'
+            + '</div>';
+    }).join('');
+}
+
+/* =============== 일시정지 — 정지 버튼·Esc·설정·로고·앱 전환 시 =============== */
+const isTimedGame = () => !!ROUND_CAP[App.game.type] && !App.game.ended;
+function isPlaying() {
+    const scr = document.getElementById('screen-game');
+    return scr && scr.classList.contains('active') && !App.game.ended;
+}
+function pauseGame() {
+    const dlg = document.getElementById('modal-pause');
+    if (!isPlaying() || !dlg || dlg.open) return;
+    App.game.paused = true;
+    clearInterval(App.game.timerInterval);
+    closeMenu();
+    const sub = document.getElementById('pause-sub');
+    if (sub) {
+        sub.textContent = isTimedGame()
+            ? `타이머가 멈췄어요 · 남은 시간 ${App.game.timer}초`
+            : '준비되면 이어서 진행하세요.';
+    }
+    Sound.play('modal');
+    dlg.showModal();
+}
+function resumeGame() {
+    const dlg = document.getElementById('modal-pause');
+    if (dlg && dlg.open) dlg.close(); // close 이벤트에서 실제 재개
+}
+function endRoundFromPause() {
+    App.game.paused = false;
+    stopGame(false, 'manual');
+}
+function onPauseClosed() {
+    if (!App.game.paused || App.game.ended) return;
+    App.game.paused = false;
+    Sound.play('tap');
+    if (isTimedGame() && App.game.timer > 0) startTimer(true);
+}
+document.addEventListener('DOMContentLoaded', () => {
+    const dlg = document.getElementById('modal-pause');
+    if (dlg) dlg.addEventListener('close', onPauseClosed); // Esc(취소)로 닫아도 재개
+});
+// 전화·앱 전환 등으로 화면이 가려지면 자동 일시정지 (시간제 게임만)
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden && isTimedGame() && isPlaying()) pauseGame();
+});
 
 /* =============== Game Action Handlers =============== */
 function correctQuiz() {
@@ -1855,7 +1975,7 @@ function handleRelayResult(success) {
     if (App.game.isTransitioning) return;
     App.game.isTransitioning = true;
     App.game.score = success ? 1 : 0;
-    stopGame(false);
+    stopGame(false, success ? 'success' : 'fail');
 }
 
 function handleFourLetterFail() {
@@ -1867,7 +1987,7 @@ function handleFourLetterFail() {
     refreshStage();
     Sound.play('fail');
     document.getElementById('quiz-sub').classList.remove('hidden');
-    App.game.pendingTimeout = setTimeout(() => stopGame(false), 1800);
+    App.game.pendingTimeout = setTimeout(() => stopGame(false, 'fail'), 1800);
 }
 
 function handleFourLetterCorrect() {
@@ -1882,7 +2002,7 @@ function handleFourLetterCorrect() {
     if (App.game.currentIndex + 1 >= App.game.targetCount) {
         App.game.score = 1;
         fx({ particleCount: 80, spread: 90, origin: { y: 0.6 }, colors: FX_COLORS });
-        App.game.pendingTimeout = setTimeout(() => stopGame(false), 1500);
+        App.game.pendingTimeout = setTimeout(() => stopGame(false, 'complete'), 1500);
     } else {
         App.game.pendingTimeout = setTimeout(() => {
             App.game.currentIndex++;
@@ -1896,7 +2016,9 @@ function showScreen(id) {
     closeAllDialogs();
     closeMenu();
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    document.getElementById(id).classList.add('active');
+    const scr = document.getElementById(id);
+    scr.classList.add('active');
+    scr.scrollTop = 0;   // 스크롤 컨테이너는 .screen — 이전 스크롤 위치가 남지 않게
     window.scrollTo(0, 0);
 
     // BGM: 메뉴/설정 화면에서 잔잔한 음악, 게임 진행 화면에서는 SFX만
@@ -1933,6 +2055,7 @@ function prepareNextTeam() {
 /* =============== Settings Menu =============== */
 function toggleMenu(e) {
     e.stopPropagation();
+    if (isPlaying()) { pauseGame(); return; } // 게임 중에는 설정 대신 일시정지 (타이머 보호)
     const m = document.getElementById('settings-menu');
     m.classList.toggle('open');
     Sound.play('tap');
@@ -1960,13 +2083,11 @@ function resetGame() {
     location.reload();
 }
 function goHome() {
+    // 로고는 점수를 지우지 않음 — 게임 중이면 일시정지, 팀이 있으면 게임 목록, 없으면 첫 화면
+    // (점수 초기화는 설정 → '새 게임'에서만)
+    if (isPlaying()) { pauseGame(); return; }
     Sound.play('tap');
-    // 팀이 설정되어 있으면 초기화 확인, 아니면 첫 화면
-    if (App.teams.length) {
-        openResetModal();
-    } else {
-        showScreen('screen-mode');
-    }
+    showScreen(App.teams.length ? 'screen-menu' : 'screen-mode');
 }
 
 function renderScoreboardList() {
@@ -2001,7 +2122,7 @@ function renderTeamSettingsList() {
     document.getElementById('team-settings-list').innerHTML = App.teams.map((t, i) => `
         <div class="team-edit-row">
             ${avatarHtml(i, 'avatar-md')}
-            <input type="text" id="edit-team-${i}" class="form-input" maxlength="10" value="${escapeHtml(t.name)}">
+            <input type="text" id="edit-team-${i}" class="form-input" maxlength="10" aria-label="${teamInitial(i)}팀 이름" value="${escapeHtml(t.name)}">
             <button class="reroll-btn" onclick="rerollTeamChar(${i})" aria-label="팀 이름 다시 뽑기"><svg><use href="#i-dice"/></svg></button>
         </div>
     `).join('');
@@ -2113,7 +2234,8 @@ document.addEventListener('keydown', (e) => {
         else if (visible('controls-fourletter')) handleFourLetterFail();
         else if (visible('controls-relay') && visible('relay-actions')) handleRelayResult(false);
     } else if (e.key === 'Escape') {
-        stopGame(false);
+        e.preventDefault();
+        pauseGame();
     }
 });
 </script>

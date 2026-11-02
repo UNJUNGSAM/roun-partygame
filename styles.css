@@ -40,7 +40,7 @@
     /* 잉크 · 라인 — 두 모드 공통 */
     --ink-900: #201e1d;
     --ink-700: #474238;
-    --ink-500: #82796a;
+    --ink-500: #6e6556;          /* 라벨·캡션 — 크림/오프화이트 위 4.5:1 이상 (구 #82796a는 3.6:1) */
     --ink-400: #a19786;
     --ink-300: #c0b6a5;
     --line: #dcd3c4;
@@ -113,6 +113,8 @@ body[data-mode="workshop"] {
 
 /* ---------- 베이스 ---------- */
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+button, input, select, label, [role="button"] { touch-action: manipulation; }
+::selection { background: var(--accent-tint); color: var(--ink-900); }
 html, body { margin: 0; padding: 0; }
 
 body {
@@ -181,6 +183,10 @@ button:focus:not(:focus-visible) { outline: none; }
     align-items: center;
     gap: 10px;
     cursor: pointer;
+    border: none;
+    background: transparent;
+    font: inherit;
+    color: inherit;
     padding: 6px 10px;
     margin-left: -10px;
     border-radius: var(--radius-md);
@@ -211,7 +217,7 @@ button:focus:not(:focus-visible) { outline: none; }
 @media (min-width: 768px) { .brand-text { font-size: 19px; } }
 
 .icon-btn {
-    width: 40px; height: 40px;
+    width: 44px; height: 44px;
     border-radius: 999px;
     background: var(--panel);
     border: 1px solid var(--line);
@@ -264,8 +270,10 @@ button:focus:not(:focus-visible) { outline: none; }
     max-width: 100%;
     flex: 1;
     min-width: 0;
-    justify-content: flex-end;
+    justify-content: flex-start;
 }
+/* 오른쪽 정렬은 auto margin으로 — 넘칠 때는 0이 되어 첫 팀부터 스크롤 가능 (flex-end는 왼쪽이 잘려 접근 불가) */
+.scoreboard > .score-chip:first-child { margin-left: auto; }
 .scoreboard::-webkit-scrollbar { display: none; }
 @media (min-width: 768px) { .scoreboard { gap: 10px; } }
 
@@ -450,12 +458,12 @@ button:focus:not(:focus-visible) { outline: none; }
 
 /* 실패·초기화 — 별도 빨강 없이 accent + 진한 테두리 */
 .btn-coral {
-    background: var(--accent);
-    border: 1px solid var(--accent-press);
+    background: var(--game-speed);
+    border: 1px solid var(--game-speed-deep);
     color: #fffdf6;
 }
-.btn-coral:hover  { background: var(--accent-hover); }
-.btn-coral:active { background: var(--accent-press); }
+.btn-coral:hover  { background: #c47038; }
+.btn-coral:active { background: var(--game-speed-deep); }
 
 /* 보조 — 투명 + 라인 */
 .btn-ghost {
@@ -520,19 +528,20 @@ button:focus:not(:focus-visible) { outline: none; }
 }
 /* 팀 선택만 accent 채움 */
 .chip.active-orange {
-    background: var(--accent);
-    border-color: var(--accent);
+    background: var(--accent-press);   /* 흰 글씨 대비 확보 (accent 3.5:1 → press 4.4:1) */
+    border-color: var(--accent-press);
     color: #fffdf6;
 }
-.chip.active-orange .avatar { background: rgba(255, 255, 255, 0.25); }
+.chip.active-orange .avatar { outline: 2px solid #fffdf6; }
+.chip > span:not(.avatar) { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 .selector-row {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 8px;
 }
-@media (min-width: 640px)  { .selector-row { grid-template-columns: repeat(4, 1fr); } }
-@media (min-width: 1024px) { .selector-row { grid-template-columns: repeat(5, 1fr); } }
+@media (min-width: 640px)  { .selector-row { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+@media (min-width: 1024px) { .selector-row { grid-template-columns: repeat(5, minmax(0, 1fr)); } }
 
 /* 세그먼트 컨트롤 (제한 시간 등 3분할) */
 .segmented {
@@ -628,7 +637,7 @@ button:focus:not(:focus-visible) { outline: none; }
     font-weight: 700;
     font-size: 11px;
     letter-spacing: 0.2em;
-    color: var(--ink-400);
+    color: var(--ink-500);
 }
 @media (min-width: 768px) { .mode-card-tag { font-size: 12.5px; } }
 
@@ -670,6 +679,7 @@ button:focus:not(:focus-visible) { outline: none; }
     font-weight: 800;
     font-size: 12.5px;
     padding: 7px 12px;
+    min-height: 40px;
     border-radius: 999px;
     cursor: pointer;
     display: inline-flex;
@@ -742,7 +752,7 @@ button:focus:not(:focus-visible) { outline: none; }
 .team-row:focus-within { border: 2px solid var(--accent); padding: 8px 11px; }
 @media (min-width: 768px) { .team-row:focus-within { padding: 9px 15px; } }
 .reroll-btn {
-    width: 34px; height: 34px;
+    width: 44px; height: 44px;
     border-radius: 999px;
     border: none;
     background: var(--bg);
@@ -756,7 +766,7 @@ button:focus:not(:focus-visible) { outline: none; }
 .reroll-btn:hover  { background: var(--panel-soft); }
 .reroll-btn:active { background: var(--line); }
 @media (min-width: 768px) {
-    .reroll-btn { width: 40px; height: 40px; }
+    .reroll-btn { width: 44px; height: 44px; }
     .reroll-btn svg { width: 20px; height: 20px; }
 }
 
@@ -811,11 +821,11 @@ button:focus:not(:focus-visible) { outline: none; }
 
 .game-card-info { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
 .game-card-tag {
-    font-family: var(--font-num);
+    font-family: var(--font-text);   /* 한글 정보 라벨 — 영문 오버라인식 자간 없음 */
     font-weight: 700;
-    font-size: 10.5px;
-    letter-spacing: 0.2em;
-    color: var(--ink-400);
+    font-size: 12px;
+    letter-spacing: -0.005em;
+    color: var(--ink-500);
 }
 .game-card-title {
     font-family: var(--font-display);
@@ -859,6 +869,7 @@ button:focus:not(:focus-visible) { outline: none; }
     text-transform: uppercase;
 }
 .start-team {
+    overflow-wrap: anywhere;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -880,7 +891,7 @@ button:focus:not(:focus-visible) { outline: none; }
 .setup-wrap { max-width: 720px; }
 
 @media (min-width: 1024px) {
-    #screen-mode, #screen-setup, #screen-menu, #screen-pregame { --s: var(--stage-scale, 1); }
+    #screen-mode, #screen-setup, #screen-menu, #screen-pregame, dialog { --s: var(--stage-scale, 1); }
     .screen-pad { max-width: calc(1440px * var(--s)); padding: calc(44px * var(--s)) calc(48px * var(--s)) calc(72px * var(--s)); }
     #screen-menu .screen-pad { margin: auto; } /* 카드 5장이 화면 세로 가운데에 오도록 */
     .panel { padding: calc(40px * var(--s)); }
@@ -942,7 +953,7 @@ button:focus:not(:focus-visible) { outline: none; }
         border-radius: calc(clamp(18px, 1.4vw, 26px) * var(--s));
     }
     .game-card-art svg { width: calc(clamp(30px, 2.3vw, 42px) * var(--s)); height: calc(clamp(30px, 2.3vw, 42px) * var(--s)); }
-    .game-card-info { gap: calc(6px * var(--s)); flex: 1; justify-content: flex-end; }
+    .game-card-info { gap: calc(6px * var(--s)); flex: 1; justify-content: flex-start; }
     .game-card-tag { font-size: calc(clamp(11.5px, 0.8vw, 13.5px) * var(--s)); }
     .game-card-title { font-size: calc(clamp(22px, 1.75vw, 31px) * var(--s)); line-height: 1.2; }
     .game-card-sub { font-size: calc(clamp(14px, 1.05vw, 17.5px) * var(--s)); line-height: 1.4; word-break: keep-all; }
@@ -998,7 +1009,7 @@ button:focus:not(:focus-visible) { outline: none; }
     gap: calc(9px * var(--s));
     padding: calc(6px * var(--s)) calc(18px * var(--s)) calc(6px * var(--s)) calc(6px * var(--s));
     border-radius: 999px;
-    background: var(--accent);
+    background: var(--accent-press);
     color: #fffdf6;
     font-size: calc(16px * var(--s));
     font-weight: 800;
@@ -1010,7 +1021,7 @@ button:focus:not(:focus-visible) { outline: none; }
 .stage-team .avatar {
     width: calc(30px * var(--s)); height: calc(30px * var(--s));
     font-size: calc(14px * var(--s));
-    background: rgba(255, 255, 255, 0.26);
+    outline: 2px solid #fffdf6;
 }
 .stage-team > span:last-child { overflow: hidden; text-overflow: ellipsis; }
 .stage-meta {
@@ -1038,7 +1049,7 @@ button:focus:not(:focus-visible) { outline: none; }
     font-variant-numeric: tabular-nums;
     line-height: 1;
 }
-.stage-score-sub { font-size: calc(14px * var(--s)); font-weight: 700; color: var(--ink-400); white-space: nowrap; }
+.stage-score-sub { font-size: calc(14px * var(--s)); font-weight: 700; color: var(--ink-500); white-space: nowrap; }
 
 /* 중앙 — 제시어 */
 .game-stage {
@@ -1187,9 +1198,9 @@ button:focus:not(:focus-visible) { outline: none; }
     transition: background-color 0.25s;
 }
 .stage-ticks span.ok   { background: #728157; }
-.stage-ticks span.pass { background: #c0b6a5; }
-.stage-ticks span.fail { background: #c0b6a5; }
-.stage-ticks span.now  { background: var(--accent); }
+.stage-ticks span.pass { background: var(--ink-400); }
+.stage-ticks span.fail { background: var(--ink-400); }
+.stage-ticks span.now  { background: #c67139; transform: scaleY(1.6); }
 .stage-ticks:empty { display: none; }
 
 /* 버튼 행 — 패스 230 · 성공 flex · 정지 92 아이콘 */
@@ -1240,7 +1251,7 @@ button:focus:not(:focus-visible) { outline: none; }
     gap: 22px;
     margin-top: 14px;
     font-size: 13px;
-    color: var(--ink-400);
+    color: var(--ink-500);
     font-weight: 600;
 }
 @media (min-width: 1024px) and (hover: hover) { .shortcut-guide { display: flex; } }
@@ -1287,7 +1298,7 @@ button:focus:not(:focus-visible) { outline: none; }
     font-weight: 700;
     font-size: calc(13px * var(--s));
     letter-spacing: 0.2em;
-    color: var(--ink-400);
+    color: var(--ink-500);
 }
 .time-column {
     flex: 1;
@@ -1339,7 +1350,8 @@ button:focus:not(:focus-visible) { outline: none; }
         width: var(--pct, 100%);
         transition: width 1s linear, background-color 0.3s;
     }
-    .stage-time.untimed .time-column { visibility: hidden; }
+    .stage-time.untimed .time-column { display: none; }
+    .stage-time.untimed { justify-content: space-between; }
     .btn-stop--phone { display: grid; width: 46px; height: 46px; }
     .btn-stop--phone svg { width: 18px; height: 18px; }
     .btn-stop--stage { display: none; }
@@ -1501,7 +1513,7 @@ dialog::backdrop {
     color: var(--ink-900);
 }
 @media (min-width: 768px) {
-    .modal { max-width: 560px; padding: 36px 32px; border-radius: 38px; }
+    .modal { max-width: 560px; padding: 36px 32px; border-radius: 32px; }
 }
 @keyframes modalIn {
     from { opacity: 0; transform: translateY(16px) scale(0.96); }
@@ -1545,13 +1557,15 @@ dialog::backdrop {
     letter-spacing: 0.08em;
 }
 .result-status svg { width: 14px; height: 14px; }
-.result-status.timeup { background: var(--accent-tint); color: #8c491a; }
+.result-status.timeup { background: var(--game-speed-tint); color: #8c491a; } /* 워크샵에서도 테라코타 틴트 유지 */
+.result-status.neutral { background: var(--panel-soft); color: var(--ink-700); }
 @media (min-width: 768px) {
     .result-status { font-size: 14px; padding: 9px 18px; margin-bottom: 16px; }
     .result-status svg { width: 16px; height: 16px; }
 }
 
 .result-team-name {
+    overflow-wrap: anywhere;
     text-align: center;
     color: var(--ink-900);
     font-family: var(--font-display);
@@ -1607,7 +1621,7 @@ dialog::backdrop {
 .result-divider { width: 1px; background: var(--line); }
 
 /* 결과 모달 — TV 출력 모드 배율(--stage-scale) 적용 */
-#modal-result .modal { --s: var(--stage-scale, 1); max-width: calc(400px * var(--s)); }
+#modal-result .modal { --s: var(--stage-scale, 1); max-width: calc(440px * var(--s)); }
 #modal-result .result-avatar .avatar { width: calc(74px * var(--s)); height: calc(74px * var(--s)); font-size: calc(31px * var(--s)); }
 #modal-result .result-status { font-size: calc(12.5px * var(--s)); }
 #modal-result .result-team-name { font-size: calc(28px * var(--s)); }
@@ -1648,7 +1662,7 @@ dialog::backdrop {
     text-align: center;
 }
 .score-pm {
-    width: 36px; height: 36px;
+    width: 44px; height: 44px;
     border-radius: 999px;
     background: var(--bg);
     border: 1px solid var(--line);
@@ -1758,6 +1772,12 @@ dialog::backdrop {
     color: var(--ink-900);
     cursor: pointer;
     font-size: 15px;
+    width: 100%;
+    min-height: 44px;
+    border: none;
+    background: transparent;
+    font-family: var(--font-text);
+    text-align: left;
 }
 .menu-item:hover { background: var(--panel-soft); }
 .menu-item.danger { color: var(--accent-text); }
@@ -1772,7 +1792,7 @@ dialog::backdrop {
     padding: 4px 10px;
     border-radius: 999px;
     background: var(--panel-soft);
-    color: var(--ink-500);
+    color: var(--ink-700);
     flex-shrink: 0;
 }
 .menu-state.on { background: var(--accent-2-tint); color: #56633f; }
@@ -1808,3 +1828,73 @@ body[data-display="tv"] .shortcut-guide { display: none; } /* TV에선 키보드
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
+
+
+/* =============================================================
+   리뷰 반영 — 입력 포커스 · 일시정지 · 결과 순위표
+   ============================================================= */
+.form-input:focus-visible, .form-select:focus-visible, .game-score-input:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+.team-row .form-input:focus-visible { outline: none; } /* 행 전체 :focus-within 테두리가 대신함 */
+
+/* 모달 안 작은 알약 버튼 — 흰 글씨 대비를 큰 글씨 기준(3:1)으로 맞추려 19px 이상 */
+.modal .btn-3d:not(.btn-big):not(.btn-xl) { font-size: 19px; }
+
+/* 긴 목록 모달 — 목록만 스크롤, 닫기 버튼은 항상 보임 */
+.modal-scroll { max-height: 52dvh; overflow-y: auto; }
+
+/* 버튼 라벨 말줄임 (다음 팀 이름) */
+.btn-label-trim { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+
+/* 일시정지 */
+.modal-pause { max-width: 400px; text-align: center; }
+.modal-pause .modal-sub { font-variant-numeric: tabular-nums; }
+
+/* 결과 모달 — 현재 순위 */
+.result-standings { margin: -4px 0 18px; display: flex; flex-direction: column; gap: 6px; }
+.result-standings:empty { display: none; }
+.standings-head {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: var(--ink-500);
+    margin: 0 0 2px 4px;
+}
+.standing {
+    display: grid;
+    grid-template-columns: 22px auto minmax(0, 1fr) 40px minmax(40px, 20%) 40px;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px 4px 8px;
+    border-radius: 999px;
+    border: 1px solid transparent;
+}
+.standing.is-current { border-color: var(--accent); background: var(--bg); }
+.standing-rank { font-family: var(--font-num); font-weight: 800; font-size: 16px; color: var(--ink-700); text-align: center; }
+.standing-name { font-weight: 700; font-size: 14px; color: var(--ink-900); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.standing-bar { height: 8px; border-radius: 999px; background: var(--track); overflow: hidden; }
+.standing-bar > span { display: block; height: 100%; border-radius: inherit; background: var(--accent-2); transition: width 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+.standing.is-current .standing-bar > span { background: var(--accent); }
+.standing-score { font-family: var(--font-num); font-weight: 800; font-size: 16px; color: var(--ink-900); text-align: right; font-variant-numeric: tabular-nums; }
+.rank-move {
+    justify-self: start;
+    display: inline-flex; align-items: center; gap: 1px;
+    font-family: var(--font-num); font-weight: 800; font-size: 12px;
+    padding: 2px 7px 2px 4px; border-radius: 999px;
+}
+.rank-move svg { width: 13px; height: 13px; }
+.rank-move.up   { background: var(--accent-2-tint); color: #56633f; }
+.rank-move.down { background: var(--accent-tint);   color: #8c491a; }
+@media (max-width: 519px) {
+    /* 폰: 막대를 빼고 이름에 폭을 줌 */
+    .standing { grid-template-columns: 22px auto minmax(0, 1fr) 44px 40px; }
+    .standing-bar { display: none; }
+}
+@media (min-width: 768px) {
+    .standing-name, .standing-rank, .standing-score { font-size: 16px; }
+    .standings-head { font-size: 14px; }
+}
+/* 결과 모달은 TV 배율(--s)을 따름 */
+#modal-result .standing-name, #modal-result .standing-rank, #modal-result .standing-score { font-size: calc(15px * var(--s)); }
+#modal-result .standing-bar { height: calc(8px * var(--s)); }
