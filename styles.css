@@ -2091,10 +2091,10 @@ body[data-display="tv"] .shortcut-guide { display: none; } /* TV에선 키보드
 .off-card-art svg { width: 24px; height: 24px; }
 .off-card-art--lg { width: 64px; height: 64px; border-radius: var(--radius-lg); }
 .off-card-art--lg svg { width: 32px; height: 32px; }
-.off-card--hand .off-card-art { background: var(--game-fourletter-tint); color: var(--game-fourletter-deep); }
-.off-card--body .off-card-art { background: var(--game-body-tint);       color: var(--game-body-deep); }
-.off-card--talk .off-card-art { background: var(--game-relay-tint);      color: var(--game-relay-deep); }
-.off-card--trad .off-card-art { background: var(--game-chosung-tint);    color: var(--game-chosung-deep); }
+.off-card--tissue .off-card-art { background: var(--game-speed-tint);      color: var(--game-speed-deep); }
+.off-card--table  .off-card-art { background: var(--game-fourletter-tint); color: var(--game-fourletter-deep); }
+.off-card--body   .off-card-art { background: var(--game-body-tint);       color: var(--game-body-deep); }
+.off-card--talk   .off-card-art { background: var(--game-relay-tint);      color: var(--game-relay-deep); }
 .off-card-body { display: flex; flex-direction: column; gap: 3px; min-width: 0; flex: 1; }
 .off-card-title { font-family: var(--font-display); font-weight: 700; font-size: 18px; line-height: 1.25; }
 .off-card-sub { font-size: 14px; line-height: 1.45; font-weight: 500; color: var(--ink-700); word-break: keep-all; }

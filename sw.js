@@ -4,7 +4,7 @@
 // - 글꼴·라이브러리: 바뀌지 않으므로 저장해 둔 파일을 먼저 씁니다.
 // 파일 구성을 크게 바꾸면 VERSION 숫자를 올려 주세요 (옛 저장분이 지워집니다).
 // =============================================================
-const VERSION = 'partygame-v1';
+const VERSION = 'partygame-v2';
 const CORE = [
     './', 'index.html', 'styles.css', 'questions.js', 'characters.js', 'games-offline.js',
     'fonts/fonts.css', 'fonts/LINESeedKR-Bd.woff2', 'fonts/outfit-latin-wght-normal.woff2',
