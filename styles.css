@@ -2184,3 +2184,44 @@ body[data-display="tv"] .shortcut-guide { display: none; } /* TV에선 키보드
 .score-edit-input::-webkit-outer-spin-button, .score-edit-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .score-edit-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .score-edit-row.has-points { border-color: var(--accent); }
+
+/* =============================================================
+   가족 놀이 — 게임 포인트 애니메이션 (family-anim.js)
+   ============================================================= */
+.off-anim { margin: 0 0 18px; }
+.off-anim[hidden] { display: none; }
+.fa-stage {
+    position: relative;
+    max-width: min(100%, calc(54dvh * 4 / 3));
+    margin: 0 auto;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: #f8f1e2;
+    cursor: pointer;
+    aspect-ratio: 4 / 3;
+}
+.fa-svg { display: block; width: 100%; height: 100%; }
+.fa-ui-bar { display: flex; align-items: center; gap: 12px; margin: 10px auto 0; max-width: min(100%, calc(54dvh * 4 / 3)); }
+.fa-progress { flex: 1; height: 6px; border-radius: 999px; background: var(--track); overflow: hidden; }
+.fa-progress span { display: block; height: 100%; width: 100%; background: var(--accent); transform-origin: left center; transform: scaleX(0); border-radius: inherit; }
+.fa-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    min-height: 44px; padding: 0 16px;
+    border-radius: 999px; border: 1px solid var(--ink-300);
+    background: var(--panel); color: var(--ink-700);
+    font-family: var(--font-text); font-weight: 700; font-size: 14px;
+    cursor: pointer;
+}
+.fa-btn svg { width: 16px; height: 16px; }
+.fa-btn:hover { border-color: var(--ink-500); }
+.off-anim.is-paused .fa-stage::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(32, 30, 29, 0.06);
+}
+.off-card-anim { color: var(--accent-text); font-weight: 800; white-space: nowrap; }
+.off-card-anim svg { width: 11px; height: 11px; margin-right: 3px; vertical-align: -1px; }
+@media (min-width: 768px) {
+    .off-anim { margin-bottom: 22px; }
+}

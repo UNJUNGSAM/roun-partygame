@@ -3,8 +3,9 @@
 LINE Seed Sans KR  — Copyright (c) LY Corporation (https://seed.line.me)
 Pretendard         — Copyright (c) 2021 Kil Hyung-jin, with Reserved Font Name Pretendard (https://github.com/orioncactus/pretendard)
 Outfit             — Copyright 2021 The Outfit Project Authors (https://github.com/Outfitio/Outfit-Fonts)
+Gaegu              — Copyright 2018 The Gaegu Project Authors (https://github.com/JAMO-TYPEFACE/Gaegu)
 
-글꼴 파일은 수정하지 않은 원본 그대로입니다.
+글꼴 파일은 원본 그대로이며, Gaegu는 상용 한글 2,350자와 영문·기호만 남긴 축소판(Gaegu-Bold-subset.woff2)입니다.
 
 -----------------------------------------------------------
 SIL OPEN FONT LICENSE Version 1.1 - 26 February 2007
