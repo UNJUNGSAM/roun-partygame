@@ -1,6 +1,6 @@
 // =============================================================
 // 로운네 파티게임 — 가족 놀이 10초 애니메이션 대본 (놀이 id별)
-// 등장인물은 '콩알 가족'(family-anim.js): 이름 a=아이, b=엄마, c=아빠, d=할머니 / 리본=딸, 안경=할아버지.
+// 등장인물은 B급 '인간 이모티콘' 가족(family-anim.js): 이름 a=아이, b=엄마, c=아빠, d=할머니 / 리본=딸, 안경=할아버지.
 // 시간은 초 단위(0~10). s.char / s.prop로 등장시키고, s.key로 움직이고,
 // s.face로 표정, s.cap으로 자막, s.burst로 효과 글자를 띄웁니다. (그림 도구는 family-anim.js)
 // =============================================================
@@ -25,7 +25,7 @@
         s.wiggle('t', 'r', 2.2, 5.3, 28, 0.8);
         s.burst(1.55, 186, 140, '휘익~');
         s.face(2.5, 'a', 'shock').cap(2.6, '어라…? 안 날아가요');
-        s.face(3.1, 'b', 'laugh').wiggle('b', 'r', 3.1, 6.6, 5, 0.25).burst(3.3, 248, 128, '푸핫!', { color: C.sage });
+        s.face(3.1, 'b', 'laugh').wiggle('b', 'r', 3.1, 6.6, 5, 0.25).burst(3.3, 248, 128, 'ㅋㅋㅋㅋㅋ', { color: C.sage });
         s.show(6.0, 'm').burst(6.2, 168, 236, '고작 1m…', { size: 18, lines: false });
         s.face(6.0, 'a', 'cry');
         s.face(8.2, 'a', 'laugh').face(8.2, 'b', 'proud');
@@ -65,7 +65,7 @@
         s.cap(2.2, '보는 사람이 초를 세요', '하나, 둘, 셋…');
         s.key('t', [6.7, { x: 200, y: 104, r: 0 }], [7.3, { x: 201, y: 158, r: 0 }, 'i']);
         s.face(7.3, 'a', 'shock').burst(7.35, 280, 132, '철썩!', { size: 28 }).cap(7.0, '앗, 얼굴에 철썩!');
-        s.face(7.6, 'b', 'laugh');
+        s.face(7.6, 'b', 'laugh').burst(7.7, 340, 112, 'ㅋㅋㅋㅋ', { size: 20, color: C.sage });
         s.end(8.5, '가장 오래 띄운 사람 승!');
     };
 
@@ -109,7 +109,7 @@
         s.char('b', 108, F, { shirt: C.terra, face: 'laugh' })
          .char('m', 200, F, { shirt: C.blue, face: 'shock' })
          .char('c', 292, F, { shirt: C.sage, flip: true, face: 'laugh', acc: ['glasses'] });
-        const wraps = [[F + 2, 0.8, 4], [F - 16, 0.86, -5], [F - 32, 0.86, 4], [F - 48, 0.84, -3], [F - 100, 0.74, 5], [F - 112, 0.58, -6]];
+        const wraps = [[F + 6, 0.5, 4], [F - 12, 0.5, -5], [F - 28, 0.54, 4], [F - 46, 0.58, -3], [F - 114, 0.78, 5], [F - 130, 0.62, -6]];
         wraps.forEach(([y, sx, r], i) => {
             const n = 'w' + i, t = 1.3 + i * 0.6;
             s.prop(n, 'wrap', 200, y, { layer: 'front', sx: 0, r });
@@ -535,7 +535,7 @@
         s.burst(2.0, 60, 130, '쓱쓱', { size: 19 }).burst(4.2, 60, 130, '여긴 코…?', { size: 18 });
         s.key('pp', [6.0, { x: 170, y: 210, s: 1.1 }], [6.5, { x: 200, y: 190, s: 1.7 }, 'back']).key('dr', [6.0, { x: 170, y: 210, s: 1.1 }], [6.5, { x: 200, y: 190, s: 1.7 }, 'back']);
         s.cap(6.0, '짜잔! 공개!').face(6.0, 'a', 'proud');
-        s.face(6.5, 'm', 'shock').burst(6.6, 318, 110, '누구야?!', { color: C.red }).face(7.3, 'm', 'laugh').face(7.3, 'a', 'laugh');
+        s.face(6.5, 'm', 'shock').burst(6.6, 318, 110, '누구야?!', { color: C.red }).face(7.3, 'm', 'laugh').face(7.3, 'a', 'laugh').burst(7.4, 300, 104, 'ㅋㅋㅋㅋㅋ', { color: C.sage });
         s.end(8.0, '가장 닮은 그림 승!', '가장 웃긴 그림 상도 좋아요');
     };
 
@@ -574,7 +574,7 @@
         s.face(3.4, 'b', 'shout').show(3.4, 'q2').hide(4.8, 'q2').face(3.4, 'a', 'neutral');
         s.face(5.0, 'c', 'shout').show(5.0, 'q3').hide(6.4, 'q3').face(5.0, 'b', 'puzzled');
         s.cap(5.0, '마지막 사람이 외치면…');
-        s.face(6.4, 'a', 'laugh').face(6.4, 'b', 'laugh').face(6.4, 'c', 'laugh').burst(6.5, 200, 104, '땡~!', { size: 30, color: C.red });
+        s.face(6.4, 'a', 'laugh').face(6.4, 'b', 'laugh').face(6.4, 'c', 'laugh').burst(6.5, 200, 104, 'ㅋㅋㅋㅋㅋㅋ', { size: 28, color: C.red });
         s.end(7.8, '정확히 전달한 팀 승!');
     };
 
