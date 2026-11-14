@@ -1,6 +1,7 @@
 // =============================================================
 // 로운네 파티게임 — 가족 놀이 '게임 포인트' 애니메이션 엔진
-// - 손그림 느낌의 민머리 캐릭터(오리지널) + 소품을 SVG로 그리고, 10초짜리 장면을 키프레임으로 움직입니다.
+// - 손그림 느낌의 '콩알 가족' 캐릭터(오리지널: 아빠·엄마·아이·딸·할머니·할아버지) + 소품을 SVG로 그리고,
+//   10초짜리 장면을 키프레임으로 움직입니다.
 // - 장면 대본은 family-scenes.js (놀이 id별). 이 파일은 그림 도구와 재생기만 담당합니다.
 // - 외부 라이브러리·영상 파일 없음 → 가볍고 인터넷이 끊겨도 재생됩니다.
 // =============================================================
@@ -23,31 +24,54 @@
     const st = (w = 2.4) => `stroke="${INK}" stroke-width="${w}" stroke-linecap="round" stroke-linejoin="round"`;
     const P = (d, w = 2.3, fill = 'none') => `<path d="${d}" fill="${fill}" ${st(w)}/>`;
     const dot = (x, y, r = 2.8) => `<circle cx="${x}" cy="${y}" r="${r}" fill="${INK}"/>`;
-    const NOSE = 'M-4 -31 q4 4 8 0';
-    const blush = `<ellipse cx="-21" cy="-29" rx="5" ry="3" fill="${PINK}" opacity=".55"/><ellipse cx="21" cy="-29" rx="5" ry="3" fill="${PINK}" opacity=".55"/>`;
-    const squeeze = P('M-19 -49 l9 4.5 l-9 4.5 M19 -49 l-9 4.5 l9 4.5', 2.4);
-    const happyEyes = P('M-19 -42 q6 -8 12 0 M7 -42 q6 -8 12 0', 2.5);
-    const closedEyes = P('M-18 -43 q5 4 10 0 M8 -43 q5 4 10 0', 2.4);
-    const sweat = `<path d="M27 -60 q-6 8 0 12 q6 -4 0 -12 z" fill="${TEAR}" ${st(1.4)}/>`;
-
-    // ---------- 표정 (머리 좌표: 목 = 0,0 / 얼굴 중심 ≈ 0,-40) ----------
+    // ---------- 콩알 가족 표정 (머리 좌표: 목 = 0,0 / 눈 y -42, 입 y -26) ----------
+    const SKIN = '#ffe6cf', HAIR_DARK = '#3a2e2a', HAIR_BROWN = '#7a4a2e', HAIR_GRAY = '#c9c4bd';
+    const eyeD = (x, y, k = 1) => `<ellipse cx="${x}" cy="${y}" rx="${3.4 * k}" ry="${4.4 * k}" fill="${INK}"/><circle cx="${x + 1.2 * k}" cy="${y - 1.6 * k}" r="${1.25 * k}" fill="#fff"/>`;
+    const blush = `<ellipse cx="-23" cy="-31" rx="6.5" ry="4" fill="${PINK}" opacity=".8"/><ellipse cx="23" cy="-31" rx="6.5" ry="4" fill="${PINK}" opacity=".8"/>`;
+    const squeeze = P('M-21 -47 l10 5 l-10 5 M21 -47 l-10 5 l10 5', 2.8);
+    const happyEyes = P('M-20 -40 q6 -9 12 0 M8 -40 q6 -9 12 0', 3);
+    const closedEyes = P('M-20 -42 q6 5 12 0 M8 -42 q6 5 12 0', 2.6);
+    const sweat = `<path d="M33 -62 q-6 8 0 12 q6 -4 0 -12 z" fill="${TEAR}" ${st(1.6)}/>`;
     const FACES = {
-        neutral: dot(-12, -44) + dot(12, -44) + P('M-18 -53 q5 -2 10 -1 M8 -54 q5 -1 10 1 ' + NOSE + ' M-8 -19 q8 4 16 0'),
-        smug: P('M-19 -46 h12 M7 -46 h12', 2.4) + dot(-13, -43.5, 2.3) + dot(13, -43.5, 2.3) + P('M-18 -52 q5 -1 10 0 M8 -58 q6 -3 11 1 ' + NOSE + ' M-9 -19 q10 4 17 -6'),
-        shock: `<circle cx="-13" cy="-44" r="6.5" fill="#fff" ${st(2)}/><circle cx="13" cy="-44" r="6.5" fill="#fff" ${st(2)}/>` + dot(-13, -44, 2.3) + dot(13, -44, 2.3)
-            + P('M-21 -58 q7 -5 13 -2 M8 -60 q6 -3 13 2 ' + NOSE) + `<ellipse cx="0" cy="-17" rx="5.5" ry="8" fill="${INK}"/>`,
-        laugh: happyEyes + P(NOSE) + `<path d="M-13 -25 h26 q-2 17 -13 17 q-11 0 -13 -17 z" fill="${INK}" ${st(2)}/><path d="M-11 -25 h22 v4 h-22 z" fill="#fff"/><path d="M-6 -11 q6 -5 12 0 q-6 3 -12 0z" fill="${PINK}"/>` + blush,
-        proud: happyEyes + P('M-18 -53 q5 -3 10 -1 M8 -54 q5 -2 10 1 ' + NOSE) + P('M-11 -23 q11 12 22 0', 2.5) + blush,
-        cry: squeeze + P(NOSE) + P('M-14 -38 q-3 12 -2 28 M14 -38 q3 12 2 28', 4).replace(INK, TEAR) + `<path d="M-10 -15 q5 -7 10 0 q5 -7 10 0 v3 h-20 z" fill="${INK}"/>`,
-        strain: squeeze + P('M-20 -57 l10 4 M20 -57 l-10 4 ' + NOSE) + `<rect x="-11" y="-27" width="22" height="10" rx="3" fill="#fff" ${st(2)}/>` + P('M-4 -27 v10 M3 -27 v10 M-11 -22 h22', 1.4) + sweat,
-        blow: closedEyes + `<circle cx="-18" cy="-24" r="8" fill="${CREAM}" ${st(2)}/><circle cx="18" cy="-24" r="8" fill="${CREAM}" ${st(2)}/>` + dot(0, -21, 4) + blush,
-        focus: dot(-12, -44) + P('M7 -45 q5 -3 10 0 M-19 -55 l10 4 M19 -55 l-10 4 ' + NOSE + ' M-8 -20 h11') + `<path d="M2 -20 q0 8 5 8 q5 0 5 -8 z" fill="${PINK}" ${st(1.8)}/>`,
-        closed: closedEyes + P('M-19 -54 l10 2 M19 -54 l-10 2 ' + NOSE + ' M-6 -19 h12'),
-        puzzled: dot(-12, -44, 2.4) + dot(13, -44, 3.4) + P('M-18 -52 q5 -1 10 0 M7 -60 q6 -4 12 0 ' + NOSE + ' M-8 -19 q4 -4 8 0 q4 4 8 0'),
-        shout: squeeze + P(NOSE) + `<ellipse cx="0" cy="-16" rx="10" ry="12" fill="${INK}"/><ellipse cx="0" cy="-9" rx="5" ry="3" fill="${PINK}"/>`,
-        nervous: dot(-16, -44) + dot(8, -44) + P('M-19 -50 l10 -3 M19 -50 l-10 -3 ' + NOSE + ' M-9 -19 q3 -3 6 0 q3 3 6 0 q3 -3 6 0') + sweat,
-        back: P('M-5 -64 q5 -5 10 0 q-3 4 -6 1', 1.8)
+        neutral: eyeD(-13, -42) + eyeD(13, -42) + P('M-6 -27 q3 3.5 6 0 q3 3.5 6 0', 2.4) + blush,
+        smug: P('M-20 -45 h13 M7 -45 h13', 2.6) + eyeD(-13, -41, 0.7) + eyeD(13, -41, 0.7) + P('M-20 -51 q5 -2 11 -1 M8 -56 q6 -3 12 1 M-7 -26 q8 3 15 -5', 2.4) + blush,
+        shock: `<circle cx="-13" cy="-43" r="7.5" fill="#fff" ${st(2.4)}/><circle cx="13" cy="-43" r="7.5" fill="#fff" ${st(2.4)}/>` + dot(-13, -42, 2.6) + dot(13, -42, 2.6)
+            + `<ellipse cx="0" cy="-22" rx="4.6" ry="6.6" fill="${INK}"/>` + P('M30 -70 l5 -7 M35 -61 l8 -2', 2.4),
+        laugh: happyEyes + `<path d="M-11 -31 h22 q-1 15 -11 15 q-10 0 -11 -15 z" fill="${INK}"/><path d="M-6 -20 q6 -5 12 0 q-6 4 -12 0z" fill="#f07f7f"/>` + blush,
+        proud: happyEyes + P('M-10 -29 q10 10 20 0', 2.8) + blush,
+        cry: P('M-20 -43 h13 M7 -43 h13', 3.2) + `<path d="M-18 -41 q-3 15 -1 32 h9 q1 -17 -3 -32z M18 -41 q3 15 1 32 h-9 q-1 -17 3 -32z" fill="${TEAR}" opacity=".9"/>`
+            + `<path d="M-9 -28 q4 -5 9 0 q5 -5 9 0 q-1 11 -9 11 q-8 0 -9 -11z" fill="${INK}"/>`,
+        strain: squeeze + `<rect x="-10" y="-32" width="20" height="10" rx="3" fill="#fff" ${st(2.2)}/>` + P('M-3 -32 v10 M4 -32 v10 M-10 -27 h20', 1.4) + sweat,
+        blow: closedEyes + `<circle cx="-21" cy="-28" r="9.5" fill="#ffd2c6" ${st(2.2)}/><circle cx="21" cy="-28" r="9.5" fill="#ffd2c6" ${st(2.2)}/>` + dot(0, -25, 4.2),
+        focus: eyeD(-13, -42) + P('M8 -42 q5 -4 10 0 M-21 -52 l10 3 M21 -52 l-10 3 M-7 -27 h10', 2.6) + `<path d="M1 -27 q0 9 5 9 q5 0 5 -9 z" fill="#f07f7f" ${st(2)}/>`,
+        closed: closedEyes + P('M-5 -26 q5 2 10 0', 2.4) + blush,
+        puzzled: eyeD(-13, -42, 0.8) + eyeD(13, -42, 1.25) + P('M7 -57 q6 -4 12 0 M-8 -26 q4 -4 8 0 q4 4 8 0', 2.4),
+        shout: squeeze + `<ellipse cx="0" cy="-21" rx="10" ry="12" fill="${INK}"/><ellipse cx="0" cy="-14" rx="5.5" ry="3.2" fill="#f07f7f"/>`,
+        nervous: eyeD(-17, -42, 0.85) + eyeD(9, -42, 0.85) + P('M-21 -51 l10 -3 M21 -51 l-10 -3 M-9 -26 q3 -3 6 0 q3 3 6 0 q3 -3 6 0', 2.4) + sweat,
+        back: ''
     };
+    // 역할별 머리 모양 (아빠·엄마·아이·딸·할머니·할아버지)
+    const HAIR = {
+        dad: `<path d="M-37 -58 C-40 -86 -20 -94 0 -94 C22 -94 40 -86 37 -58 q-6 -9 -13 -6 q-4 -10 -12 -4 q-6 -9 -12 0 q-8 -6 -14 2 q-7 -2 -10 8 z" fill="${HAIR_DARK}" ${st(2)}/>`,
+        mom: `<path d="M-45 -20 C-52 -70 -30 -98 0 -98 C30 -98 52 -70 45 -20 q-5 -2 -8 -10 C37 -48 30 -60 16 -66 q-14 10 -38 3 q-10 10 -13 20 q-2 14 -2 23 q-4 2 -8 0 z" fill="${HAIR_BROWN}" ${st(2.2)}/>`,
+        kid: P('M-1 -88 q-2 -12 5 -17', 2.6) + `<path d="M4 -105 q-13 -5 -13 -14 q13 0 15 10z" fill="#8fbf6a" ${st(2.2)}/><path d="M4 -105 q12 -8 16 -2 q-6 8 -16 2z" fill="#8fbf6a" ${st(2.2)}/>`,
+        girl: `<ellipse cx="-42" cy="-70" rx="10" ry="14" fill="#5a3a26" ${st(2.2)}/><ellipse cx="42" cy="-70" rx="10" ry="14" fill="#5a3a26" ${st(2.2)}/>`
+            + `<path d="M-36 -64 C-32 -92 32 -92 36 -64 q-8 -8 -16 -4 q-8 -9 -18 -2 q-10 -7 -18 2 q-8 -2 -12 4z" fill="#5a3a26" ${st(2.2)}/>`
+            + `<path d="M-38 -84 l-10 -8 v16 z M-38 -84 l10 -8 v16 z" fill="${COL.red}" ${st(1.8)}/><path d="M38 -84 l-10 -8 v16 z M38 -84 l10 -8 v16 z" fill="${COL.red}" ${st(1.8)}/>`,
+        grandma: `<circle cx="0" cy="-100" r="13" fill="${HAIR_GRAY}" ${st(2.4)}/><path d="M-38 -56 C-41 -90 -18 -95 0 -95 C20 -95 41 -90 38 -56 q-14 -16 -38 -14 q-24 -2 -38 14 z" fill="${HAIR_GRAY}" ${st(2.2)}/>`
+            + `<circle cx="-13" cy="-43" r="10.5" fill="#fff" fill-opacity=".25" ${st(2.3)}/><circle cx="13" cy="-43" r="10.5" fill="#fff" fill-opacity=".25" ${st(2.3)}/>` + P('M-2.5 -44 h5', 2.3),
+        grandpa: `<path d="M-41 -46 q-8 -12 2 -22 q5 7 7 15 M41 -46 q8 -12 -2 -22 q-5 7 -7 15" fill="${HAIR_GRAY}" ${st(2)}/>`
+            + `<path d="M-13 -35 q6 -6 13 -2 q7 -4 13 2 q-6 7 -13 2 q-7 5 -13 -2z" fill="#f3efe8" ${st(2)}/>` + P('M-6 -84 q6 -4 12 0', 1.8)
+            + `<circle cx="-13" cy="-44" r="10.5" fill="#fff" fill-opacity=".25" ${st(2.3)}/><circle cx="13" cy="-44" r="10.5" fill="#fff" fill-opacity=".25" ${st(2.3)}/>` + P('M-2.5 -45 h5', 2.3)
+    };
+    const ROLE_BY_NAME = { a: 'kid', b: 'mom', c: 'dad', d: 'grandma', h: 'grandma', m: 'dad' };
+    function pickRole(name, o) {
+        if (o.role) return o.role;
+        const acc = o.acc || [];
+        if (acc.includes('ribbon')) return 'girl';
+        if (acc.includes('glasses')) return 'grandpa';
+        return ROLE_BY_NAME[name] || 'kid';
+    }
 
     // ---------- 소품 ----------
     const PROPS = {
@@ -75,9 +99,9 @@
         table: (w = 220) => `<rect x="${-w / 2}" y="0" width="${w}" height="10" rx="3" fill="#c79a6b" ${st(2.2)}/>` + P(`M${-w / 2 + 12} 10 v52 M${w / 2 - 12} 10 v52`, 3),
         mat: () => `<rect x="-80" y="-8" width="160" height="12" rx="6" fill="#d7e3c8" ${st(2)}/>`,
         note: (t = '펭귄') => `<rect x="-17" y="-14" width="34" height="26" rx="2" fill="#f6dc6e" ${st(1.8)}/><text x="0" y="5" text-anchor="middle" font-family="Gaegu, 'LINE Seed KR', sans-serif" font-weight="700" font-size="14" fill="${INK}">${t}</text>`,
-        phones: () => P('M-37 -36 q0 -52 37 -52 q37 0 37 52', 4) + `<rect x="-44" y="-46" width="12" height="22" rx="5" fill="${COL.plum}" ${st(2)}/><rect x="32" y="-46" width="12" height="22" rx="5" fill="${COL.plum}" ${st(2)}/>`,
-        glasses: () => `<circle cx="-13" cy="-44" r="9" fill="#fff" fill-opacity=".25" ${st(2)}/><circle cx="13" cy="-44" r="9" fill="#fff" fill-opacity=".25" ${st(2)}/>` + P('M-4 -45 q4 -3 8 0 M-22 -46 l-11 -2 M22 -46 l11 -2', 2),
-        ribbon: () => `<path d="M10 -82 l-12 -8 v16 z M10 -82 l12 -8 v16 z" fill="${COL.red}" ${st(1.8)}/><circle cx="10" cy="-82" r="3.4" fill="${COL.red}" ${st(1.6)}/>`,
+        phones: () => P('M-43 -40 q0 -56 43 -56 q43 0 43 56', 4.5) + `<rect x="-52" y="-52" width="13" height="24" rx="5" fill="${COL.plum}" ${st(2)}/><rect x="39" y="-52" width="13" height="24" rx="5" fill="${COL.plum}" ${st(2)}/>`,
+        glasses: () => `<circle cx="-13" cy="-43" r="10.5" fill="#fff" fill-opacity=".25" ${st(2.3)}/><circle cx="13" cy="-43" r="10.5" fill="#fff" fill-opacity=".25" ${st(2.3)}/>` + P('M-2.5 -44 h5 M-23.5 -45 l-12 -3 M23.5 -45 l12 -3', 2.3),
+        ribbon: () => `<path d="M14 -86 l-12 -8 v16 z M14 -86 l12 -8 v16 z" fill="${COL.red}" ${st(1.8)}/><circle cx="14" cy="-86" r="3.4" fill="${COL.red}" ${st(1.6)}/>`,
         box: () => `<rect x="-22" y="-16" width="44" height="30" rx="3" fill="#9fc3cf" ${st(2.2)}/>` + `<ellipse cx="0" cy="-2" rx="10" ry="5" fill="${INK}"/>` + P('M-22 -6 h-12 M22 -6 h12', 2),
         capRed: () => `<ellipse rx="9" ry="4" fill="${COL.red}" ${st(1.8)}/>`,
         capBlue: () => `<ellipse rx="9" ry="4" fill="${COL.blue}" ${st(1.8)}/>`,
@@ -85,7 +109,7 @@
         cone: () => `<path d="M-10 0 L0 -26 L10 0 Z" fill="#e58c3a" ${st(2)}/>` + P('M-6 -9 h12', 2.4).replace(INK, '#fff'),
         paper: () => `<rect x="-26" y="-32" width="52" height="64" rx="2" fill="#fff" ${st(2)}/>`,
         pen: () => P('M0 0 l14 -20', 4) + P('M0 0 l2.4 -3.4', 2),
-        band: () => `<ellipse rx="34" ry="6" fill="none" stroke="#e05a6a" stroke-width="4"/>`,
+        band: () => `<ellipse rx="44" ry="7" fill="none" stroke="#e05a6a" stroke-width="4.5"/>`,
         rope: () => '',
         hand5: () => handSvg(5), hand4: () => handSvg(4), hand3: () => handSvg(3), hand2: () => handSvg(2), hand1: () => handSvg(1), hand0: () => handSvg(0),
         rock: () => `<circle r="11" fill="${CREAM}" ${st(2)}/>` + P('M-7 -3 h14 M-7 2 h14', 1.4),
@@ -99,7 +123,7 @@
         trail: () => `<path d="M0 34 L18 -8 L36 34 M56 -18 V44 M56 12 H76" pathLength="1" stroke-dasharray="1" fill="none" stroke="${COL.terra}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>`,
         note8: () => `<path d="M0 0 v-16 l10 -3 v16" fill="none" ${st(2)}/><ellipse cx="-3" cy="0" rx="4" ry="3" fill="${INK}"/><ellipse cx="7" cy="-3" rx="4" ry="3" fill="${INK}"/>`,
         holes: () => '', strip: () => `<rect x="0" y="-3" width="1" height="6" fill="${CREAM}" stroke="${INK}" stroke-width="1.8" vector-effect="non-scaling-stroke"/>`,
-        wrap: () => `<rect x="-24" y="-5" width="48" height="10" rx="3" fill="${CREAM}" ${st(1.8)}/>`,
+        wrap: () => `<rect x="-47" y="-6" width="94" height="12" rx="4" fill="${CREAM}" ${st(1.8)}/>`,
         sparkle: (c = COL.gold) => `<path d="M0 -10 Q0 0 10 0 Q0 0 0 10 Q0 0 -10 0 Q0 0 0 -10 Z" fill="${c}"/>`
     };
     function handSvg(n) {
@@ -110,32 +134,35 @@
         return s;
     }
 
-    // ---------- 캐릭터 ----------
-    function charSvg(id, o) {
+    // ---------- 캐릭터: 콩알 가족 (머리와 몸이 하나인 콩 모양, 옷 색 = 팀 색) ----------
+    const BEAN = 'M-41 56 C-49 5 -39 -88 0 -88 C39 -88 49 5 41 56 Q0 68 -41 56 Z';
+    function charSvg(id, o, name) {
+        const role = pickRole(name, o);
         const shirt = o.shirt || COL.terra;
         const faces = Object.keys(FACES).map(k => `<g class="fa-face" data-face="${k}" style="display:none">${FACES[k]}</g>`).join('');
-        const acc = (o.acc || []).map(a => PROPS[a] ? PROPS[a]() : '').join('');
-        const leg = (side) => `<g id="${id}.leg${side}">` + P('M0 0 L0 17', 2.6)
-            + `<ellipse cx="${side === 'L' ? -3 : 3}" cy="19" rx="6.5" ry="3.6" fill="${CREAM}" ${st(2)}/></g>`;
+        const acc = (o.acc || []).filter(a => !(a === 'ribbon' && role === 'girl') && !(a === 'glasses' && (role === 'grandma' || role === 'grandpa')))
+            .map(a => PROPS[a] ? PROPS[a]() : '').join('');
+        const foot = (side) => `<g id="${id}.leg${side}"><ellipse cx="${side === 'L' ? -2 : 2}" cy="10" rx="11" ry="6" fill="#fff" ${st(2.6)}/></g>`;
         const arm = (side) => {
             const k = side === 'L' ? -1 : 1;
-            return `<g id="${id}.arm${side}">` + P(`M0 0 q${7 * k} 12 ${5 * k} 24`, 2.6)
-                + `<circle cx="${5 * k}" cy="27" r="4.6" fill="${CREAM}" ${st(2.2)}/><g id="${id}.hand${side}" data-slot="1"></g></g>`;
+            return `<g id="${id}.arm${side}"><ellipse cx="${3 * k}" cy="11" rx="8" ry="12.5" fill="${SKIN}" ${st(2.6)} transform="rotate(${-14 * k} ${3 * k} 11)"/>`
+                + `<g id="${id}.hand${side}" data-slot="1"></g></g>`;
         };
         return `<g id="${id}">`
-            + `<ellipse cx="0" cy="21" rx="24" ry="4" fill="${INK}" opacity=".08"/>`
-            + leg('L') + leg('R')
-            + `<path d="M-19 -20 C-22 -38 -18 -52 -10 -55 L10 -55 C18 -52 22 -38 19 -20 Q0 -15 -19 -20 Z" fill="${shirt}" ${st(2.3)}/>` + P('M-7 -55 q7 6 14 0', 1.8)
+            + `<ellipse cx="0" cy="17" rx="34" ry="4.5" fill="${INK}" opacity=".08"/>`
+            + foot('L') + foot('R')
+            + `<g id="${id}.head">`
+            + `<clipPath id="${id}-clip"><path d="${BEAN}"/></clipPath>`
+            + `<path d="${BEAN}" fill="${SKIN}"/>`
+            + `<path d="M-60 12 Q0 24 60 12 V80 H-60 Z" fill="${shirt}" clip-path="url(#${id}-clip)"/>`
+            + P('M-46 12 Q0 24 46 12', 2.4).replace('<path', `<path clip-path="url(#${id}-clip)"`)
+            + `<path d="${BEAN}" fill="none" ${st(3)}/>`
+            + faces + (HAIR[role] || '') + acc + `<g id="${id}.face" data-slot="1"></g></g>`
             + `<g id="${id}.back" data-slot="1"></g>`
             + arm('L') + arm('R')
-            + `<g id="${id}.head">`
-            + `<path d="M-34 -46 q-8 -1 -7 8 q1 7 7 5 M34 -46 q8 -1 7 8 q-1 7 -7 5" fill="${CREAM}" ${st(2.2)}/>`
-            + `<path d="M0 -86 C23 -86 35 -67 35 -45 C35 -18 21 -2 0 -2 C-21 -2 -35 -18 -35 -45 C-35 -67 -23 -86 0 -86 Z" fill="${CREAM}" ${st(2.5)}/>`
-            + P('M-7 -85 q-3 -8 -9 -9 M0 -86 q1 -9 -2 -13 M7 -85 q3 -7 9 -7', 2)
-            + faces + acc + `<g id="${id}.face" data-slot="1"></g></g>`
             + `</g>`;
     }
-    const CHAR_PARTS = { legL: [-8, -20], legR: [8, -20], armL: [-17, -49], armR: [17, -49], head: [0, -52], handL: [0, 0], handR: [0, 0], back: [0, 0], face: [0, 0] };
+    const CHAR_PARTS = { legL: [-15, 6], legR: [15, 6], armL: [-40, -38], armR: [40, -38], head: [0, -52], handL: [0, 0], handR: [0, 0], back: [0, 0], face: [0, 0] };
 
     // ---------- 장면 빌더 ----------
     function Scene(uid) {
@@ -153,8 +180,8 @@
         _reg(name, b) { this.base[this.id(name)] = Object.assign({ x: 0, y: 0, r: 0, s: 1, sx: 1, sy: 1, o: 1 }, b); },
         char(name, x, y, o = {}) {
             const id = this.id(name);
-            this.layers[o.layer || 'chars'].push(charSvg(id, o));
-            this._reg(name, { x, y, s: o.s || 1, sx: o.flip ? -1 : 1, r: o.r || 0 });
+            this.layers[o.layer || 'chars'].push(charSvg(id, o, name));
+            this._reg(name, { x, y, s: o.s || 0.86, sx: o.flip ? -1 : 1, r: o.r || 0 });   // 콩알 가족은 폭이 넓어 기본 0.86배
             for (const [part, [px, py]] of Object.entries(CHAR_PARTS)) this._reg(name + '.' + part, { x: px, y: py });
             this.chars.push(name);
             this.ev.push([-1, 'face', name, o.face || 'neutral']);

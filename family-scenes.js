@@ -1,5 +1,6 @@
 // =============================================================
 // 로운네 파티게임 — 가족 놀이 10초 애니메이션 대본 (놀이 id별)
+// 등장인물은 '콩알 가족'(family-anim.js): 이름 a=아이, b=엄마, c=아빠, d=할머니 / 리본=딸, 안경=할아버지.
 // 시간은 초 단위(0~10). s.char / s.prop로 등장시키고, s.key로 움직이고,
 // s.face로 표정, s.cap으로 자막, s.burst로 효과 글자를 띄웁니다. (그림 도구는 family-anim.js)
 // =============================================================
@@ -108,7 +109,7 @@
         s.char('b', 108, F, { shirt: C.terra, face: 'laugh' })
          .char('m', 200, F, { shirt: C.blue, face: 'shock' })
          .char('c', 292, F, { shirt: C.sage, flip: true, face: 'laugh', acc: ['glasses'] });
-        const wraps = [[F + 6, 1, 4], [F - 12, 1, -5], [F - 28, 1.05, 4], [F - 46, 1.1, -3], [F - 112, 1.45, 5], [F - 128, 1.2, -6]];
+        const wraps = [[F + 2, 0.8, 4], [F - 16, 0.86, -5], [F - 32, 0.86, 4], [F - 48, 0.84, -3], [F - 100, 0.74, 5], [F - 112, 0.58, -6]];
         wraps.forEach(([y, sx, r], i) => {
             const n = 'w' + i, t = 1.3 + i * 0.6;
             s.prop(n, 'wrap', 200, y, { layer: 'front', sx: 0, r });
@@ -364,7 +365,7 @@
     S['butt-writing'] = (s) => {
         s.prop('tr', 'trail', 22, 104, { draw: 0, layer: 'fx', s: 0.9 })
          .char('a', 150, F, { shirt: C.plum, face: 'back' })
-         .char('b', 285, F, { shirt: C.terra, flip: true, face: 'puzzled' })
+         .char('b', 272, F, { shirt: C.terra, flip: true, face: 'puzzled' })
          .char('c', 350, F, { shirt: C.sage, flip: true, acc: ['ribbon'], face: 'puzzled' });
         s.cap(0, '엉덩이로 글자 쓰기!', '팀원에게 등을 돌리고');
         s.key('tr', [1.2, { draw: 0 }], [5.2, { draw: 1 }, 'lin']);
@@ -373,7 +374,7 @@
         s.key('a', [1.2, { sy: 1 }], [1.5, { sy: 0.92 }], [5.6, { sy: 0.92 }], [6.0, { sy: 1 }]);
         s.burst(1.6, 222, 220, '씰룩씰룩', { size: 19 });
         s.cap(1.4, '공중에 크게 쓱싹쓱싹');
-        s.prop('q1', 'bubble', 280, 118, { hidden: true, args: ['사…자?', 70], layer: 'fx' });
+        s.prop('q1', 'bubble', 268, 112, { hidden: true, args: ['사…자?', 70], layer: 'fx' });
         s.prop('q2', 'bubble', 348, 120, { hidden: true, args: ['사과!', 62], layer: 'fx' });
         s.show(5.4, 'q1').hide(7.0, 'q1').show(6.4, 'q2').hide(8.3, 'q2');
         s.cap(5.4, '팀원은 글자를 맞혀요');
