@@ -1,18 +1,17 @@
 {
   "name": "로운네 파티게임",
-  "short_name": "PartyGame",
-  "description": "가족과 친구가 함께하는 프리미엄 파티 게임",
+  "short_name": "파티게임",
+  "description": "가족·친구·워크샵 모임에서 함께 하는 퀴즈 게임과 가족 놀이 모음",
   "start_url": "./",
-  "display": "fullscreen",
+  "scope": "./",
+  "display": "standalone",
   "orientation": "any",
-  "background_color": "#F5EBDB",
-  "theme_color": "#2D4036",
+  "background_color": "#f5ead8",
+  "theme_color": "#f5ead8",
   "lang": "ko",
   "icons": [
-    {
-      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect width='192' height='192' rx='40' fill='%232D4036'/><path d='M40 152 L96 40 L152 152 Z' fill='none' stroke='%23E89F4E' stroke-width='10' stroke-linejoin='round'/><path d='M96 40 L96 152' stroke='%23E89F4E' stroke-width='10' stroke-linecap='round'/></svg>",
-      "sizes": "192x192",
-      "type": "image/svg+xml"
-    }
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
   ]
 }
