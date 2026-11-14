@@ -35,6 +35,11 @@
   [headers.values]
     Cache-Control = "public, max-age=0, must-revalidate"
 
+[[headers]]
+  for = "/family-*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=0, must-revalidate"
+
 # 서비스 워커는 항상 최신으로 (오프라인 저장 규칙이 바뀌면 바로 반영)
 [[headers]]
   for = "/sw.js"

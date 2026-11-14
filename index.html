@@ -21,6 +21,8 @@
     <script src="questions.js"></script>
     <script src="characters.js"></script>
     <script src="games-offline.js"></script>
+    <script src="family-anim.js"></script>
+    <script src="family-scenes.js"></script>
 
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -117,6 +119,10 @@
         </symbol>
         <symbol id="i-off-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+        </symbol>
+        <!-- play — 재생 -->
+        <symbol id="i-play" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 4.5v15a1 1 0 0 0 1.5.86l12-7.5a1 1 0 0 0 0-1.72l-12-7.5A1 1 0 0 0 6 4.5z"/>
         </symbol>
         <!-- undo-2 — 되돌리기 -->
         <symbol id="i-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
@@ -2267,6 +2273,7 @@ function showScreen(id) {
     closeAllDialogs();
     closeMenu();
     if (id !== 'screen-offline-detail' && typeof stopOffTimer === 'function') stopOffTimer();
+    if (id !== 'screen-offline-detail' && window.FamilyAnim) FamilyAnim.stop();
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const scr = document.getElementById(id);
     scr.classList.add('active');
@@ -2485,7 +2492,8 @@ function renderOfflineList() {
             + '<span class="off-card-body">'
             + '<span class="off-card-title">' + escapeHtml(g.name) + '</span>'
             + '<span class="off-card-sub">' + escapeHtml(g.line) + '</span>'
-            + '<span class="off-card-meta">' + escapeHtml(cat.label) + ' · ' + escapeHtml(g.time) + ' · ' + (g.items.length ? '준비물 ' + g.items.length + '가지' : '준비물 없음') + '</span>'
+            + '<span class="off-card-meta">' + escapeHtml(cat.label) + ' · ' + escapeHtml(g.time) + ' · ' + (g.items.length ? '준비물 ' + g.items.length + '가지' : '준비물 없음')
+            + (window.FamilyAnim && FamilyAnim.has(g.id) ? ' · <span class="off-card-anim"><svg><use href="#i-play"/></svg>10초 영상</span>' : '') + '</span>'
             + '</span>'
             + '<svg class="game-card-chev"><use href="#i-chevron-right"/></svg>'
             + '</button>';
@@ -2513,6 +2521,7 @@ function openOfflineGame(id) {
         + '<span class="off-card-art off-card-art--lg"><svg><use href="#' + (OFF_ICON[g.cat] || 'i-dice') + '"/></svg></span>'
         + '<div><h2 class="off-title">' + escapeHtml(g.name) + '</h2><p class="off-line">' + escapeHtml(g.line) + '</p></div>'
         + '</div>'
+        + '<div class="off-anim" id="off-anim" hidden></div>'
         + '<div class="off-facts">'
         + '<span class="off-fact"><b>종류</b>' + escapeHtml(cat.label) + '</span>'
         + '<span class="off-fact"><b>참가</b>' + escapeHtml(g.who) + '</span>'
@@ -2529,6 +2538,8 @@ function openOfflineGame(id) {
     offTimer.total = offTimer.left = g.timer || 0;
     paintOffTimer();
     showScreen('screen-offline-detail');
+    // 게임 포인트 애니메이션 (family-anim.js / family-scenes.js)
+    if (window.FamilyAnim) FamilyAnim.mount(document.getElementById('off-anim'), g.id);
 }
 function fmtClock(sec) {
     const m = Math.floor(sec / 60), s = sec % 60;

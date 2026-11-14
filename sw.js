@@ -4,10 +4,10 @@
 // - 글꼴·라이브러리: 바뀌지 않으므로 저장해 둔 파일을 먼저 씁니다.
 // 파일 구성을 크게 바꾸면 VERSION 숫자를 올려 주세요 (옛 저장분이 지워집니다).
 // =============================================================
-const VERSION = 'partygame-v2';
+const VERSION = 'partygame-v3';
 const CORE = [
-    './', 'index.html', 'styles.css', 'questions.js', 'characters.js', 'games-offline.js',
-    'fonts/fonts.css', 'fonts/LINESeedKR-Bd.woff2', 'fonts/outfit-latin-wght-normal.woff2',
+    './', 'index.html', 'styles.css', 'questions.js', 'characters.js', 'games-offline.js', 'family-anim.js', 'family-scenes.js',
+    'fonts/fonts.css', 'fonts/LINESeedKR-Bd.woff2', 'fonts/outfit-latin-wght-normal.woff2', 'fonts/Gaegu-Bold-subset.woff2',
     'vendor/confetti.browser.js', 'manifest.webmanifest', 'icons/icon-192.png'
 ];
 // 본문 글꼴 조각 92개 — 설치 뒤 뒤에서 천천히 받아 둠 (실패해도 설치는 성공)

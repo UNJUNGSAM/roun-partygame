@@ -3,6 +3,7 @@
    - LINE Seed Sans KR Bold  : 제목·제시어  (© LY Corporation, SIL OFL 1.1)
    - Pretendard Variable     : 본문 UI      (© Kil Hyung-jin, SIL OFL 1.1)
    - Outfit Variable         : 숫자·영문    (© The Outfit Project Authors, SIL OFL 1.1)
+   - Gaegu Bold (축소판)      : 애니메이션 자막 (© The Gaegu Project Authors, SIL OFL 1.1)
    라이선스 전문: fonts/OFL.txt
    ============================================================= */
 @font-face {
@@ -11,6 +12,14 @@
     font-style: normal;
     font-display: swap;
     src: url(LINESeedKR-Bd.woff2) format('woff2');
+}
+/* 손글씨 — 가족 놀이 애니메이션 자막 (상용 한글 2,350자 + 영문·기호만 담은 축소판) */
+@font-face {
+    font-family: 'Gaegu';
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+    src: url(Gaegu-Bold-subset.woff2) format('woff2');
 }
 @font-face {
     font-family: 'Outfit';

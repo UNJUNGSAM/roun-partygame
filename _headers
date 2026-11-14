@@ -17,6 +17,12 @@
 /styles.css
   Cache-Control: public, max-age=0, must-revalidate
 
+/family-anim.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/family-scenes.js
+  Cache-Control: public, max-age=0, must-revalidate
+
 /sw.js
   Cache-Control: public, max-age=0, must-revalidate
 
