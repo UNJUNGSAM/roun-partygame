@@ -7,19 +7,20 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="mobile-web-app-capable" content="yes">
-    <meta name="description" content="로운네 파티게임 - 가족과 친구가 함께하는 프리미엄 파티 게임">
+    <meta name="description" content="로운네 파티게임 - 가족·친구·워크샵 모임에서 함께 하는 퀴즈 게임과 가족 놀이 모음">
     <link rel="manifest" href="manifest.webmanifest">
+    <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png">
+    <link rel="apple-touch-icon" href="icons/icon-180.png">
 
     <title>로운네 파티게임</title>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+    <link rel="preload" href="fonts/LINESeedKR-Bd.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="fonts/fonts.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="vendor/confetti.browser.js"></script>
     <script src="questions.js"></script>
     <script src="characters.js"></script>
+    <script src="games-offline.js"></script>
 
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -106,6 +107,20 @@
         <!-- crown — 최종 결과 -->
         <symbol id="i-crown" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
             <path d="M11.562 3.266a.5.5 0 0 1 .876 0L15.39 8.87a1 1 0 0 0 1.516.294L21.183 5.5a.5.5 0 0 1 .798.519l-2.834 10.246a1 1 0 0 1-.956.734H5.81a1 1 0 0 1-.957-.734L2.02 6.02a.5.5 0 0 1 .798-.519l4.276 3.664a1 1 0 0 0 1.516-.294z"/><path d="M5 21h14"/>
+        </symbol>
+        <!-- 가족 놀이 종류 아이콘 (같은 선 굵기로 직접 그림) -->
+        <symbol id="i-off-hand" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 4h12l-1.5 14.2a2 2 0 0 1-2 1.8H9.5a2 2 0 0 1-2-1.8z"/><path d="M6.6 9.5h10.8"/>
+        </symbol>
+        <symbol id="i-off-tissue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3.5 11.5h17v7.5a1.5 1.5 0 0 1-1.5 1.5H5A1.5 1.5 0 0 1 3.5 19z"/><path d="M9 15.5h6"/><path d="M8.2 11.5C7.8 7.6 9.6 4.6 12.3 2.5c.9 2.3 3.4 3.3 3.7 6c.1 1.1-.1 2.1-.5 3"/>
+        </symbol>
+        <symbol id="i-off-chat" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/>
+        </symbol>
+        <!-- undo-2 — 되돌리기 -->
+        <symbol id="i-undo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 14 4 9l5-5"/><path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"/>
         </symbol>
         <!-- music — 배경음악 -->
         <symbol id="i-music" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round">
@@ -199,24 +214,124 @@
     <!-- ==================== SCREEN: MODE ==================== -->
     <section id="screen-mode" class="screen active">
         <div class="mode-wrap">
-            <h1 class="display-1">오늘은 누구와<br>함께 노실 건가요?</h1>
-            <p class="display-sub">모임에 맞는 모드를 골라주세요 · 테마 색도 함께 바뀌어요</p>
+            <div class="mode-hero">
+                <!-- HERO-ART:START (tools/hero-art.js로 생성) -->
+                <svg class="hero-art" viewBox="0 0 640 480" role="img" aria-label="줄무늬 파티 텐트와 팀 풍선, 색종이가 날리는 그림">
+                <defs><clipPath id="hero-roof"><path d="M320 112 C262 138 196 200 150 268 L490 268 C444 200 378 138 320 112 Z"/></clipPath><clipPath id="hero-wall"><path d="M178 262 H462 L474 432 H166 Z"/></clipPath></defs>
+                <circle class="ill-tint" cx="320" cy="262" r="186"/>
+                <ellipse cx="320" cy="440" rx="304" ry="34" fill="#ebddc5"/>
+                <path d="M-6,44 Q150,132 320,74" fill="none" stroke="#c0b6a5" stroke-width="3" stroke-linecap="round"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#c67139" transform="translate(28.3 61.5) rotate(24.6)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#b8952f" transform="translate(77.9 80.4) rotate(17.1)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#728157" transform="translate(128.1 92.3) rotate(9.3)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#5b7d8c" transform="translate(179.1 97) rotate(1.3)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#8a6a86" transform="translate(230.7 94.5) rotate(-6.6)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#c67139" transform="translate(283 84.9) rotate(-14)"/>
+                <path d="M320,74 Q490,132 646,44" fill="none" stroke="#c0b6a5" stroke-width="3" stroke-linecap="round"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#728157" transform="translate(357 84.9) rotate(14)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#5b7d8c" transform="translate(409.3 94.5) rotate(6.6)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#8a6a86" transform="translate(460.9 97) rotate(-1.3)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#c67139" transform="translate(511.9 92.3) rotate(-9.3)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#b8952f" transform="translate(562.1 80.4) rotate(-17.1)"/>
+                <path d="M-13 0 H13 L0 26 Z" fill="#728157" transform="translate(611.7 61.5) rotate(-24.6)"/>
+                <g>
+                <path d="M178 262 H462 L474 432 H166 Z" fill="#fffdf6"/>
+                <g clip-path="url(#hero-wall)">
+                <rect class="ill-accent" x="150" y="262" width="68" height="176"/>
+                <rect class="ill-accent" x="286" y="262" width="68" height="176"/>
+                <rect class="ill-accent" x="422" y="262" width="68" height="176"/>
+                </g>
+                <path d="M270 432 V386 a50 50 0 0 1 100 0 V432 Z" fill="#474238"/>
+                <path d="M270 432 V386 a50 50 0 0 1 50 -50 C317 372 300 408 270 432 Z" fill="#fffdf6"/>
+                <path d="M370 432 V386 a50 50 0 0 0 -50 -50 C323 372 340 408 370 432 Z" fill="#fffdf6"/>
+                <path d="M320 112 C262 138 196 200 150 268 L490 268 C444 200 378 138 320 112 Z" fill="#fffdf6"/>
+                <g clip-path="url(#hero-roof)">
+                <path class="ill-accent" d="M320 104 L150 272 H218 Z"/>
+                <path class="ill-accent" d="M320 104 L286 272 H354 Z"/>
+                <path class="ill-accent" d="M320 104 L422 272 H490 Z"/>
+                </g>
+                <path fill="#fffdf6" d="M150 266 a34 30 0 0 0 68 0 Z"/>
+                <path class="ill-accent" d="M218 266 a34 30 0 0 0 68 0 Z"/>
+                <path fill="#fffdf6" d="M286 266 a34 30 0 0 0 68 0 Z"/>
+                <path class="ill-accent" d="M354 266 a34 30 0 0 0 68 0 Z"/>
+                <path fill="#fffdf6" d="M422 266 a34 30 0 0 0 68 0 Z"/>
+                <rect x="230" y="286" width="180" height="42" rx="21" fill="#201e1d"/>
+                <text x="320" y="314" text-anchor="middle" font-family="'LINE Seed KR','Pretendard',sans-serif" font-weight="700" font-size="19" letter-spacing="-0.3" fill="#fffdf6">로운네 파티게임</text>
+                <path d="M320 112 V66" stroke="#474238" stroke-width="5" stroke-linecap="round"/>
+                <path d="M322 66 L362 80 L322 96 Z" fill="#b8952f"/>
+                </g>
+                <g class="hero-balloon b1">
+                <path d="M92 254 C102 294 72 328 82.4 368" fill="none" stroke="#c0b6a5" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M84 255 L92 241 L100 255 Z" fill="#c67139"/>
+                <ellipse cx="92" cy="196" rx="40" ry="48" fill="#c67139"/>
+                <ellipse cx="75.2" cy="175.8" rx="8" ry="14.4" fill="#fff" opacity=".28" transform="rotate(28 75.2 175.8)"/>
+                <text x="92" y="209" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="36" fill="#fff">A</text>
+                </g>
+                <g class="hero-balloon b2">
+                <path d="M552 237.5 C577 279.9 545.2 315.9 564.8 358.3" fill="none" stroke="#c0b6a5" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M543.5 238.5 L552 223.7 L560.5 238.5 Z" fill="#728157"/>
+                <ellipse cx="552" cy="176" rx="42.4" ry="50.9" fill="#728157"/>
+                <ellipse cx="534.2" cy="154.6" rx="8.5" ry="15.3" fill="#fff" opacity=".28" transform="rotate(28 534.2 154.6)"/>
+                <text x="552" y="189.8" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="38.2" fill="#fff">B</text>
+                </g>
+                <g class="hero-balloon b3">
+                <path d="M46 364.9 C53.8 394.5 31.6 419.7 39.6 449.3" fill="none" stroke="#c0b6a5" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M40.1 365.7 L46 355.3 L51.9 365.7 Z" fill="#5b7d8c"/>
+                <ellipse cx="46" cy="322" rx="29.6" ry="35.5" fill="#5b7d8c"/>
+                <ellipse cx="33.6" cy="307.1" rx="5.9" ry="10.7" fill="#fff" opacity=".28" transform="rotate(28 33.6 307.1)"/>
+                <text x="46" y="331.6" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="26.6" fill="#fff">C</text>
+                </g>
+                <g class="hero-balloon b4">
+                <path d="M604 352.4 C620.8 384.4 596.8 411.6 610.4 443.6" fill="none" stroke="#c0b6a5" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M597.6 353.2 L604 342 L610.4 353.2 Z" fill="#8a6a86"/>
+                <ellipse cx="604" cy="306" rx="32" ry="38.4" fill="#8a6a86"/>
+                <ellipse cx="590.6" cy="289.9" rx="6.4" ry="11.5" fill="#fff" opacity=".28" transform="rotate(28 590.6 289.9)"/>
+                <text x="604" y="316.4" text-anchor="middle" font-family="'Outfit',sans-serif" font-weight="800" font-size="28.8" fill="#fff">D</text>
+                </g>
+                <circle cx="208" cy="66" r="6" fill="#c67139"/>
+                <rect x="227" y="114" width="18" height="8" rx="4" fill="#5b7d8c" transform="rotate(-30 236 118)"/>
+                <rect x="411" y="56" width="18" height="8" rx="4" fill="#728157" transform="rotate(35 420 60)"/>
+                <circle cx="452" cy="116" r="6" fill="#8a6a86"/>
+                <rect x="147" y="114" width="18" height="8" rx="4" fill="#b8952f" transform="rotate(50 156 118)"/>
+                <rect x="489" y="80" width="18" height="8" rx="4" fill="#c67139" transform="rotate(-40 498 84)"/>
+                <circle cx="118" cy="96" r="6" fill="#728157"/>
+                <rect x="531" y="56" width="18" height="8" rx="4" fill="#b8952f" transform="rotate(15 540 60)"/>
+                <rect x="17" y="146" width="18" height="8" rx="4" fill="#8a6a86" transform="rotate(40 26 150)"/>
+                <circle cx="618" cy="148" r="6" fill="#5b7d8c"/>
+                <rect x="167" y="210" width="18" height="8" rx="4" fill="#b8952f" transform="rotate(-12 176 214)"/>
+                <rect x="461" y="206" width="18" height="8" rx="4" fill="#c67139" transform="rotate(28 470 210)"/>
+                <path class="hero-spark s1" d="M268 37 Q268 50 281 50 Q268 50 268 63 Q268 50 255 50 Q268 50 268 37 Z" fill="#b8952f"/>
+                <path class="hero-spark s3" d="M584 97 Q584 108 595 108 Q584 108 584 119 Q584 108 573 108 Q584 108 584 97 Z" fill="#b8952f"/>
+                <path class="hero-spark s2" d="M30 222 Q30 232 40 232 Q30 232 30 242 Q30 232 20 232 Q30 232 30 222 Z" fill="#c67139"/>
+                <path class="hero-spark s1" d="M612 224 Q612 232 620 232 Q612 232 612 240 Q612 232 604 232 Q612 232 612 224 Z" fill="#b8952f"/>
+                <g transform="translate(92 398) scale(.9)"><rect x="-7" y="-52" width="14" height="14" rx="4" fill="#474238"/><circle r="36" fill="#5b7d8c"/><circle r="26" fill="#fffdf6"/><path d="M0 -15 V0 L11 8" fill="none" stroke="#474238" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/></g>
+                <g transform="translate(546 396) scale(.92)"><path d="M-58 -38 h116 a14 14 0 0 1 14 14 v36 a14 14 0 0 1 -14 14 h-66 l-20 20 v-20 h-30 a14 14 0 0 1 -14 -14 v-36 a14 14 0 0 1 14 -14 Z" fill="#fffdf6"/><text x="0" y="5" text-anchor="middle" font-family="'LINE Seed KR','Pretendard',sans-serif" font-weight="700" font-size="30" letter-spacing="5" fill="#201e1d">ㅍㅌ</text></g>
+                </svg>
+                <!-- HERO-ART:END -->
+            </div>
+            <div class="mode-copy">
+                <h1 class="display-1">오늘은 누구와<br>함께 노실 건가요?</h1>
+                <p class="display-sub">모임에 맞는 모드를 골라 주세요</p>
 
-            <div class="mode-cards">
-                <button class="mode-card mode-card--party" onclick="setMode('party')">
-                    <div class="mode-card-art"><svg><use href="#i-mode-party"/></svg></div>
-                    <div class="mode-card-body">
-                        <span class="mode-card-title">파티 모드</span>
-                        <span class="mode-card-sub">가족 · 친구 · 2~4팀</span>
-                    </div>
-                </button>
-                <button class="mode-card mode-card--workshop" onclick="setMode('workshop')">
-                    <div class="mode-card-art"><svg><use href="#i-mode-workshop"/></svg></div>
-                    <div class="mode-card-body">
-                        <span class="mode-card-title">워크샵 모드</span>
-                        <span class="mode-card-sub">단체 행사 · 4~10팀</span>
-                    </div>
-                </button>
+                <div class="mode-cards">
+                    <button class="mode-card mode-card--party" onclick="setMode('party')">
+                        <div class="mode-card-art"><svg><use href="#i-mode-party"/></svg></div>
+                        <div class="mode-card-body">
+                            <span class="mode-card-title">파티 모드</span>
+                            <span class="mode-card-sub">가족 · 친구 · 2~4팀</span>
+                        </div>
+                        <svg class="mode-card-chev"><use href="#i-chevron-right"/></svg>
+                    </button>
+                    <button class="mode-card mode-card--workshop" onclick="setMode('workshop')">
+                        <div class="mode-card-art"><svg><use href="#i-mode-workshop"/></svg></div>
+                        <div class="mode-card-body">
+                            <span class="mode-card-title">워크샵 모드</span>
+                            <span class="mode-card-sub">단체 행사 · 4~10팀</span>
+                        </div>
+                        <svg class="mode-card-chev"><use href="#i-chevron-right"/></svg>
+                    </button>
+                </div>
+                <p class="mode-foot" id="mode-foot"></p>
             </div>
         </div>
     </section>
@@ -263,7 +378,7 @@
                     <div class="game-card-info">
                         <span class="game-card-tag">시간제 · 최대 30문제</span>
                         <span class="game-card-title">스피드 게임</span>
-                        <span class="game-card-sub">설명 없이 단어 맞추기</span>
+                        <span class="game-card-sub">제시어를 말하지 않고 설명하기</span>
                     </div>
                     <div class="game-card-art"><svg><use href="#i-game-speed"/></svg></div>
                     <svg class="game-card-chev"><use href="#i-chevron-right"/></svg>
@@ -304,6 +419,48 @@
                     <div class="game-card-art"><svg><use href="#i-game-fourletter"/></svg></div>
                     <svg class="game-card-chev"><use href="#i-chevron-right"/></svg>
                 </button>
+            </div>
+
+            <button class="offline-banner" onclick="openOfflineList()">
+                <svg class="offline-banner-art" viewBox="0 0 132 92" aria-hidden="true">
+                    <ellipse cx="62" cy="84" rx="58" ry="7" fill="#ebddc5"/>
+                    <path d="M18 54h26l-3.4 28H21.4z" fill="#c67139"/><path d="M46 54h26l-3.4 28H49.4z" fill="#b8952f"/><path d="M32 24h26l-3.4 28H35.4z" fill="#5b7d8c"/>
+                    <path d="M19.2 62h23.6M47.2 62h23.6M33.2 32h23.6" stroke="#fffdf6" stroke-width="3" stroke-linecap="round" opacity=".7"/>
+                    <path d="M104 51c5 10-4 18 1 31" fill="none" stroke="#c0b6a5" stroke-width="2.4" stroke-linecap="round"/>
+                    <path d="M99 52l5-7 5 7z" fill="#728157"/><ellipse cx="104" cy="27" rx="19" ry="23" fill="#728157"/>
+                    <ellipse cx="96.5" cy="17.5" rx="4" ry="7" fill="#fff" opacity=".28" transform="rotate(28 96.5 17.5)"/>
+                    <path d="M76 6Q76 14 84 14Q76 14 76 22Q76 14 68 14Q76 14 76 6Z" fill="#b8952f"/>
+                </svg>
+                <span class="offline-banner-body">
+                    <span class="offline-banner-title">가족 놀이 모음</span>
+                    <span class="offline-banner-sub">휴지 멀리 던지기, 이마 휴지 일어나기, 엉덩이로 이름 쓰기처럼 요즘 가족 모임에서 하는 챌린지예요. 규칙을 보고 놀이한 뒤 점수만 입력하세요.</span>
+                </span>
+                <span class="offline-banner-count"><b id="offline-count">0</b>가지</span>
+                <svg class="game-card-chev"><use href="#i-chevron-right"/></svg>
+            </button>
+        </div>
+    </section>
+
+    <!-- ==================== SCREEN: 가족 놀이 목록 ==================== -->
+    <section id="screen-offline" class="screen">
+        <div class="screen-pad">
+            <button class="btn-ghost" onclick="showScreen('screen-menu')" style="margin-bottom:20px"><svg width="16" height="16" style="margin-right:4px"><use href="#i-back"/></svg>게임 목록</button>
+            <div class="section-title">
+                <h2>가족 놀이 모음</h2>
+                <p class="section-sub">휴지·컵·풍선만 있으면 되는 가족 챌린지예요. 규칙을 보고 놀이한 뒤 점수만 입력하세요.</p>
+            </div>
+            <div class="filter-row" id="offline-filter" role="group" aria-label="놀이 종류"></div>
+            <div class="offline-grid" id="offline-grid"></div>
+        </div>
+    </section>
+
+    <!-- ==================== SCREEN: 가족 놀이 규칙 ==================== -->
+    <section id="screen-offline-detail" class="screen">
+        <div class="screen-pad offline-detail-wrap">
+            <button class="btn-ghost" onclick="showScreen('screen-offline')" style="margin-bottom:20px"><svg width="16" height="16" style="margin-right:4px"><use href="#i-back"/></svg>놀이 목록</button>
+            <div class="panel offline-detail" id="offline-detail"></div>
+            <div class="sticky-cta">
+                <button class="btn btn-3d btn-primary btn-big w-full" onclick="openOfflineScore()">놀이가 끝났어요 · 점수 입력</button>
             </div>
         </div>
     </section>
@@ -447,11 +604,13 @@
                             <button class="btn btn-3d btn-coral btn-fail" onclick="handleFourLetterFail()">실패</button>
                             <button class="btn btn-3d btn-emerald btn-ok" onclick="handleFourLetterCorrect()"><svg><use href="#i-check"/></svg>정답</button>
                         </div>
+                        <button class="btn-stop btn-stop--stage btn-undo" onclick="undoLast()" aria-label="방금 답 되돌리기" disabled><svg><use href="#i-undo"/></svg></button>
                         <button class="btn-stop btn-stop--stage" onclick="pauseGame()" aria-label="일시정지"><svg><use href="#i-pause"/></svg></button>
                     </div>
                     <div class="shortcut-guide" id="shortcut-guide">
                         <span><kbd>←</kbd>패스 / 실패</span>
                         <span><kbd>→</kbd>성공 / 정답</span>
+                        <span><kbd>Bksp</kbd>되돌리기</span>
                         <span><kbd>Esc</kbd>일시정지</span>
                     </div>
                 </div>
@@ -462,6 +621,7 @@
                 <div class="timer" id="timer-display">60</div>
                 <div class="timer-label">SEC</div>
                 <div class="time-column" id="time-column"><div class="time-column-fill" id="time-column-fill"></div></div>
+                <button class="btn-stop btn-stop--phone btn-undo" onclick="undoLast()" aria-label="방금 답 되돌리기" disabled><svg><use href="#i-undo"/></svg></button>
                 <button class="btn-stop btn-stop--phone" onclick="pauseGame()" aria-label="일시정지"><svg><use href="#i-pause"/></svg></button>
             </aside>
         </div>
@@ -501,6 +661,7 @@
 
 <dialog id="modal-final" aria-labelledby="final-team">
     <div class="modal modal-final">
+        <svg class="final-garland" viewBox="0 0 480 70" preserveAspectRatio="xMidYMin slice" aria-hidden="true"><path d="M-4 6 Q120 58 240 10" fill="none" stroke="#c0b6a5" stroke-width="2.5" stroke-linecap="round"/><path d="M-11 0H11L0 22Z" fill="#c67139" transform="translate(19.4 14.9) rotate(19.0)"/><path d="M-11 0H11L0 22Z" fill="#b8952f" transform="translate(52.8 24.6) rotate(13.3)"/><path d="M-11 0H11L0 22Z" fill="#728157" transform="translate(86.0 30.6) rotate(7.2)"/><path d="M-11 0H11L0 22Z" fill="#5b7d8c" transform="translate(119.0 33.0) rotate(0.9)"/><path d="M-11 0H11L0 22Z" fill="#8a6a86" transform="translate(151.9 31.7) rotate(-5.4)"/><path d="M-11 0H11L0 22Z" fill="#c67139" transform="translate(184.7 26.8) rotate(-11.7)"/><path d="M-11 0H11L0 22Z" fill="#b8952f" transform="translate(217.3 18.2) rotate(-17.8)"/><path d="M240 10 Q360 58 484 6" fill="none" stroke="#c0b6a5" stroke-width="2.5" stroke-linecap="round"/><path d="M-11 0H11L0 22Z" fill="#5b7d8c" transform="translate(262.7 18.2) rotate(17.8)"/><path d="M-11 0H11L0 22Z" fill="#8a6a86" transform="translate(295.3 26.8) rotate(11.7)"/><path d="M-11 0H11L0 22Z" fill="#c67139" transform="translate(328.1 31.7) rotate(5.4)"/><path d="M-11 0H11L0 22Z" fill="#b8952f" transform="translate(361.0 33.0) rotate(-0.9)"/><path d="M-11 0H11L0 22Z" fill="#728157" transform="translate(394.0 30.6) rotate(-7.2)"/><path d="M-11 0H11L0 22Z" fill="#5b7d8c" transform="translate(427.2 24.6) rotate(-13.3)"/><path d="M-11 0H11L0 22Z" fill="#8a6a86" transform="translate(460.6 14.9) rotate(-19.0)"/></svg>
         <div class="final-crown" id="final-crown"></div>
         <div class="final-tag" id="final-tag"><svg><use href="#i-crown"/></svg>우승</div>
         <div class="final-team" id="final-team">팀 이름</div>
@@ -508,6 +669,33 @@
         <div class="result-standings final-standings" id="final-standings"></div>
         <button class="btn btn-3d btn-primary btn-big w-full mb-4" onclick="closeDialog('modal-final')">계속 플레이하기</button>
         <button class="btn-ghost w-full" onclick="closeDialog('modal-final'); openResetModal()">새 게임 시작 (점수 초기화)</button>
+    </div>
+</dialog>
+
+<dialog id="modal-offline-score" aria-labelledby="offline-score-title">
+    <div class="modal">
+        <h3 class="modal-title" id="offline-score-title">점수 입력</h3>
+        <p class="modal-sub" id="offline-score-sub">이긴 팀에 점수를 주세요</p>
+        <div class="segmented segmented--sm" id="offline-step" role="group" aria-label="한 번에 더할 점수">
+            <button type="button" data-step="10" aria-pressed="false" onclick="setOffStep(10)">10점씩</button>
+            <button type="button" data-step="50" aria-pressed="false" onclick="setOffStep(50)">50점씩</button>
+            <button type="button" data-step="100" aria-pressed="true" onclick="setOffStep(100)">100점씩</button>
+        </div>
+        <div id="offline-score-list" class="modal-scroll no-scrollbar" style="margin-top:14px"></div>
+        <div style="display:flex; gap:10px; margin-top:18px;">
+            <button class="btn-ghost w-full" onclick="closeDialog('modal-offline-score')">취소</button>
+            <button class="btn btn-3d btn-primary w-full" onclick="applyOfflineScore()">점수 반영</button>
+        </div>
+    </div>
+</dialog>
+
+<dialog id="modal-standings" aria-labelledby="standings-title">
+    <div class="modal">
+        <h3 class="modal-title" id="standings-title">점수를 반영했어요</h3>
+        <p class="modal-sub" id="standings-sub"></p>
+        <div class="result-standings" id="standings-list"></div>
+        <button class="btn btn-3d btn-primary btn-big w-full mb-4" onclick="closeAndShow('screen-offline')">다른 놀이 고르기</button>
+        <button class="btn-ghost w-full" onclick="closeAndShow('screen-menu')">게임 목록으로</button>
     </div>
 </dialog>
 
@@ -546,7 +734,7 @@
 <dialog id="modal-scoreboard">
     <div class="modal">
         <h3 class="modal-title">점수 관리</h3>
-        <p class="modal-sub">각 팀의 점수를 직접 조정할 수 있어요</p>
+        <p class="modal-sub">−, +는 10점씩 바뀌어요. 숫자를 눌러 직접 고칠 수도 있어요.</p>
         <div id="scoreboard-list" class="modal-scroll no-scrollbar"></div>
         <button class="btn-ghost w-full mt-4" onclick="closeDialog('modal-scoreboard')">닫기</button>
     </div>
@@ -1274,6 +1462,7 @@ function updateStageScore() {
     rankEl.textContent = '점 · ' + rank + '위';
 }
 function refreshStage() {
+    paintUndo();
     renderTicks();
     updateComboBadge();
     updateStageScore();
@@ -1733,26 +1922,23 @@ function stopGame(isTimeOver = false, reason = 'manual') {
     }
 }
 
-// 결과 모달 순위표 — 순위 · 모노그램 · 이름 · 점수 막대 · 점수 · 순위 변동
-function renderResultStandings(before, after) {
-    const el = document.getElementById('result-standings');
-    if (!el) return;
-    if (App.teams.length < 2) { el.innerHTML = ''; return; }
+// 순위표 — 순위 · 모노그램 · 이름 · 순위 변동 · 점수 막대 · 점수
+// isCurrent(i): 강조할 팀. focus: 팀이 많을 때 상위 5팀에 더해 꼭 보여 줄 팀
+function standingsHtml(before, after, isCurrent, focus = []) {
     const order = App.teams.map((t, i) => i).sort((a, b) => after[b] - after[a] || a - b);
     const top = Math.max(1, ...after);
-    // 팀이 많으면 상위 5팀 + 이번 팀만
     let shown = order;
     if (order.length > 6) {
         shown = order.slice(0, 5);
-        if (!shown.includes(App.currentTeamIndex)) shown.push(App.currentTeamIndex);
+        focus.forEach(i => { if (!shown.includes(i)) shown.push(i); });
     }
-    el.innerHTML = '<div class="standings-head">현재 순위</div>' + shown.map(i => {
+    return '<div class="standings-head">현재 순위</div>' + shown.map(i => {
         const r0 = rankOf(before, i), r1 = rankOf(after, i);
         let move = '<span></span>'; // 변동 없음도 자리를 차지해 열이 맞도록
         if (r1 < r0) move = '<span class="rank-move up" aria-label="' + (r0 - r1) + '계단 상승"><svg><use href="#i-chevron-up"/></svg>' + (r0 - r1) + '</span>';
         else if (r1 > r0) move = '<span class="rank-move down" aria-label="' + (r1 - r0) + '계단 하락"><svg><use href="#i-chevron-down"/></svg>' + (r1 - r0) + '</span>';
-        const pct = Math.round((after[i] / top) * 100);
-        return '<div class="standing' + (i === App.currentTeamIndex ? ' is-current' : '') + '">'
+        const pct = Math.max(0, Math.round((after[i] / top) * 100));
+        return '<div class="standing' + (isCurrent(i) ? ' is-current' : '') + '">'
             + '<span class="standing-rank">' + r1 + '</span>'
             + avatarHtml(i, 'avatar-xs')
             + '<span class="standing-name">' + escapeHtml(App.teams[i].name) + '</span>'
@@ -1761,6 +1947,12 @@ function renderResultStandings(before, after) {
             + '<span class="standing-score">' + after[i] + '</span>'
             + '</div>';
     }).join('');
+}
+function renderResultStandings(before, after) {
+    const el = document.getElementById('result-standings');
+    if (!el) return;
+    el.innerHTML = App.teams.length < 2 ? ''
+        : standingsHtml(before, after, i => i === App.currentTeamIndex, [App.currentTeamIndex]);
 }
 
 /* =============== 최종 결과 발표 — 점수는 지우지 않음 =============== */
@@ -1856,8 +2048,44 @@ document.addEventListener('visibilitychange', () => {
 });
 
 /* =============== Game Action Handlers =============== */
+// 연타 방지 — 아이들이 버튼을 두드려도 한 번에 한 문제만 넘어가게
+let lastAnswerAt = 0;
+function tooFast() {
+    const now = Date.now();
+    if (now - lastAnswerAt < 220) return true;
+    lastAnswerAt = now;
+    return false;
+}
+
+// 방금 답 되돌리기 — 잘못 누른 성공/패스를 취소하고 그 문제로 돌아감 (스피드·몸으로·초성)
+function canUndo() {
+    const g = App.game;
+    return !!ROUND_CAP[g.type] && !g.ended && !g.isTransitioning && (g.marks || []).length > 0;
+}
+function paintUndo() {
+    const on = canUndo();
+    document.querySelectorAll('.btn-undo').forEach(b => {
+        b.disabled = !on;
+        b.classList.toggle('hidden', !ROUND_CAP[App.game.type]);
+    });
+}
+function undoLast() {
+    if (!canUndo()) return;
+    const g = App.game;
+    const last = g.marks.pop();
+    if (last === 'ok') g.score = Math.max(0, g.score - 1);
+    // 콤보는 남은 기록의 끝에서부터 다시 계산
+    let c = 0;
+    for (let i = g.marks.length - 1; i >= 0 && g.marks[i] === 'ok'; i--) c++;
+    g.combo = c;
+    Sound.successCount = Math.min(c, 5);
+    g.currentIndex = Math.max(0, g.currentIndex - 1);
+    Sound.play('pass');
+    renderQuiz();
+}
+
 function correctQuiz() {
-    if (App.game.isTransitioning) return;
+    if (App.game.isTransitioning || tooFast()) return;
     App.game.isTransitioning = true;
     Sound.play('success');
     buzz(12);
@@ -1869,7 +2097,7 @@ function correctQuiz() {
 }
 
 function passQuiz() {
-    if (App.game.isTransitioning) return;
+    if (App.game.isTransitioning || tooFast()) return;
     App.game.isTransitioning = true;
     Sound.play('pass');
     App.game.combo = 0;
@@ -2038,6 +2266,7 @@ function handleFourLetterCorrect() {
 function showScreen(id) {
     closeAllDialogs();
     closeMenu();
+    if (id !== 'screen-offline-detail' && typeof stopOffTimer === 'function') stopOffTimer();
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     const scr = document.getElementById(id);
     scr.classList.add('active');
@@ -2121,9 +2350,9 @@ function renderScoreboardList() {
                 <span class="score-edit-name">${escapeHtml(t.name)}</span>
             </div>
             <div class="score-edit-ctl">
-                <button class="score-pm" onclick="adjScore(${i}, -10)">−</button>
-                <span class="score-edit-val">${t.score}</span>
-                <button class="score-pm" onclick="adjScore(${i}, 10)">+</button>
+                <button class="score-pm" onclick="adjScore(${i}, -10)" aria-label="${escapeHtml(t.name)} 10점 빼기">−</button>
+                <input class="score-edit-val score-edit-input" type="number" inputmode="numeric" value="${t.score}" aria-label="${escapeHtml(t.name)} 점수" onchange="setScore(${i}, this.value)">
+                <button class="score-pm" onclick="adjScore(${i}, 10)" aria-label="${escapeHtml(t.name)} 10점 더하기">+</button>
             </div>
         </div>
     `).join('');
@@ -2133,6 +2362,14 @@ function openScoreBoard() {
     renderScoreboardList();
     document.getElementById('modal-scoreboard').showModal();
     Sound.play('modal');
+}
+function setScore(i, v) {
+    const n = parseInt(v, 10);
+    if (!Number.isFinite(n)) { renderScoreboardList(); return; }
+    App.teams[i].score = Math.max(-99999, Math.min(99999, n));
+    persist();
+    renderScoreboardList();
+    updateScoreboard();
 }
 function adjScore(i, v) {
     App.teams[i].score += v;
@@ -2213,9 +2450,199 @@ function saveGameScoreSettings() {
     Sound.play('success');
 }
 
+/* =============== 가족 놀이 모음 — 규칙 안내 + 점수 입력 (games-offline.js) =============== */
+const OFF_GAMES = window.OFFLINE_GAMES || [];
+const OFF_CATS = window.OFFLINE_CATS || {};
+const OFF_ICON = { tissue: 'i-off-tissue', table: 'i-off-hand', body: 'i-game-body', talk: 'i-off-chat' };
+let offFilter = 'all';
+let offGame = null;
+let offDraft = [];
+let offStep = 100;
+const offTimer = { total: 0, left: 0, id: null };
+
+function openOfflineList() {
+    Sound.play('tap');
+    renderOfflineList();
+    showScreen('screen-offline');
+}
+function setOfflineFilter(c) {
+    offFilter = c;
+    Sound.play('tap');
+    renderOfflineList();
+}
+function renderOfflineList() {
+    const cats = [['all', '전체']].concat(Object.keys(OFF_CATS).map(k => [k, OFF_CATS[k].label]));
+    document.getElementById('offline-filter').innerHTML = cats.map(([k, label]) => {
+        const n = k === 'all' ? OFF_GAMES.length : OFF_GAMES.filter(g => g.cat === k).length;
+        return '<button type="button" class="chip' + (offFilter === k ? ' active' : '') + '" aria-pressed="' + (offFilter === k) + '" onclick="setOfflineFilter(\'' + k + '\')">'
+            + escapeHtml(label) + '<span class="chip-count">' + n + '</span></button>';
+    }).join('');
+    const list = OFF_GAMES.filter(g => offFilter === 'all' || g.cat === offFilter);
+    document.getElementById('offline-grid').innerHTML = list.map(g => {
+        const cat = OFF_CATS[g.cat] || { label: '' };
+        return '<button class="off-card off-card--' + g.cat + '" onclick="openOfflineGame(\'' + g.id + '\')">'
+            + '<span class="off-card-art"><svg><use href="#' + (OFF_ICON[g.cat] || 'i-dice') + '"/></svg></span>'
+            + '<span class="off-card-body">'
+            + '<span class="off-card-title">' + escapeHtml(g.name) + '</span>'
+            + '<span class="off-card-sub">' + escapeHtml(g.line) + '</span>'
+            + '<span class="off-card-meta">' + escapeHtml(cat.label) + ' · ' + escapeHtml(g.time) + ' · ' + (g.items.length ? '준비물 ' + g.items.length + '가지' : '준비물 없음') + '</span>'
+            + '</span>'
+            + '<svg class="game-card-chev"><use href="#i-chevron-right"/></svg>'
+            + '</button>';
+    }).join('');
+}
+function openOfflineGame(id) {
+    const g = OFF_GAMES.find(x => x.id === id);
+    if (!g) return;
+    offGame = g;
+    Sound.play('tap');
+    const cat = OFF_CATS[g.cat] || { label: '' };
+    const items = g.items.length
+        ? '<ul class="off-items">' + g.items.map(x => '<li>' + escapeHtml(x) + '</li>').join('') + '</ul>'
+        : '<p class="off-none">준비물 없이 바로 시작할 수 있어요.</p>';
+    const timer = g.timer
+        ? '<div class="off-timer" id="off-timer">'
+            + '<div class="off-timer-num" id="off-timer-num" role="timer">' + fmtClock(g.timer) + '</div>'
+            + '<div class="off-timer-btns">'
+            + '<button class="btn btn-3d btn-emerald" id="off-timer-go" onclick="toggleOffTimer()">타이머 시작</button>'
+            + '<button class="btn-ghost" onclick="resetOffTimer()">처음으로</button>'
+            + '</div></div>'
+        : '';
+    document.getElementById('offline-detail').innerHTML =
+        '<div class="off-head off-card--' + g.cat + '">'
+        + '<span class="off-card-art off-card-art--lg"><svg><use href="#' + (OFF_ICON[g.cat] || 'i-dice') + '"/></svg></span>'
+        + '<div><h2 class="off-title">' + escapeHtml(g.name) + '</h2><p class="off-line">' + escapeHtml(g.line) + '</p></div>'
+        + '</div>'
+        + '<div class="off-facts">'
+        + '<span class="off-fact"><b>종류</b>' + escapeHtml(cat.label) + '</span>'
+        + '<span class="off-fact"><b>참가</b>' + escapeHtml(g.who) + '</span>'
+        + '<span class="off-fact"><b>시간</b>' + escapeHtml(g.time) + '</span>'
+        + '</div>'
+        + '<h3 class="off-h">준비물</h3>' + items
+        + '<h3 class="off-h">진행 순서</h3>'
+        + '<ol class="off-rules">' + g.rules.map(x => '<li>' + escapeHtml(x) + '</li>').join('') + '</ol>'
+        + timer
+        + '<h3 class="off-h">승부 내는 법</h3><p class="off-win">' + escapeHtml(g.win) + '</p>'
+        + '<div class="howto off-tip"><svg><use href="#i-bulb"/></svg><p>' + escapeHtml(g.tip) + '</p></div>';
+    clearInterval(offTimer.id);
+    offTimer.id = null;
+    offTimer.total = offTimer.left = g.timer || 0;
+    paintOffTimer();
+    showScreen('screen-offline-detail');
+}
+function fmtClock(sec) {
+    const m = Math.floor(sec / 60), s = sec % 60;
+    return m + ':' + String(s).padStart(2, '0');
+}
+// 놀이용 타이머 — 시작/멈춤, 마지막 10초 똑딱, 끝나면 차임
+function paintOffTimer() {
+    const num = document.getElementById('off-timer-num');
+    const go = document.getElementById('off-timer-go');
+    if (!num || !go) return;
+    num.textContent = fmtClock(offTimer.left);
+    num.classList.toggle('danger', offTimer.left <= 10 && offTimer.left > 0 && !!offTimer.id);
+    go.textContent = offTimer.id ? '멈춤' : (offTimer.left === 0 ? '다시 시작' : (offTimer.left < offTimer.total ? '이어서' : '타이머 시작'));
+}
+function stopOffTimer() {
+    clearInterval(offTimer.id);
+    offTimer.id = null;
+    paintOffTimer();
+}
+function resetOffTimer() {
+    stopOffTimer();
+    offTimer.left = offTimer.total;
+    paintOffTimer();
+    Sound.play('tap');
+}
+function toggleOffTimer() {
+    if (offTimer.id) { stopOffTimer(); Sound.play('tap'); return; }
+    if (offTimer.left <= 0) offTimer.left = offTimer.total;
+    Sound.play('start');
+    const endAt = Date.now() + offTimer.left * 1000; // 시각 기준 — 탭 전환에도 밀리지 않음
+    offTimer.id = setInterval(() => {
+        const left = Math.max(0, Math.ceil((endAt - Date.now()) / 1000));
+        if (left === offTimer.left) return;
+        offTimer.left = left;
+        if (left <= 10 && left > 0) Sound.play('tick', left);
+        if (left <= 0) { stopOffTimer(); Sound.play('timesup'); buzz(200); return; }
+        paintOffTimer();
+    }, 200);
+    paintOffTimer();
+}
+
+// 점수 입력 — 팀마다 −/+ (10·50·100점 단위) 또는 직접 입력
+function openOfflineScore() {
+    if (!offGame || !App.teams.length) return;
+    stopOffTimer();
+    offDraft = App.teams.map(() => 0);
+    document.getElementById('offline-score-title').textContent = offGame.name + ' 점수';
+    paintOffStep();
+    renderOfflineScore();
+    document.getElementById('modal-offline-score').showModal();
+    Sound.play('modal');
+}
+function paintOffStep() {
+    document.querySelectorAll('#offline-step button').forEach(b =>
+        b.setAttribute('aria-pressed', parseInt(b.dataset.step, 10) === offStep ? 'true' : 'false'));
+}
+function setOffStep(n) { offStep = n; paintOffStep(); Sound.play('tap'); }
+function renderOfflineScore() {
+    document.getElementById('offline-score-list').innerHTML = App.teams.map((t, i) => `
+        <div class="score-edit-row${offDraft[i] ? ' has-points' : ''}">
+            <div class="score-edit-who">
+                ${avatarHtml(i, 'avatar-sm')}
+                <span class="score-edit-name">${escapeHtml(t.name)}</span>
+            </div>
+            <div class="score-edit-ctl">
+                <button class="score-pm" onclick="adjOffline(${i}, -1)" aria-label="${escapeHtml(t.name)} 점수 빼기">−</button>
+                <input class="score-edit-val score-edit-input" type="number" inputmode="numeric" value="${offDraft[i]}" aria-label="${escapeHtml(t.name)} 받을 점수" onchange="setOffline(${i}, this.value)">
+                <button class="score-pm" onclick="adjOffline(${i}, 1)" aria-label="${escapeHtml(t.name)} 점수 더하기">+</button>
+            </div>
+        </div>`).join('');
+}
+function adjOffline(i, dir) {
+    offDraft[i] = Math.max(-9999, Math.min(9999, offDraft[i] + dir * offStep));
+    Sound.play('tap');
+    renderOfflineScore();
+}
+function setOffline(i, v) {
+    const n = parseInt(v, 10);
+    offDraft[i] = Number.isFinite(n) ? Math.max(-9999, Math.min(9999, n)) : 0;
+    renderOfflineScore();
+}
+function applyOfflineScore() {
+    const before = App.teams.map(t => t.score);
+    App.teams.forEach((t, i) => { t.score += offDraft[i] || 0; });
+    const after = App.teams.map(t => t.score);
+    persist();
+    updateScoreboard();
+    document.getElementById('modal-offline-score').close();
+
+    const gained = offDraft.map((v, i) => v > 0 ? i : -1).filter(i => i >= 0);
+    const sub = document.getElementById('standings-sub');
+    sub.textContent = gained.length
+        ? gained.map(i => App.teams[i].name + ' +' + offDraft[i]).join(' · ')
+        : '이번 놀이는 점수 변동이 없어요.';
+    document.getElementById('standings-list').innerHTML = standingsHtml(before, after, i => offDraft[i] > 0, gained);
+    const dlg = document.getElementById('modal-standings');
+    dlg.showModal();
+    const m = dlg.querySelector('.modal'); if (m) m.scrollTop = 0;
+    if (gained.length) {
+        Sound.play('big-success');
+        const leaderBefore = before.indexOf(Math.max(...before));
+        const top = Math.max(...after);
+        const leaders = after.map((v, i) => v === top ? i : -1).filter(i => i >= 0);
+        if (leaders.length === 1 && leaders[0] !== leaderBefore) {
+            fx({ particleCount: 90, spread: 90, origin: { y: 0.6 }, colors: FX_COLORS });
+        }
+    } else {
+        Sound.play('tap');
+    }
+}
+
 /* =============== 소리 설정 — 배경음악 / 효과음 켜고 끄기 (별도 키에 저장) =============== */
 const SOUND_KEY = 'partygame_sound';
-const MENU_SCREENS = ['screen-menu', 'screen-mode', 'screen-setup', 'screen-pregame'];
+const MENU_SCREENS = ['screen-menu', 'screen-mode', 'screen-setup', 'screen-pregame', 'screen-offline', 'screen-offline-detail'];
 function paintSoundPrefs() {
     [['bgm', !Sound.bgmOff], ['sfx', !Sound.muted]].forEach(([k, on]) => {
         const el = document.getElementById(k + '-state');
@@ -2255,12 +2682,65 @@ document.body.addEventListener('pointerdown', () => {
 }, { once: true });
 document.addEventListener('keydown', () => { Sound.userGestureDone = true; Sound.ensure(); }, { once: true });
 
+/* =============== 실제 진행 중 생기는 문제 방지 =============== */
+// 1) 화면 꺼짐 방지 — 탁자에 올려 둔 채 설명을 듣는 동안 화면이 어두워지지 않게 (지원 기기만)
+let wakeLock = null;
+async function keepAwake() {
+    try {
+        if (!('wakeLock' in navigator) || wakeLock || document.hidden) return;
+        wakeLock = await navigator.wakeLock.request('screen');
+        wakeLock.addEventListener('release', () => { wakeLock = null; });
+    } catch (e) { wakeLock = null; }
+}
+document.addEventListener('pointerdown', keepAwake, { once: true });
+document.addEventListener('visibilitychange', () => { if (!document.hidden) keepAwake(); });
+
+// 2) 뒤로 가기 — 휴대전화의 뒤로 버튼·스와이프가 사이트를 나가 버리지 않고 앱 안에서 한 단계만 돌아가게
+const BACK_TO = {
+    'screen-setup': 'screen-mode', 'screen-pregame': 'screen-menu',
+    'screen-offline': 'screen-menu', 'screen-offline-detail': 'screen-offline'
+};
+function appBack() {
+    const open = document.querySelector('dialog[open]');
+    if (open) {
+        if (open.id === 'modal-result' || open.id === 'modal-standings') return true; // 버튼으로만 닫음
+        open.close();
+        return true;
+    }
+    const menu = document.getElementById('settings-menu');
+    if (menu && menu.classList.contains('open')) { closeMenu(); return true; }
+    const cur = document.querySelector('.screen.active');
+    if (!cur) return false;
+    if (cur.id === 'screen-game') { pauseGame(); return true; }
+    if (BACK_TO[cur.id]) { showScreen(BACK_TO[cur.id]); return true; }
+    return false; // 첫 화면·게임 목록에서는 평소처럼 나가도록 둠
+}
+try {
+    history.pushState({ app: true }, '');
+    window.addEventListener('popstate', () => {
+        if (appBack()) history.pushState({ app: true }, '');
+    });
+} catch (e) {}
+
+// 3) 라운드 도중 새로고침·탭 닫기 — 이번 라운드 점수가 사라지므로 한 번 물어봄
+window.addEventListener('beforeunload', (e) => {
+    if (isPlaying()) { e.preventDefault(); e.returnValue = ''; }
+});
+
+// 4) 오프라인 준비 — 한 번 열어 두면 행사장 인터넷이 끊겨도 열림 (sw.js)
+if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) {
+    window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(() => {}); });
+}
+
 // Restore from storage if available
 window.addEventListener('DOMContentLoaded', () => {
     // 결과 모달은 Esc로 닫히지 않도록 — 버튼 선택을 강제해 어중간한 상태 방지
     document.getElementById('modal-result').addEventListener('cancel', e => e.preventDefault());
     try { applyDisplayMode(localStorage.getItem(DISPLAY_KEY)); } catch (e) {}
     loadSoundPrefs();
+    const oc = document.getElementById('offline-count'); if (oc) oc.textContent = OFF_GAMES.length;
+    const mf = document.getElementById('mode-foot');
+    if (mf) mf.textContent = `퀴즈 게임 5종 · 가족 놀이 ${OFF_GAMES.length}종 · 점수는 자동으로 더해 드려요`;
     if (restore()) {
         applyMode(App.mode); // 저장된 모드의 컬러 테마 복원
         updateScoreboard();
@@ -2268,8 +2748,11 @@ window.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-// Prevent pinch zoom on iOS
-document.addEventListener('gesturestart', e => e.preventDefault());
+// 게임 진행 화면에서만 두 손가락 확대를 막음 (여러 명이 동시에 누르다 화면이 커지는 사고 방지) — 다른 화면은 확대 가능
+document.addEventListener('gesturestart', e => {
+    const cur = document.querySelector('.screen.active');
+    if (cur && cur.id === 'screen-game') e.preventDefault();
+});
 document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
 
 // Keyboard shortcuts (desktop)
@@ -2291,6 +2774,9 @@ document.addEventListener('keydown', (e) => {
         else if (visible('controls-chosung')) handleChosungPass();
         else if (visible('controls-fourletter')) handleFourLetterFail();
         else if (visible('controls-relay') && visible('relay-actions')) handleRelayResult(false);
+    } else if (e.key === 'Backspace') {
+        e.preventDefault();
+        undoLast();
     } else if (e.key === 'Escape') {
         e.preventDefault();
         pauseGame();

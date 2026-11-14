@@ -1,5 +1,5 @@
 // =============================================================
-// 문제 데이터 검증 도구 — questions.js 수정 후 반드시 실행하세요:
+// 문제·놀이 데이터 검증 도구 — questions.js / games-offline.js 수정 후 반드시 실행하세요:
 //   node tools/validate.js
 // 검사 항목:
 //   1) 초성퀴즈: q가 정답 a의 실제 초성과 일치하는지 (괄호 병기 제외)
@@ -84,12 +84,37 @@ for (const [game, cap] of Object.entries(ROUND_CAP)) {
     }
 }
 
+// 5. 가족 놀이 모음(games-offline.js) 검사 — id 중복, 필수 항목, 종류
+let offlineCount = 0;
+try {
+    const offSrc = fs.readFileSync(path.join(__dirname, '..', 'games-offline.js'), 'utf8');
+    eval(offSrc);
+    const cats = window.OFFLINE_CATS || {};
+    const ids = new Set();
+    for (const g of window.OFFLINE_GAMES || []) {
+        offlineCount++;
+        const tag = `[가족놀이/${g.name || g.id || '?'}]`;
+        if (!g.id || ids.has(g.id)) errors.push(`${tag} id가 없거나 중복: "${g.id}"`);
+        ids.add(g.id);
+        for (const k of ['name', 'cat', 'line', 'who', 'time', 'win', 'tip']) {
+            if (!g[k] || typeof g[k] !== 'string') errors.push(`${tag} "${k}" 항목이 비어 있음`);
+        }
+        if (!cats[g.cat]) errors.push(`${tag} 종류(cat)가 올바르지 않음: "${g.cat}"`);
+        if (!Array.isArray(g.items)) errors.push(`${tag} items는 배열이어야 함 (준비물이 없으면 [])`);
+        if (!Array.isArray(g.rules) || g.rules.length < 2) errors.push(`${tag} rules(진행 순서)는 2줄 이상`);
+        if (g.timer !== undefined && !(Number.isInteger(g.timer) && g.timer > 0)) errors.push(`${tag} timer는 초 단위 양의 정수`);
+    }
+} catch (e) {
+    errors.push('games-offline.js를 읽을 수 없음: ' + e.message);
+}
+
 // 결과 출력
 console.log('=== 문제 데이터 검증 결과 ===');
 for (const [game, cats] of Object.entries(DB)) {
     const total = Object.values(cats).reduce((s, a) => s + a.length, 0);
     console.log(`${game}: ${Object.keys(cats).length}개 주제, ${total}문제`);
 }
+console.log(`가족 놀이: ${offlineCount}가지`);
 console.log(`relay 난이도: 순한맛 ${tierCount[1]} · 보통 ${tierCount[2]} · 매운맛 ${tierCount[3]}`);
 console.log('');
 if (warnings.length) {

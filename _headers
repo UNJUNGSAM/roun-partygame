@@ -10,3 +10,15 @@
 
 /questions.js
   Cache-Control: public, max-age=0, must-revalidate
+
+/games-offline.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/styles.css
+  Cache-Control: public, max-age=0, must-revalidate
+
+/sw.js
+  Cache-Control: public, max-age=0, must-revalidate
+
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
